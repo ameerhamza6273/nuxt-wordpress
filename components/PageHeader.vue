@@ -46,7 +46,7 @@
       <!-- Mobile Navbar -->
       <div
         v-if="isToggled"
-        class="fixed inset-0 z-40 bg-transparent  flex items-center justify-center md:hidden"
+        class="fixed inset-0 z-40 bg-[#000]  flex items-center justify-center md:hidden"
       >
         <ul class="space-y-4 text-center text-white">
           <li v-for="item in pagesLinks" :key="item.link">
