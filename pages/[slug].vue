@@ -7,10 +7,10 @@
     v-if="postData?.featuredImage"
     style="width: 100%; height: 500px; object-fit: cover;"
   />
-    <div class="px-16 py-16">
+    <div class="px-6 md:px-16 py-16">
         <h2 class="text-3xl font-bold">{{ postData?.title || "Loading..." }}</h2>
         <p class="text-md mt-4" v-html="postData?.excerpt"></p>
-        <div v-html="postData?.content" class="mt-4"></div>
+        <!-- <div v-html="postData?.content" class="mt-4"></div> -->
     </div>
   <PageFooter />
 </div>
