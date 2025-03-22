@@ -1,6 +1,6 @@
 <template>
     <div>
-        <pageHeader />
+        <PageNavbar />
         <HeroSection />
         <AboutUs />
         <SignMeSec />
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import pageHeader from '@/components/pageHeader.vue';
+import PageNavbar from '@/components/PageNavbar.vue';
 import HeroSection from '@/components/HeroSection.vue';
 import AboutUs from '@/components/AboutUs.vue';
 import SignMeSec from '@/components/SignMeSec.vue';
@@ -29,7 +29,7 @@ import pageFooter from '@/components/pageFooter.vue';
 
 export default {
     components: {
-        pageHeader,
+        PageNavbar,
         HeroSection,
         AboutUs,
         SignMeSec,
