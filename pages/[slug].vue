@@ -6,6 +6,7 @@
     alt="Featured Image" 
     v-if="postData?.featuredImage"
     style="width: 100%; height: 500px; object-fit: cover;"
+    class="mt-20"
   />
     <div class="px-6 md:px-16 py-16">
         <h2 class="text-3xl font-bold">{{ postData?.title || "Loading..." }}</h2>

@@ -1,7 +1,7 @@
 <template>
     <div>
       <!-- Desktop & Tablet Navbar -->
-      <nav class="fixed w-full z-50 top-0 left-0 bg-[#0000006b] text-white transition-all duration-300">
+      <nav class="fixed w-full z-50 top-0 left-0 bg-[#161616] shadow-[0_4px_10px_rgba(255,255,255,0.2)] text-white transition-all duration-300">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-5 px-5 sm:px-8">
           <!-- Logo -->
           <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
