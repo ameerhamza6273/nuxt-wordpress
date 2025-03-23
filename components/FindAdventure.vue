@@ -13,17 +13,15 @@
       </div>
       <!-- filter section -->
       <div class="flex items-center bg-[#404857e6] p-3 flex-wrap gap-2 justify-left shadow-lg">
-        <!-- Filters Button and Clear All -->
+        <!-- Filters and Clear All -->
         <div class="flex items-center justify-around space-x-2 text-white w-full sm:w-[15%] min-w-[150px]">
           <span class="flex items-center space-x-1 cursor-pointer">
             <i class="fas fa-filter"></i>
             <span>Filters</span>
           </span>
-          <!-- White Divider -->
-          <span class="text-white">|</span> <!-- You can also use a border instead -->
+          <span class="text-white">|</span>
           <span class="text-gray-400 cursor-pointer hover:text-white">Clear All</span>
         </div>
-
 
         <!-- Search Input -->
         <input type="text" placeholder="Search destinations..."
@@ -32,16 +30,15 @@
         <!-- Date Range -->
         <div
           class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
-
           <!-- Start Date -->
           <div
             class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
-            @click="$refs.startDate.showPicker()">
+            @click="showPicker($refs.startDateInput)">
             <i class="fas fa-calendar-alt"></i>
-            <span id="startDateLabel" class="text-[#606060]">Start Date</span>
-            <input ref="startDate" type="date" class="absolute opacity-0 -top-[5px] left-0 mt-3 pointer-events-none"
-              @change="(event) => updateLabel(event, 'startDateLabel')" />
-
+            <span>{{ startDateLabel }}</span>
+            <input ref="startDateInput" type="date"
+              class="absolute opacity-0 -top-[5px] left-0 mt-3 pointer-events-none"
+              @change="(event) => updateLabel(event, startDateLabel, 'Start Date')" />
           </div>
 
           <!-- To Separator -->
@@ -50,14 +47,13 @@
           <!-- End Date -->
           <div
             class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
-            @click="$refs.endDate.showPicker()">
+            @click="showPicker($refs.endDateInput)">
             <i class="fas fa-calendar-alt"></i>
-            <span id="endDateLabel" class="text-[#606060]">End Date</span>
-            <input ref="endDate" type="date" class="absolute opacity-0 -top-[5px] left-0 mt-3 pointer-events-none"
-              @change="(event) => updateLabel(event, 'endDateLabel')" />
+            <span>{{ endDateLabel }}</span>
+            <input ref="endDateInput" type="date" class="absolute opacity-0 -top-[5px] left-0 mt-3 pointer-events-none"
+              @change="(event) => updateLabel(event, endDateLabel, 'End Date')" />
           </div>
         </div>
-
 
         <!-- Budget Dropdown -->
         <select
@@ -77,6 +73,7 @@
           <option>Hard</option>
         </select>
       </div>
+
     </div>
     <!-- slider section -->
     <div class="max-w-[1290px] mx-auto px-4 sm:px-10 py-10">
@@ -159,11 +156,17 @@ const pagesLinks = ref([
 
 ]);
 
-function updateLabel(event, labelId) {
-  const label = document.getElementById(labelId);
-  const value = event.target.value;
-  label.textContent = value ? value : (labelId === 'startDateLabel' ? 'Start Date' : 'End Date');
-}
+
+const startDateLabel = ref('Start Date');
+const endDateLabel = ref('End Date');
+
+const updateLabel = (event, labelRef, defaultText) => {
+  labelRef.value = event.target.value || defaultText;
+};
+
+const showPicker = (refName) => {
+  refName?.showPicker?.();
+};
 </script>
 
 <style scoped>
