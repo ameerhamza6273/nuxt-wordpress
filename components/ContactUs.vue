@@ -22,10 +22,14 @@
                 </div>
                 <div class="md:col-span-3">
                   <label class="text-white text-md font-bold">E-mail</label>
-                  <input type="text" class="w-full px-5 py-2 border bg-[#D9D9D9]  rounded mt-1" required />
+                  <input type="email" class="w-full px-5 py-2 border bg-[#D9D9D9]  rounded mt-1" required />
                 </div>
                 <div class="mt-4 md:mt-7">
-                  <input type="email" class="w-full px-5 py-2 border bg-[#D9D9D9]  rounded " required />
+                  <select class="w-full px-5 py-2 border bg-[#D9D9D9]  rounded " required>
+                    <option value="Select Subject"> Select Subject</option>
+                    <option value="Select Subject"> A </option>
+                    <option value="Select Subject"> B </option>
+                  </select>
                 </div>
   
               </div>
