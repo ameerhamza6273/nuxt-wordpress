@@ -5,8 +5,8 @@
             :spaceBetween="20" :slidesPerView="2.5" :modules="[Navigation]" :loop="true"
             class="w-full relative" style="padding-bottom: 70px !important;" :breakpoints="{
                 340: { slidesPerView: 1.5 },
-                768: { slidesPerView: 2 },
-                1024: { slidesPerView: 2.5 }
+                600: { slidesPerView: 2 },
+                1124: { slidesPerView: 2.5 }
             }">
             <!-- Navigation Arrows -->
             <section class="parallax-slider-navigation cursor-pointer">
