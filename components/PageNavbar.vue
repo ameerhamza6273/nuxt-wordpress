@@ -64,6 +64,7 @@
     <div
       v-if="isToggled"
       class="fixed inset-0 z-40 bg-[#000] flex items-center justify-center md:hidden"
+      
     >
       <ul class="space-y-4 text-center text-white">
         <li v-for="item in pagesLinks" :key="item.link">
@@ -100,24 +101,23 @@ export default {
     };
   },
   methods: {
-    toggleMenu() {
-      this.isToggled = !this.isToggled;
-    },
-    getActiveLink(title) {
-      this.activeLink = title;
-    },
-    handleScroll() {
-      if (window.innerWidth >= 768) {
-        this.isScrolled = window.scrollY > 50;
-      }
-    },
+  toggleMenu() {
+    this.isToggled = !this.isToggled;
   },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+  getActiveLink(title) {
+    this.activeLink = title;
   },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.handleScroll);
+  handleScroll() {
+    this.isScrolled = window.scrollY > 50;
   },
+},
+mounted() {
+  window.addEventListener("scroll", this.handleScroll, { passive: true });
+},
+beforeDestroy() {
+  window.removeEventListener("scroll", this.handleScroll);
+}
+
 };
 </script>
 
