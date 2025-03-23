@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-black">
     <div class=" bg-[url('/perfect-adventure.jpg')] bg-cover bg-center bg-no-repeat">
       <div class="max-w-[1230px] mx-auto py-20">
         <h2 class="text-white uppercase text-3xl md:text-5xl font-bold text-center max-w-3xl mx-auto heading-line-ht"
@@ -11,6 +11,7 @@
           Find your ideal trek among our diverse selection.
         </p>
       </div>
+      <!-- filter section -->
       <div class="flex items-center bg-[#404857e6] p-3 flex-wrap gap-2 justify-left shadow-lg">
         <!-- Filters Button and Clear All -->
         <div class="flex items-center justify-around space-x-2 text-white w-full sm:w-[15%] min-w-[150px]">
@@ -26,11 +27,11 @@
 
         <!-- Search Input -->
         <input type="text" placeholder="Search destinations..."
-          class="px-4 py-3 bg-[#000000ab] text-white rounded-md focus:outline-none placeholder-gray-400 w-full sm:w-[30%] min-w-[200px] mx-2 my-1" />
+          class="px-4 py-3 bg-[#000000ab] text-white rounded-md focus:outline-none placeholder-gray-400 w-full sm:w-[28%] min-w-[200px] mx-2 my-1" />
 
         <!-- Date Range -->
         <div
-          class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full sm:w-[22%] min-w-[300px] mx-2 my-1">
+          class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
 
           <!-- Start Date -->
           <div
@@ -77,11 +78,87 @@
         </select>
       </div>
     </div>
+    <!-- slider section -->
+    <div class="max-w-[1290px] mx-auto px-4 sm:px-10 py-10">
+      <!-- Swiper Slider -->
+      <swiper :modules="[Navigation, Pagination, Grid]" :navigation="{ nextEl: '.nextArrow', prevEl: '.prevArrow' }"
+        :pagination="{ clickable: true }" :spaceBetween="20" :loop="true" class="w-full relative"
+        style="padding-bottom: 70px !important;" :breakpoints="{
+          768: {
+            slidesPerView: 3,
+            grid: {
+              rows: 2,
+              fill: 'row'
+            }
+          },
+          1024: {
+            slidesPerView: 3,
+            grid: {
+              rows: 2,
+              fill: 'row'
+            }
+          }
+        }">
+        <!-- Navigation Arrows -->
+        <section class="parallax-slider-navigation cursor-pointer">
+          <article class="nav-indicator prevArrow">
+            <img src="/public/left-slide-icon.svg" alt="Left Arrow"
+              class="w-10 absolute z-40 bottom-0 left-[10%] md:left-[30%] lg:left-[37%]" />
+          </article>
+          <article class="nav-indicator nextArrow">
+            <img src="/public/right-slide-icon.svg" alt="Right Arrow"
+              class="w-10 absolute z-40 bottom-0 right-[10%] md:right-[30%] lg:right-[37%]" />
+          </article>
+        </section>
+        <!-- Swiper Slides -->
+        <swiper-slide v-for="(post, index) in pagesLinks" :key="index">
+          <div class="rounded-lg mx-1 mt-6 min-h-[450px] overflow-hidden">
+            <!-- Featured Image -->
+            <img :src="post.image || '/public/trip1.jpg'" alt="Featured Image" class="rounded-t-lg w-full" />
+
+            <div class="p-4 px-0">
+              <!-- Title and Budget -->
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-xl text-white w-[60%]">{{ post.title }}</h3>
+                <p class="w-[40%] text-[#A5A5A5] text-right">{{ post.budget }}</p>
+              </div>
+
+              <!-- Description -->
+              <p class="text-[14px] text-[#A5A5A5] my-2 max-h-[130px] overflow-hidden">{{ post.description }}</p>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+    </div>
+
 
   </div>
 </template>
 
 <script setup>
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/grid"; // Add this
+import { Navigation, Pagination, Grid } from "swiper/modules"; // Include Grid
+import { ref } from "vue";
+
+
+
+const pagesLinks = ref([
+  { image: "/Destination 1.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 2.png", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 3.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 4.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 4.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+
+]);
+
 function updateLabel(event, labelId) {
   const label = document.getElementById(labelId);
   const value = event.target.value;
@@ -90,5 +167,13 @@ function updateLabel(event, labelId) {
 </script>
 
 <style scoped>
-/* Custom styles if required */
+:deep(.swiper-pagination-bullet) {
+  background-color: #fff !important;
+  margin-right: 8px !important;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background-color: transparent !important;
+  border: 2px solid #fff;
+}
 </style>

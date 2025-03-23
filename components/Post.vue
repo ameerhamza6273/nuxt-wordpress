@@ -1,6 +1,6 @@
 <template>
     <div class="bg-[url('/Blogimage-bg.jpg')] bg-cover bg-center bg-no-repeat">
-        <div class="max-w-[1230px] mx-auto py-16">
+        <div class="max-w-[1230px] mx-auto px-4 sm:px-10 py-16">
             <h2 class="text-white uppercase text-3xl md:text-5xl font-bold text-center max-w-3xl mx-auto heading-line-ht" style="line-height: 50px;">
                 Trail tracking: <br> x-pedition journal
             </h2>
@@ -12,7 +12,8 @@
             <swiper :navigation="{ nextEl: '.nextArrow', prevEl: '.prevArrow' }" :pagination="{ clickable: true }"
                 :spaceBetween="0" :modules="[Navigation, Pagination]" :loop="true" :centeredSlides="true" class="w-full relative " style="padding-bottom: 70px !important;"
                 :breakpoints="{
-                    768: { slidesPerView: 1 },
+                    568: { slidesPerView: 1 },
+                    768: { slidesPerView: 2 },
                     1024: { slidesPerView: 3 }
                 }">
                 
