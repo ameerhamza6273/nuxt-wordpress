@@ -12,7 +12,7 @@
         </p>
       </div>
       <!-- filter section -->
-      <div class="flex items-center bg-[#404857e6] p-3 flex-wrap gap-2 justify-left shadow-lg">
+      <div class="hidden  md:flex items-center bg-[#404857e6] p-3 flex-wrap gap-2 justify-left shadow-lg">
         <!-- Filters and Clear All -->
         <div class="flex items-center justify-around space-x-2 text-white w-full sm:w-[15%] min-w-[150px]">
           <span class="flex items-center space-x-1 cursor-pointer">
@@ -27,39 +27,34 @@
         <input type="text" placeholder="Search destinations..."
           class="px-4 py-3 bg-[#000000ab] text-white rounded-md focus:outline-none placeholder-gray-400 w-full sm:w-[28%] min-w-[200px] mx-2 my-1" />
 
-       <!-- Date Range -->
-<div class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
-  <!-- Start Date -->
-  <div
-    class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
-    @click="triggerPicker($refs.startDateInput)">
-    <i class="fas fa-calendar-alt"></i>
-    <span>{{ startDateLabel }}</span>
-    <input 
-      ref="startDateInput"
-      type="date"
-      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-      @focus="(event) => event.target.showPicker && event.target.showPicker()"
-      @input="(event) => updateLabel(event, startDateLabel, 'Start Date')" />
-  </div>
+        <!-- Date Range -->
+        <div
+          class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
+          <!-- Start Date -->
+          <div
+            class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
+            @click="triggerPicker($refs.startDateInput)">
+            <i class="fas fa-calendar-alt"></i>
+            <span>{{ startDateLabel }}</span>
+            <input ref="startDateInput" type="date" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              @focus="(event) => event.target.showPicker && event.target.showPicker()"
+              @input="(event) => updateLabel(event, startDateLabel, 'Start Date')" />
+          </div>
 
-  <!-- To Separator -->
-  <span class="px-2">To</span>
+          <!-- To Separator -->
+          <span class="px-2">To</span>
 
-  <!-- End Date -->
-  <div
-    class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
-    @click="triggerPicker($refs.endDateInput)">
-    <i class="fas fa-calendar-alt"></i>
-    <span>{{ endDateLabel }}</span>
-    <input 
-      ref="endDateInput"
-      type="date"
-      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-      @focus="(event) => event.target.showPicker && event.target.showPicker()"
-      @input="(event) => updateLabel(event, endDateLabel, 'End Date')" />
-  </div>
-</div>
+          <!-- End Date -->
+          <div
+            class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
+            @click="triggerPicker($refs.endDateInput)">
+            <i class="fas fa-calendar-alt"></i>
+            <span>{{ endDateLabel }}</span>
+            <input ref="endDateInput" type="date" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              @focus="(event) => event.target.showPicker && event.target.showPicker()"
+              @input="(event) => updateLabel(event, endDateLabel, 'End Date')" />
+          </div>
+        </div>
         <!-- Budget Dropdown -->
         <select
           class="px-4 py-3 bg-[#afb1b4] rounded-xl focus:outline-none cursor-pointer w-[44%] sm:w-[12%] min-w-[140px] mx-2 my-1">
@@ -78,7 +73,80 @@
           <option>Hard</option>
         </select>
       </div>
+      <div class="md:hidden flex justify-center bg-[#404857e6] p-3">
+        <button @click="showModal = true"
+          class="bg-[#afb1b4] rounded-xl border border-[#414141]  w-full py-3 text-xl font-sebibold rounded-md shadow-lg">
+          <i class="fas fa-search mr-3"></i> Start Your Search
+        </button>
+      </div>
+      <transition name="fade">
+        <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-[0.9] flex justify-center items-center z-50">
+          <div class="bg-[#404857e6] rounded-lg p-6 w-[90%] max-w-md relative">
+            <button @click="showModal = false" class="absolute top-2 right-2 text-white">X</button>
+            <span class="flex items-center gap-4 text-white text-xl mb-3 cursor-pointer">
+              <i class="fas fa-filter"></i>
+              <span>Filters</span>
+            </span>
 
+            <!-- Search Input -->
+            <input type="text" placeholder="Search destinations..."
+              class="px-4 py-3 bg-[#000000ab] text-white rounded-md focus:outline-none placeholder-gray-400 w-full" />
+
+
+            <!-- Date Range -->
+            <div
+              class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full mt-3">
+              <!-- Start Date -->
+              <div
+                class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
+                @click="triggerPicker($refs.startDateInput)">
+                <i class="fas fa-calendar-alt"></i>
+                <span>{{ startDateLabel }}</span>
+                <input ref="startDateInput" type="date" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  @focus="(event) => event.target.showPicker && event.target.showPicker()"
+                  @input="(event) => updateLabel(event, startDateLabel, 'Start Date')" />
+              </div>
+
+              <!-- To Separator -->
+              <span class="px-2">To</span>
+
+              <!-- End Date -->
+              <div
+                class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
+                @click="triggerPicker($refs.endDateInput)">
+                <i class="fas fa-calendar-alt"></i>
+                <span>{{ endDateLabel }}</span>
+                <input ref="endDateInput" type="date" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  @focus="(event) => event.target.showPicker && event.target.showPicker()"
+                  @input="(event) => updateLabel(event, endDateLabel, 'End Date')" />
+              </div>
+            </div>
+
+            <div class="flex justify-between mt-3">
+              <select
+                class="px-4 py-3 bg-[#afb1b4] rounded-xl focus:outline-none cursor-pointer w-[49%]">
+                <option>Select Budget</option>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+              </select>
+
+              <!-- Difficulty Dropdown -->
+              <select
+                class="px-4 py-3 bg-[#afb1b4] rounded-xl focus:outline-none cursor-pointer w-[49%]">
+                <option>Difficulty Level</option>
+                <option>Easy</option>
+                <option>Moderate</option>
+                <option>Hard</option>
+              </select>
+            </div>
+
+            <button @click="applyFilters" class="bg-[#ffffff1f] py-2  delay-300 text-white rounded-xl text-lg mt-3 shadow-md w-full">
+              Apply Filters
+            </button>
+          </div>
+        </div>
+      </transition>
     </div>
     <!-- slider section -->
     <div class="max-w-[1290px] mx-auto px-4 sm:px-10 py-10">
@@ -164,7 +232,12 @@ const pagesLinks = ref([
 
 const startDateLabel = ref('Start Date');
 const endDateLabel = ref('End Date');
+const showModal = ref(false);
 
+const applyFilters = () => {
+  showModal.value = false;
+  // Filters apply logic here
+};
 const updateLabel = (event, labelRef, defaultText) => {
   labelRef.value = event.target.value || defaultText;
 };
@@ -185,5 +258,15 @@ const triggerPicker = (inputRef) => {
 :deep(.swiper-pagination-bullet-active) {
   background-color: transparent !important;
   border: 2px solid #fff;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
