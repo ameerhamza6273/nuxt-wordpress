@@ -92,11 +92,11 @@ export default {
       isScrolled: false,
       activeLink: "Home",
       pagesLinks: [
-        { title: "Home", link: "#home" },
-        { title: "About Us", link: "#aboutUs" },
-        { title: "Reviews", link: "#reviews" },
-        { title: "Contact Us", link: "#contactUs" },
-        { title: "Find A Trip", link: "#exploreTrips", image: "Search Trips Icon.svg" },
+        { title: "Home", link: "/#home" },
+        { title: "About Us", link: "/#aboutUs" },
+        { title: "Reviews", link: "/#reviews" },
+        { title: "Contact Us", link: "/#contactUs" },
+        { title: "Find A Trip", link: "/#exploreTrips", image: "Search Trips Icon.svg" },
       ],
     };
   },

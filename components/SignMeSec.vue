@@ -15,7 +15,7 @@
             <div class="flex flex-col sm:flex-row mt-8 items-center sm:justify-center ">
               <input type="text" placeholder="Enter e-mail address " class="text-white bg-[#575757] rounded-xl p-2 px-4 min-w-[330px] border-2 border-[#575757]">
               <button
-                class="bg-[#ffffff1f]  sm:ml-4 mt-4 delay-300 text-white rounded-xl shadow-md py-2 px-4 font-bevietnam font-medium border-2 border-white"
+                class="bg-[#ffffff1f]  sm:ml-4 mt-4 md:mt-0 delay-300 text-white rounded-xl shadow-md py-2 px-4 font-bevietnam font-medium border-2 border-white"
                 onclick="location.href='#courses';">Sign me up!</button>
             </div>
           </div>

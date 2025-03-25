@@ -1,6 +1,6 @@
 <template>
     <div id="reviews">
-        <div class=" bg-[url('/reviews-bg.jpg')] bg-cover bg-top bg-no-repeat ">
+        <div class=" bg-[url('/Review-mob.png')]  md:bg-[url('/reviews-bg.jpg')] bg-cover bg-top bg-no-repeat ">
             <div class="max-w-[1230px] mx-auto py-16 px-4">
                 <h2 class="text-white text-xl md:text-2xl mb-5 md:mb-10 border-b uppercase inline-block ">
                     <i>Reviews</i>
