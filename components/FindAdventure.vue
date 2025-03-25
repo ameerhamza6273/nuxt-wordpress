@@ -73,7 +73,7 @@
           <option>Hard</option>
         </select>
       </div>
-      <div class="md:hidden flex justify-center bg-[#404857e6] p-3">
+      <div class="md:hidden flex justify-center bg-[#404857e6] p-3 px-5">
         <button @click="showModal = true"
           class="bg-[#afb1b4] rounded-xl border border-[#414141]  w-full py-3 text-lg font-sebibold rounded-md shadow-lg">
           <i class="fas fa-search mr-3"></i> Start Your Search
