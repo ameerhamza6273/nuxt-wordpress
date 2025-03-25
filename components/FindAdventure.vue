@@ -27,34 +27,39 @@
         <input type="text" placeholder="Search destinations..."
           class="px-4 py-3 bg-[#000000ab] text-white rounded-md focus:outline-none placeholder-gray-400 w-full sm:w-[28%] min-w-[200px] mx-2 my-1" />
 
-        <!-- Date Range -->
-        <div
-          class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
-          <!-- Start Date -->
-          <div
-            class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
-            @click="showPicker($refs.startDateInput)">
-            <i class="fas fa-calendar-alt"></i>
-            <span>{{ startDateLabel }}</span>
-            <input ref="startDateInput" type="date"
-              class="absolute opacity-0 -top-[5px] left-0 mt-3 pointer-events-none"
-              @change="(event) => updateLabel(event, startDateLabel, 'Start Date')" />
-          </div>
+       <!-- Date Range -->
+<div class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
+  <!-- Start Date -->
+  <div
+    class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
+    @click="triggerPicker($refs.startDateInput)">
+    <i class="fas fa-calendar-alt"></i>
+    <span>{{ startDateLabel }}</span>
+    <input 
+      ref="startDateInput"
+      type="date"
+      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      @focus="(event) => event.target.showPicker && event.target.showPicker()"
+      @input="(event) => updateLabel(event, startDateLabel, 'Start Date')" />
+  </div>
 
-          <!-- To Separator -->
-          <span class="px-2">To</span>
+  <!-- To Separator -->
+  <span class="px-2">To</span>
 
-          <!-- End Date -->
-          <div
-            class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
-            @click="showPicker($refs.endDateInput)">
-            <i class="fas fa-calendar-alt"></i>
-            <span>{{ endDateLabel }}</span>
-            <input ref="endDateInput" type="date" class="absolute opacity-0 -top-[5px] left-0 mt-3 pointer-events-none"
-              @change="(event) => updateLabel(event, endDateLabel, 'End Date')" />
-          </div>
-        </div>
-
+  <!-- End Date -->
+  <div
+    class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
+    @click="triggerPicker($refs.endDateInput)">
+    <i class="fas fa-calendar-alt"></i>
+    <span>{{ endDateLabel }}</span>
+    <input 
+      ref="endDateInput"
+      type="date"
+      class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      @focus="(event) => event.target.showPicker && event.target.showPicker()"
+      @input="(event) => updateLabel(event, endDateLabel, 'End Date')" />
+  </div>
+</div>
         <!-- Budget Dropdown -->
         <select
           class="px-4 py-3 bg-[#afb1b4] rounded-xl focus:outline-none cursor-pointer w-[44%] sm:w-[12%] min-w-[140px] mx-2 my-1">
@@ -164,8 +169,10 @@ const updateLabel = (event, labelRef, defaultText) => {
   labelRef.value = event.target.value || defaultText;
 };
 
-const showPicker = (refName) => {
-  refName?.showPicker?.();
+// Force click for iOS devices
+const triggerPicker = (inputRef) => {
+  inputRef.focus();
+  inputRef.click();
 };
 </script>
 
