@@ -55,23 +55,47 @@
               @input="(event) => updateLabel(event, endDateLabel, 'End Date')" />
           </div>
         </div>
-        <!-- Budget Dropdown -->
-        <select
-          class="px-4 py-3 bg-[#afb1b4] rounded-xl focus:outline-none cursor-pointer w-[44%] sm:w-[12%] min-w-[140px] mx-2 my-1">
-          <option>Select Budget</option>
-          <option>Low</option>
-          <option>Medium</option>
-          <option>High</option>
-        </select>
+        <div class="relative w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1">
+          <button @click="toggleDropdown('dropdown1')"
+            class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-3 rounded-md shadow text-gray-900">
+            {{ selectedBudget || 'Select Budget' }}
+            <svg class="-mr-1 size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+          <ul v-if="dropdown1"
+            class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
+            <li @click="selectBudget('Low')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Low</li>
+            <li @click="selectBudget('Medium')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Medium
+            </li>
+            <li @click="selectBudget('High')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">High</li>
+          </ul>
+        </div>
 
-        <!-- Difficulty Dropdown -->
-        <select
-          class="px-4 py-3 bg-[#afb1b4] rounded-xl focus:outline-none cursor-pointer w-[44%] sm:w-[12%] min-w-[140px] mx-2 my-1">
-          <option>Difficulty Level</option>
-          <option>Easy</option>
-          <option>Moderate</option>
-          <option>Hard</option>
-        </select>
+        <!-- Dropdown 2: Difficulty Level -->
+        <div class="w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1 relative">
+          <button @click="toggleDropdown('dropdown2')"
+            class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-3 rounded-md shadow text-gray-900">
+            {{ selectedDifficulty || 'Select Difficulty' }}
+            <svg class="-mr-1 size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                clip-rule="evenodd" />
+            </svg>
+          </button>
+          <ul v-if="dropdown2"
+            class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
+            <li @click="selectDifficulty('Easy')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Easy
+            </li>
+            <li @click="selectDifficulty('Moderate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+              Moderate</li>
+            <li @click="selectDifficulty('Hard')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Hard
+            </li>
+          </ul>
+        </div>
+
       </div>
       <div class="md:hidden flex justify-center bg-[#404857e6] p-3 px-5">
         <button @click="showModal = true"
@@ -83,7 +107,7 @@
         <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-[0.9] flex justify-center items-center z-50">
           <div class="bg-[#404857e6] rounded-lg p-6 w-[90%] max-w-md relative">
             <button @click="showModal = false" class="absolute top-2 right-2 text-white">X</button>
-            <span class="flex items-center gap-4 text-white text-xl mb-3 cursor-pointer">
+            <span class="flex items-center gap-4 text-white text-xl mb-4 cursor-pointer">
               <i class="fas fa-filter"></i>
               <span>Filters</span>
             </span>
@@ -95,7 +119,7 @@
 
             <!-- Date Range -->
             <div
-              class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full mt-3">
+              class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-hidden p-2 w-full mt-4">
               <!-- Start Date -->
               <div
                 class="relative flex items-center px-3 py-1 bg-white space-x-2 cursor-pointer rounded-xl border border-[#414141]"
@@ -122,26 +146,61 @@
               </div>
             </div>
 
-            <div class="flex justify-between mt-3">
-              <select
-                class="px-4 py-3 bg-[#afb1b4] rounded-xl focus:outline-none cursor-pointer w-[49%]">
-                <option>Select Budget</option>
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
-              </select>
 
-              <!-- Difficulty Dropdown -->
-              <select
-                class="px-4 py-3 bg-[#afb1b4] rounded-xl focus:outline-none cursor-pointer w-[49%]">
-                <option>Difficulty Level</option>
-                <option>Easy</option>
-                <option>Moderate</option>
-                <option>Hard</option>
-              </select>
+
+            <div class="flex justify-between mt-4">
+              <div class="w-[48%] relative">
+                <button @click="toggleDropdown('dropdown1')"
+                  class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-2 rounded-md shadow text-gray-900">
+                  {{ selectedBudget || 'Select Budget' }}
+                  <svg class="-mr-1 size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </button>
+                <ul v-if="dropdown1"
+                  class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
+                  <li @click="selectBudget('Low')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Low
+                  </li>
+                  <li @click="selectBudget('Medium')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    Medium
+                  </li>
+                  <li @click="selectBudget('High')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    High</li>
+                </ul>
+              </div>
+
+              <!-- Dropdown 2 -->
+              <div class="w-[48%] relative">
+                <button @click="toggleDropdown('dropdown2')"
+                  class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-2 rounded-md shadow text-gray-900">
+                  {{ selectedDifficulty || 'Select Difficulty' }}
+                  <svg class="-mr-1 size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </button>
+                <ul v-if="dropdown2"
+                  class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
+                  <li @click="selectDifficulty('Easy')"
+                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Easy
+                  </li>
+                  <li @click="selectDifficulty('Moderate')"
+                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    Moderate</li>
+                  <li @click="selectDifficulty('Hard')"
+                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">Hard
+                  </li>
+                </ul>
+              </div>
+
             </div>
 
-            <button @click="applyFilters" class="bg-[#ffffff1f] py-2  delay-300 text-white rounded-xl text-lg mt-3 shadow-md w-full">
+
+            <button @click="applyFilters"
+              class="bg-[#ffffff1f] py-2  delay-300 text-white rounded-xl text-lg mt-4 shadow-md w-full">
               Apply Filters
             </button>
           </div>
@@ -200,7 +259,9 @@
         </swiper-slide>
       </swiper>
     </div>
-
+    <div class="flex justify-center items-center min-h-screen bg-gray-100">
+    <Calendar />
+  </div>
 
   </div>
 </template>
@@ -234,6 +295,30 @@ const startDateLabel = ref('Start Date');
 const endDateLabel = ref('End Date');
 const showModal = ref(false);
 
+const dropdown1 = ref(false);
+const dropdown2 = ref(false);
+const selectedBudget = ref('');
+const selectedDifficulty = ref('');
+
+const toggleDropdown = (dropdown) => {
+  if (dropdown === 'dropdown1') {
+    dropdown1.value = !dropdown1.value;
+    dropdown2.value = false;
+  } else {
+    dropdown2.value = !dropdown2.value;
+    dropdown1.value = false;
+  }
+};
+
+const selectBudget = (budget) => {
+  selectedBudget.value = budget;
+  dropdown1.value = false;
+};
+
+const selectDifficulty = (difficulty) => {
+  selectedDifficulty.value = difficulty;
+  dropdown2.value = false;
+};
 const applyFilters = () => {
   showModal.value = false;
   // Filters apply logic here

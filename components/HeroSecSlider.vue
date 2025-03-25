@@ -23,22 +23,24 @@
             <!-- Swiper Slides -->
             <swiper-slide v-for="(data, index) in pagesLinks" :key="index">
                 <div class="rounded-xl mx-3 min-h-[300px] overflow-hidden relative"
-                    :style="{ backgroundImage: `url(${data.bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }">
-                    <!-- Gradient Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+    :style="{ backgroundImage: `url(${data.bgImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }">
 
-                    <div class="p-6 px-7 z-10 flex flex-col justify-end min-h-[300px]">
-                        <!-- Dynamic Data -->
-                        <p class="text-lg text-white text-center">
-                            <b>{{ data.title }}</b><br />
-                            {{ data.description }}
-                        </p>
-                        <NuxtLink :to="data.link"
-                            class="bg-[#ffffff1f] mt-3 delay-300 text-white rounded-xl shadow-md py-2 px-4 block font-medium text-center border-2 border-white">
-                            {{ data.btnText }}
-                        </NuxtLink>
-                    </div>
-                </div>
+    <!-- Gradient Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none"></div>
+
+    <div class="p-6 px-7 z-10 flex flex-col justify-end min-h-[300px] relative">
+        <!-- Dynamic Data -->
+        <p class="text-lg text-white text-center z-20">
+            <b>{{ data.title }}</b><br />
+            {{ data.description }}
+        </p>
+        <NuxtLink :to="data.link"
+            class="bg-[#ffffff1f] mt-3 delay-300 text-white rounded-xl shadow-md py-2 px-4 block font-medium text-center border-2 border-white cursor-pointer z-20">
+            {{ data.btnText }}
+        </NuxtLink>
+    </div>
+</div>
+
             </swiper-slide>
         </swiper>
     </div>
@@ -49,14 +51,16 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation } from "swiper/modules";
 import { ref } from "vue";
 
 const pagesLinks = ref([
-    { bgImage: "/slider-bg-1.png", title: "Druk Path Trek:", description: "The Ultimate Bhutan Trekking Adventure", btnText: "Book Now", link: "" },
-    { bgImage: "/slider-bg-1.png", title: "Dolomites of Cortina:", description: "Guided Hiking Adventure", btnText: "Book Now", link: "" },
-    { bgImage: "/slider-bg-1.png", title: "Tour du Mont Blanc:", description: "A Complete 9-Day Alpine Adventure", btnText: "Book Now", link: "" },
-    { bgImage: "/slider-bg-1.png", title: "Druk Path Trek:", description: "The Ultimate Bhutan Trekking Adventure", btnText: "Book Now", link: "" },
+    { bgImage: "/slider-bg-1.png", title: "Druk Path Trek:", description: "The Ultimate Bhutan Trekking Adventure", btnText: "Book Now", link: "/druk-path" },
+    { bgImage: "/slider-bg-1.png", title: "Dolomites of Cortina:", description: "Guided Hiking Adventure", btnText: "Book Now", link: "/dolomites" },
+    { bgImage: "/slider-bg-1.png", title: "Tour du Mont Blanc:", description: "A Complete 9-Day Alpine Adventure", btnText: "Book Now", link: "/mont-blanc" },
+    { bgImage: "/slider-bg-1.png", title: "Druk Path Trek:", description: "The Ultimate Bhutan Trekking Adventure", btnText: "Book Now", link: "/druk-path" },
+    { bgImage: "/slider-bg-1.png", title: "Dolomites of Cortina:", description: "Guided Hiking Adventure", btnText: "Book Now", link: "/dolomites" },
+    { bgImage: "/slider-bg-1.png", title: "Tour du Mont Blanc:", description: "A Complete 9-Day Alpine Adventure", btnText: "Book Now", link: "/mont-blanc" },
 ]);
 </script>
 
