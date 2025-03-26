@@ -1,7 +1,7 @@
 <template>
   <div class=" bg-[#0D0D0D]" id="exploreTrips">
     <div class="grid grid-cols-1  md:grid-cols-11 mx-auto">
-      <div class="col-span-1 md:col-span-5 self-center px-6 md:px-16 py-16 ">
+      <div class="col-span-1 md:col-span-5 self-center px-6 md:px-16 py-16 text-center md:text-left ">
         <h3 class="text-white  text-xl lg:text-2xl mb-6 lg:mb-16 uppercase border-b inline-block ">
           <i>explore trips</i>
         </h3>

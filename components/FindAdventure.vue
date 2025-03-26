@@ -249,7 +249,7 @@
               <!-- Title and Budget -->
               <div class="flex items-center justify-between">
                 <h3 class="font-semibold text-xl text-white w-[60%]">{{ post.title }}</h3>
-                <p class="w-[40%] text-[#A5A5A5] text-right">{{ post.budget }}</p>
+                <p class="w-[40%] text-[#A5A5A5] text-right">{{ post.budjet }}</p>
               </div>
 
               <!-- Description -->
@@ -259,9 +259,6 @@
         </swiper-slide>
       </swiper>
     </div>
-    <div class="flex justify-center items-center min-h-screen bg-gray-100">
-    <Calendar />
-  </div>
 
   </div>
 </template>

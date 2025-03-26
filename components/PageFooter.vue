@@ -10,8 +10,8 @@
                 US at ANYTIME!
               </h2>
               <p class="text-lg text-white  mt-3">Let’s connect! Join our growing community!</p>
-              <p class="text-lg text-white font-bold ">Office Number: +65 94876198</p>
-              <p class="text-lg text-white font-bold ">Email: info@x-trekkers.com</p>
+              <p class="text-lg text-white font-bold ">Office Number: <NuxtLink to="tel:+65 94876198">+65 94876198</NuxtLink></p>
+              <p class="text-lg text-white font-bold ">Email:<NuxtLink to="mailto:info@x-trekkers.com">info@x-trekkers.com</NuxtLink></p>
   
             </div>
             <div class="flex items-center justify-between sm:justify-around mt-4 w-100 md:w-[60%]">

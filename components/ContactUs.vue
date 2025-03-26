@@ -1,9 +1,11 @@
 <template>
   <div id="contactUs" class="bg-[url('/form-image.jpg')] bg-cover bg-top bg-no-repeat px-4 sm:px-10">
     <div class="max-w-[1230px] mx-auto py-16">
-      <h2 class="text-white text-xl md:text-2xl mb-10 border-b uppercase inline-block">
-        <i>Contact Us</i>
-      </h2>
+      <div class="text-center md:text-left">
+        <h2 class="text-white text-xl md:text-2xl mb-10 border-b uppercase inline-block">
+          <i>Contact Us</i>
+        </h2>
+      </div>
       <div class="max-w-[900px] mx-auto">
         <h2 class="text-white uppercase text-3xl md:text-5xl mt-5 font-bold text-center leading-tight">
           ENQUIRIES? <br /> REACH OUT ANYTIME!
