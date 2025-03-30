@@ -1,74 +1,41 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-const loadingMovies = ref(false);
-const loadingDedicated = ref(false);
-const loadingHeaderFooter = ref(false);
-const loadingPosts = ref(false);
+const loading = ref(true);
+const movies = ref(null);
+const dedicatedTeam = ref(null);
+const headerFooter = ref(null);
+const posts = ref(null);
 
-const movies = useMovies();
-const dedicatedTeam = useDedicatedTeam();
-const headerFooter = useHeaderFooter();
-const posts = usePosts();
-
-async function GetMovies() {
-  loadingMovies.value = true;
-  const [res, err] = await getMovies();
-  loadingMovies.value = false;
-  if (res) {
-    console.log("RES MOVIES", res);
-  } else {
-    console.error("Error fetching movies:", err);
-  }
+async function fetchData() {
+  loading.value = true;
+  
+  const [moviesRes, moviesErr] = await getMovies();
+  const [dedicatedRes, dedicatedErr] = await getDedicatedTeam();
+  const [headerFooterRes, headerFooterErr] = await getHeaderFooter();
+  const [postsRes, postsErr] = await getPosts();
+  
+  if (moviesRes) movies.value = moviesRes;
+  if (dedicatedRes) dedicatedTeam.value = dedicatedRes;
+  if (headerFooterRes) headerFooter.value = headerFooterRes;
+  if (postsRes) posts.value = postsRes;
+  
+  if (moviesErr) console.error("Error fetching movies:", moviesErr);
+  if (dedicatedErr) console.error("Error fetching dedicated team:", dedicatedErr);
+  if (headerFooterErr) console.error("Error fetching header & footer:", headerFooterErr);
+  if (postsErr) console.error("Error fetching posts:", postsErr);
+  
+  loading.value = false;
 }
 
-async function GetDedicatedTeam() {
-  loadingDedicated.value = true;
-  const [res, err] = await getDedicatedTeam();
-  loadingDedicated.value = false;
-  if (res) {
-    console.log("RES DEDICATED TEAM", res);
-  } else {
-    console.error("Error fetching dedicated team:", err);
-  }
-}
-
-async function GetHeaderFooter() {
-  loadingHeaderFooter.value = true;
-  const [res, err] = await getHeaderFooter();
-  loadingHeaderFooter.value = false;
-  if (res) {
-    console.log("RES HEADER FOOTER", res);
-  } else {
-    console.error("Error fetching header & footer:", err);
-  }
-}
-
-async function GetPosts() {
-  loadingPosts.value = true;
-  const [res, err] = await getPosts();
-  loadingPosts.value = false;
-  if (res) {
-    console.log("RES POSTS", res);
-  } else {
-    console.error("Error fetching posts:", err);
-  }
-}
-
-onMounted(() => {
-  GetMovies();
-  GetDedicatedTeam();
-  GetHeaderFooter();
-  GetPosts();
-});
+onMounted(fetchData);
 </script>
 
 <template>
   <section>
-    <article v-if="loadingMovies || loadingDedicated || loadingHeaderFooter || loadingPosts">
+    <article v-if="loading">
       <SpinLoader />
     </article>
-
     <article v-else>
       <PageNavbar :headerData="headerFooter" />
       <HeroSection :movies="movies" />
