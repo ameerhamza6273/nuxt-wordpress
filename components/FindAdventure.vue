@@ -1,14 +1,93 @@
+
+<script setup>
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import "swiper/css/grid"; // Add this
+import { Navigation, Pagination, Grid } from "swiper/modules"; // Include Grid
+import { ref , computed } from "vue";
+
+
+const pagesLinks = ref([
+  { image: "/Destination 1.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 2.png", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 3.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 4.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 4.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
+
+]);
+
+
+const startDateLabel = ref('Start Date');
+const endDateLabel = ref('End Date');
+const showModal = ref(false);
+
+const dropdown1 = ref(false);
+const dropdown2 = ref(false);
+const selectedBudget = ref('');
+const selectedDifficulty = ref('');
+
+const toggleDropdown = (dropdown) => {
+  if (dropdown === 'dropdown1') {
+    dropdown1.value = !dropdown1.value;
+    dropdown2.value = false;
+  } else {
+    dropdown2.value = !dropdown2.value;
+    dropdown1.value = false;
+  }
+};
+
+const selectBudget = (budget) => {
+  selectedBudget.value = budget;
+  dropdown1.value = false;
+};
+
+const selectDifficulty = (difficulty) => {
+  selectedDifficulty.value = difficulty;
+  dropdown2.value = false;
+};
+const applyFilters = () => {
+  showModal.value = false;
+  // Filters apply logic here
+};
+const updateLabel = (event, labelRef, defaultText) => {
+  labelRef.value = event.target.value || defaultText;
+};
+
+// Force click for iOS devices
+const triggerPicker = (inputRef) => {
+  inputRef.focus();
+  inputRef.click();
+};
+
+
+const props = defineProps({
+  movies: {
+    type: Array,
+    required: true,
+  },
+});
+const movieId = 27283;
+const movie = computed(() => props.movies.find((m) => m.id === movieId));
+
+</script>
+
 <template>
-  <div class="bg-black">
+  <div class="bg-black" >
     <div class=" bg-[url('/perfect-adventure.jpg')] bg-cover bg-center bg-no-repeat">
-      <div class="max-w-[1230px] mx-auto py-20">
+      <div class="max-w-[1230px] mx-auto py-20" v-if="movie">
         <h2 class="text-white uppercase text-3xl md:text-5xl font-bold text-center max-w-3xl mx-auto heading-line-ht"
           style="line-height: 50px;">
-          let’s find the perfect <br> adventure for you
+          {{ movie.acf.title }}
         </h2>
 
         <p class=" mt-5 mb-12 max-w-2xl text-lg text-white text-center mx-auto">
-          Find your ideal trek among our diverse selection.
+          {{ movie.acf.description }}
         </p>
       </div>
       <!-- filter section -->
@@ -262,74 +341,6 @@
 
   </div>
 </template>
-
-<script setup>
-import { Swiper, SwiperSlide } from "swiper/vue";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css/grid"; // Add this
-import { Navigation, Pagination, Grid } from "swiper/modules"; // Include Grid
-import { ref } from "vue";
-
-
-
-const pagesLinks = ref([
-  { image: "/Destination 1.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 2.png", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 3.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 4.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 4.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-
-]);
-
-
-const startDateLabel = ref('Start Date');
-const endDateLabel = ref('End Date');
-const showModal = ref(false);
-
-const dropdown1 = ref(false);
-const dropdown2 = ref(false);
-const selectedBudget = ref('');
-const selectedDifficulty = ref('');
-
-const toggleDropdown = (dropdown) => {
-  if (dropdown === 'dropdown1') {
-    dropdown1.value = !dropdown1.value;
-    dropdown2.value = false;
-  } else {
-    dropdown2.value = !dropdown2.value;
-    dropdown1.value = false;
-  }
-};
-
-const selectBudget = (budget) => {
-  selectedBudget.value = budget;
-  dropdown1.value = false;
-};
-
-const selectDifficulty = (difficulty) => {
-  selectedDifficulty.value = difficulty;
-  dropdown2.value = false;
-};
-const applyFilters = () => {
-  showModal.value = false;
-  // Filters apply logic here
-};
-const updateLabel = (event, labelRef, defaultText) => {
-  labelRef.value = event.target.value || defaultText;
-};
-
-// Force click for iOS devices
-const triggerPicker = (inputRef) => {
-  inputRef.focus();
-  inputRef.click();
-};
-</script>
 
 <style scoped>
 :deep(.swiper-pagination-bullet) {

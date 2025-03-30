@@ -22,6 +22,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       wordpressUrl: 'https://www.x-trekkers.com/graphql',
+      BASE_URL: 'https://www.x-trekkers.com/wp-json/wp/v2'
     },
   },
   build: {
@@ -29,3 +30,4 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
 });
+

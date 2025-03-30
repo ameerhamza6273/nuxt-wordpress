@@ -1,11 +1,14 @@
 <template>
-    <div class="bg-[url('/Blogimage-bg.jpg')] bg-cover bg-center bg-no-repeat">
+    <div v-if="movie" class="bg-[url('/Blogimage-bg.jpg')] bg-cover bg-center bg-no-repeat">
         <div class="max-w-[1230px] mx-auto px-4 sm:px-10 py-16">
-            <h2 class="text-white uppercase text-3xl md:text-5xl font-bold text-center max-w-3xl mx-auto heading-line-ht" style="line-height: 50px;">
-                Trail tracking: <br> x-pedition journal
+            <h2 class="text-white uppercase max-w-[600px] text-3xl md:text-5xl font-bold text-center max-w-3xl mx-auto heading-line-ht" style="line-height: 50px;">
+                {{ movie.acf.title }}
             </h2>
-            <p class="mt-5 mb-12 max-w-2xl text-lg text-white text-center mx-auto">
-                First hand insights on our team’s trekking expeditions.
+            <h2 class="text-white uppercase max-w-[600px] text-3xl md:text-5xl font-bold text-center max-w-3xl mx-auto heading-line-ht" style="line-height: 50px;">
+                {{ movie.acf.title_2 }}
+            </h2>
+            <p class="mt-5 mb-12 max-w-2xl  text-lg text-white text-center mx-auto">
+                {{ movie.acf.description }}
             </p>
 
             <!-- Swiper Slider -->
@@ -49,7 +52,7 @@
     </div>
 </template>
 
-<script setup lang="js">
+<script setup>
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -57,6 +60,15 @@ import "swiper/css/navigation";
 import { Navigation, Pagination } from "swiper/modules";
 
 const config = useRuntimeConfig();
+import { computed } from 'vue'
+const props = defineProps({
+  movies: {
+    type: Array,
+    required: true,
+  },
+});
+const movieId = 27285;
+const movie = computed(() => props.movies.find((m) => m.id === movieId));
 
 const { data } = await useFetch(config.public.wordpressUrl, {
     method: 'post',
