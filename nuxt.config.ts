@@ -28,6 +28,7 @@ export default defineNuxtConfig({
       FROM_EMAIL: process.env.FROM_EMAIL,
       TO_EMAIL: process.env.TO_EMAIL,
       SUBJECT: process.env.SUBJECT,
+      CLIENT_EMAIL: process.env.CLIENT_EMAIL,
       REPLY_TO_EMAIL: process.env.REPLY_TO_EMAIL,
     },
   },
