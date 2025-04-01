@@ -43,7 +43,7 @@ const druckPage = computed(() => (props.druckPage?.length ? props.druckPage.find
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${druckPage.acf.bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl font-bevietnam heading-line-ht"
+                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{druckPage.acf.title}}                             
                         </h1>
@@ -62,7 +62,7 @@ const druckPage = computed(() => (props.druckPage?.length ? props.druckPage.find
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${druckPage.acf.why_choose_bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl font-bevietnam heading-line-ht"
+                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{druckPage.acf.title}}
                            
@@ -93,7 +93,7 @@ const druckPage = computed(() => (props.druckPage?.length ? props.druckPage.find
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${druckPage.acf.additional_bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold uppercase mt-10 text-3xl md:text-5xl font-bevietnam heading-line-ht"
+                        <h1 class="text-white font-bold uppercase mt-10 text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{druckPage.acf.title}}
                             
@@ -131,7 +131,7 @@ const druckPage = computed(() => (props.druckPage?.length ? props.druckPage.find
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${druckPage.acf.book_bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl font-bevietnam heading-line-ht"
+                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{druckPage.acf.title}}
                            
@@ -144,7 +144,7 @@ const druckPage = computed(() => (props.druckPage?.length ? props.druckPage.find
                         <div class="flex mt-8">
                             <NuxtLink
                             :to="druckPage.acf.book_action.url"
-                                class="bg-[#ffffff1f]  delay-300 text-white rounded-xl shadow-md py-2 px-10 font-bevietnam font-medium border-2 border-white"
+                                class="bg-[#ffffff1f]  delay-300 text-white rounded-xl shadow-md py-2 px-10 font-medium border-2 border-white"
                                 > {{druckPage.acf.book_action.title}}</NuxtLink>
                         </div>
 

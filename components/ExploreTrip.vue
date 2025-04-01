@@ -19,7 +19,7 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
         <h3 class="text-white  text-xl lg:text-2xl mb-6 lg:mb-16 uppercase border-b inline-block ">
           <i>{{ movie.acf.subtitle }}</i>
         </h3>
-        <h2 class="text-white font-bold max-w-[400px] text-3xl lg:text-5xl mt-3 uppercase font-bevietnam heading-line-ht"
+        <h2 class="text-white font-bold max-w-[400px] text-3xl lg:text-5xl mt-3 uppercase heading-line-ht"
           style="line-height: 56px;">
           {{ movie.acf.title }}
         </h2>
