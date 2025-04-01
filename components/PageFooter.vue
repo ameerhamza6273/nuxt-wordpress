@@ -26,9 +26,9 @@
       <div class="bg-[#161616] p-10 md:p-12 px-5 md:px-12 ">
         <div class=" flex items-center flex-col md:flex-row justify-around gap-5 max-w-[1220px] mx-auto">
           
-            <NuxtLink :to="footerData.acf.page_1" class="font-bold text-white text-lg md:text-xl uppercase">Terms & conditions</NuxtLink>
-             <NuxtLink :to="footerData.acf.page_2" class="font-bold text-white text-lg md:text-xl uppercase">privacy policy</NuxtLink>
-            <NuxtLink :to="footerData.acf.page_3" class="font-bold text-white text-lg md:text-xl uppercase">CERTIFIED TRAVEL AGENCY: 01261</NuxtLink> 
+            <NuxtLink :to="footerData.acf.page_1.url" class="font-bold text-white text-lg md:text-xl uppercase">{{footerData.acf.page_1.title}}</NuxtLink>
+             <NuxtLink :to="footerData.acf.page_2.url" class="font-bold text-white text-lg md:text-xl uppercase">{{footerData.acf.page_2.title}}</NuxtLink>
+            <NuxtLink :to="footerData.acf.page_3.url" class="font-bold text-white text-lg md:text-xl uppercase">{{footerData.acf.page_3.title}}</NuxtLink> 
           
         </div>
       </div>

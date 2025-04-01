@@ -41,7 +41,7 @@ onMounted(fetchData);
       <HeroSection :movies="movies" />
       <AboutUs :movies="movies" />
       <LogoSection :movies="movies" />
-      <SignMeSec :movies="movies" />
+      <NewsletterSec :movies="movies" />
       <Trips :dedicatedTeam="dedicatedTeam" />
       <ExploreTrip :movies="movies" />
       <FindAdventure :movies="movies" />
