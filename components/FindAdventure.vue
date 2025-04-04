@@ -357,7 +357,7 @@ const clearAllFilters = () => {
           <div class="rounded-lg mx-1 mt-6 min-h-[450px] overflow-hidden">
             <NuxtLink :to="{ path: post.slug }">
             <!-- Featured Image -->
-            <img :src="post.acf.post_image || '/public/trip1.jpg'" alt="Featured Image" class="rounded-t-lg w-full h-[280px] object-cover" />
+            <img :src="post.acf.post_image ? post.acf.post_image : 'https://www.x-trekkers.com/wp-content/uploads/2018/05/taste-of-lapland-Santa-scaled.jpg'" alt="Featured Image" class="rounded-t-lg w-full h-[280px] object-cover" />
 
             <div class="p-4 px-0">
               <!-- Title and Budget -->
