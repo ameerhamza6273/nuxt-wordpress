@@ -18,8 +18,12 @@ html {
 /* h1, h2 {
     font-weight:bolder;
 } */
-
-
+#htmlContainer > p span,
+#htmlContainer > h1 span,
+#htmlContainer,
+#htmlContainer > h5 span {
+    color: #A5A5A5 !important;
+}
 p, span, strong {
     font-family: 'Barlow', sans-serif;
 }

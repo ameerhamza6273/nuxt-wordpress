@@ -50,7 +50,7 @@ onMounted(fetchData);
       <NewsletterSec :movies="movies" />
       <Trips :dedicatedTeam="dedicatedTeam" />
       <ExploreTrip :movies="movies" />
-      <FindAdventure :movies="movies" />
+      <FindAdventure :movies="movies" :postData="posts" />
       <Post :movies="movies" />
       <ReviewsSec :dedicatedTeam="dedicatedTeam" />
       <ContactUs :movies="movies" />

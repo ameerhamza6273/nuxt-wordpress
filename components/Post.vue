@@ -32,10 +32,10 @@
 
                 <!-- Swiper Slides -->
                 <swiper-slide v-for="post in data" :key="post.uri">
-                    <div class="rounded-lg bg-[#191818] mx-3 mt-6 min-h-[490px] overflow-hidden">
+                    <div class="rounded-lg bg-[#191818] mx-3 mt-6 min-h-[440px] overflow-hidden">
                         <NuxtLink :to="{ path: post.uri }">
                             <img :src="post.featuredImage?.node?.sourceUrl || '/public/trip1.jpg'" alt="Featured Image"
-                                class="rounded-t-lg w-full h-[250px] object-cover" />
+                                class="rounded-t-lg w-full h-[200px] object-cover" />
                             <div class="p-4 sm:px-5">
                                 <!-- Truncated Title -->
                                 <h3 class="font-semibold text-xl text-white mt-2">{{ truncateText(post.title, 5) }}</h3>

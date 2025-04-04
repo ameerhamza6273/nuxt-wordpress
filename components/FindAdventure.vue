@@ -6,21 +6,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/grid"; // Add this
 import { Navigation, Pagination, Grid } from "swiper/modules"; // Include Grid
-import { ref , computed } from "vue";
-
-
-const pagesLinks = ref([
-  { image: "/Destination 1.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 2.png", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 3.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 4.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 4.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-  { image: "/Destination 5.jpg", title: "Mt. Fuji mountain climb", description: "Duration - ?? days", budjet: "Budget: $$$", },
-
-]);
+import { ref , computed , watch} from "vue";
 
 
 const startDateLabel = ref('Start Date');
@@ -31,6 +17,8 @@ const dropdown1 = ref(false);
 const dropdown2 = ref(false);
 const selectedBudget = ref('');
 const selectedDifficulty = ref('');
+const searchQuery = ref('');
+
 
 const toggleDropdown = (dropdown) => {
   if (dropdown === 'dropdown1') {
@@ -56,8 +44,16 @@ const applyFilters = () => {
   // Filters apply logic here
 };
 const updateLabel = (event, labelRef, defaultText) => {
-  labelRef.value = event.target.value || defaultText;
+  const value = event.target.value;
+  if (value) {
+    labelRef.value = new Date(value).toLocaleDateString("en-GB");
+  } else {
+    labelRef.value = defaultText;
+  }
 };
+
+
+
 
 // Force click for iOS devices
 const triggerPicker = (inputRef) => {
@@ -71,9 +67,44 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  postData: {
+    type: Array,
+    required: true,
+  },
 });
+
 const movieId = 27283;
 const movie = computed(() => props.movies.find((m) => m.id === movieId));
+const truncateText = (html, wordLimit) => {
+    if (process.client) {
+        const div = document.createElement("div");
+        div.innerHTML = html;
+        const text = div.textContent || div.innerText || "";
+        const words = text.split(" ");
+        return words.length > wordLimit ? words.slice(0, wordLimit).join(" ") + "..." : text;
+    }
+    return "";
+};
+
+const filteredPosts = computed(() => {
+  if (!searchQuery.value) return props.postData;
+
+  const query = searchQuery.value.toLowerCase();
+  return props.postData.filter(post =>
+    post.acf?.post_title?.toLowerCase().includes(query)
+  );
+});
+watch(searchQuery, (newVal) => {
+  console.log('searchQuery changed to:', newVal);
+});
+
+const clearAllFilters = () => {
+  searchQuery.value = '';
+  selectedBudget.value = '';
+  selectedDifficulty.value = '';
+  startDateLabel.value = 'Start Date';
+  endDateLabel.value = 'End Date';
+};
 
 </script>
 
@@ -99,12 +130,12 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
             <span>Filters</span>
           </span>
           <span class="text-white">|</span>
-          <span class="text-gray-400 cursor-pointer hover:text-white">Clear All</span>
+          <span class="text-gray-400 cursor-pointer hover:text-white" @click="clearAllFilters" >Clear All</span>
         </div>
 
         <!-- Search Input -->
-        <input type="text" placeholder="Search destinations..."
-          class="px-4 py-3 bg-[#000000ab] text-white rounded-md focus:outline-none placeholder-gray-400 w-full sm:w-[28%] min-w-[200px] mx-2 my-1" />
+        <input type="text" v-model="searchQuery" placeholder="Search destinations..."
+          class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full sm:w-[28%] min-w-[200px] mx-2 my-1" />
 
         <!-- Date Range -->
         <div
@@ -117,11 +148,11 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
             <span>{{ startDateLabel }}</span>
             <input ref="startDateInput" type="date" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               @focus="(event) => event.target.showPicker && event.target.showPicker()"
-              @input="(event) => updateLabel(event, startDateLabel, 'Start Date')" />
+              @input="(e) => updateLabel(e, startDateLabel, 'Start Date')" />
           </div>
 
           <!-- To Separator -->
-          <span class="px-2">To</span>
+          <span class="px-2">To </span>
 
           <!-- End Date -->
           <div
@@ -131,12 +162,13 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
             <span>{{ endDateLabel }}</span>
             <input ref="endDateInput" type="date" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               @focus="(event) => event.target.showPicker && event.target.showPicker()"
-              @input="(event) => updateLabel(event, endDateLabel, 'End Date')" />
+              @input="(e) => updateLabel(e, endDateLabel, 'End Date')"
+ />
           </div>
         </div>
         <div class="relative w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1">
           <button @click="toggleDropdown('dropdown1')"
-            class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-3 rounded-md shadow text-gray-900">
+            class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-3 rounded-xl shadow text-gray-900">
             {{ selectedBudget || 'Select Budget' }}
             <svg class="-mr-1 size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
@@ -156,7 +188,7 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
         <!-- Dropdown 2: Difficulty Level -->
         <div class="w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1 relative">
           <button @click="toggleDropdown('dropdown2')"
-            class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-3 rounded-md shadow text-gray-900">
+            class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-3 rounded-xl shadow text-gray-900">
             {{ selectedDifficulty || 'Select Difficulty' }}
             <svg class="-mr-1 size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
@@ -189,10 +221,12 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
             <span class="flex items-center gap-4 text-white text-xl mb-4 cursor-pointer">
               <i class="fas fa-filter"></i>
               <span>Filters</span>
+              <span class="text-white">|</span>
+              <span class="text-gray-400 cursor-pointer hover:text-white" @click="clearAllFilters" >Clear All</span>
             </span>
 
             <!-- Search Input -->
-            <input type="text" placeholder="Search destinations..."
+            <input type="text" v-model="searchQuery" placeholder="Search destinations..."
               class="px-4 py-3 bg-[#000000ab] text-white rounded-md focus:outline-none placeholder-gray-400 w-full" />
 
 
@@ -319,21 +353,23 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
           </article>
         </section>
         <!-- Swiper Slides -->
-        <swiper-slide v-for="(post, index) in pagesLinks" :key="index">
+        <swiper-slide v-for="(post, index) in filteredPosts" :key="post.id">
           <div class="rounded-lg mx-1 mt-6 min-h-[450px] overflow-hidden">
+            <NuxtLink :to="{ path: post.slug }">
             <!-- Featured Image -->
-            <img :src="post.image || '/public/trip1.jpg'" alt="Featured Image" class="rounded-t-lg w-full" />
+            <img :src="post.acf.post_image || '/public/trip1.jpg'" alt="Featured Image" class="rounded-t-lg w-full h-[280px] object-cover" />
 
             <div class="p-4 px-0">
               <!-- Title and Budget -->
               <div class="flex items-center justify-between">
-                <h3 class="font-semibold text-xl text-white w-[60%]">{{ post.title }}</h3>
-                <p class="w-[40%] text-[#A5A5A5] text-right">{{ post.budjet }}</p>
+                <h3 class="font-semibold text-xl text-white w-[75%]">{{ truncateText(post.title.rendered, 4) }}</h3>
+                <p class="w-[25%] text-[#A5A5A5] text-right">Budget: $$$</p>
               </div>
 
               <!-- Description -->
-              <p class="text-[14px] text-[#A5A5A5] my-2 max-h-[130px] overflow-hidden">{{ post.description }}</p>
+              <p class="text-[14px] text-[#A5A5A5] my-2 max-h-[130px] overflow-hidden" id="htmlContainer" v-html="post.content.rendered"></p>
             </div>
+          </NuxtLink>
           </div>
         </swiper-slide>
       </swiper>
