@@ -56,7 +56,7 @@ const submitEmailForm = async () => {
           <p class="mt-5 sm:mt-10 max-w-2xl text-lg text-white text-center mx-auto">{{ movie.acf.description }}
           </p>
           <div class="flex flex-col sm:flex-row mt-10 sm:mt-14 items-center sm:justify-center ">
-            <form @submit.prevent="submitEmailForm">
+            <form @submit.prevent="submitEmailForm" class="text-center">
               <input v-model="email" type="email" placeholder="Enter e-mail address"
                 class="text-white bg-[#575757] rounded-xl p-2 px-4 min-w-[330px] border-2 border-[#575757]" required>
               <button type="submit"
