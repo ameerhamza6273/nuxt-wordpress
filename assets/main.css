@@ -18,6 +18,7 @@ html {
 /* h1, h2 {
     font-weight:bolder;
 } */
+#htmlContainer > h5 span,
 #htmlContainer > p span,
 #htmlContainer > h1 span,
 #htmlContainer,

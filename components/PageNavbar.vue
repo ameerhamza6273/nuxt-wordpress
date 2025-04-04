@@ -206,7 +206,7 @@ import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const isToggled = ref(false);
 const isScrolled = ref(false);
-const activeLink = ref("/#Home");
+const activeLink = ref("/#home");
 
 const toggleMenu = () => {
   isToggled.value = !isToggled.value;
