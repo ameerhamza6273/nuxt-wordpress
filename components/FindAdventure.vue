@@ -280,7 +280,7 @@ const selectedDate = ref(new Date());
 
             <!-- Date Range -->
             <div
-              class="relative flex items-center justify-between bg-[#000000ab] rounded-md overflow-visible p-1 w-full sm:w-[24%] min-w-[300px] mt-4 ">
+              class="relative flex items-center justify-between bg-[#000000ab] rounded-md overflow-visible p-1 w-full sm:w-[24%] min-w-[280px] mt-4 ">
               <vue-date-picker v-model="startDate" class="w-28 rounded-xl" placeholder="Start Date" close-on-scroll
                 auto-apply :enable-time-picker="false" />
 
