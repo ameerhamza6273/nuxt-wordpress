@@ -472,6 +472,8 @@ const selectedDate = ref(new Date());
   ::v-deep(.dp__input) {
     border: none;
     background-color: #00000000;
+    color: #9ca3af !important;
+
   }
 
   ::v-deep(.dp__input::placeholder) {
