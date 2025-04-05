@@ -23,10 +23,10 @@
                 <!-- Navigation Arrows -->
                 <section class="parallax-slider-navigation cursor-pointer">
                     <article class="nav-indicator prevArrow">
-                        <img src="/public/left-slide-icon.svg" alt="Left Arrow" class="w-10 absolute z-40 bottom-0 left-[10%] md:left-[30%] lg:left-[37%]" />
+                        <NuxtImg src="/left-slide-icon.svg" alt="Left Arrow" class="w-10 absolute z-40 bottom-0 left-[10%] md:left-[30%] lg:left-[37%]" />
                     </article>
                     <article class="nav-indicator nextArrow">
-                        <img src="/public/right-slide-icon.svg" alt="Right Arrow" class="w-10 absolute z-40 bottom-0 right-[10%] md:right-[30%] lg:right-[37%]" />
+                        <NuxtImg src="/right-slide-icon.svg" alt="Right Arrow" class="w-10 absolute z-40 bottom-0 right-[10%] md:right-[30%] lg:right-[37%]" />
                     </article>
                 </section>
 
@@ -34,7 +34,7 @@
                 <swiper-slide v-for="post in data" :key="post.uri">
                     <div class="rounded-lg bg-[#191818] mx-3 mt-6 min-h-[440px] overflow-hidden">
                         <NuxtLink :to="{ path: post.uri }">
-                            <img :src="post.featuredImage?.node?.sourceUrl || '/public/trip1.jpg'" alt="Featured Image"
+                            <NuxtImg :src="post.featuredImage?.node?.sourceUrl || '/public/trip1.jpg'" alt="Featured Image"
                                 class="rounded-t-lg w-full h-[200px] object-cover" />
                             <div class="p-4 sm:px-5">
                                 <!-- Truncated Title -->

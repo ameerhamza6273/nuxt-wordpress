@@ -70,7 +70,7 @@
           <!-- Submit Button -->
           <div class="flex mt-3 items-center justify-end gap-4">
             <button type="submit"
-              class="bg-[#ffffff13] text-white rounded-xl shadow-md py-2 px-4 font-medium border-2 border-white">
+              class="bg-[#ffffff13] mx-auto md:ml-auto  md:mr-0 mt-3 text-white rounded-xl shadow-md py-2 px-4 font-medium border-2 border-white">
               Send Message
             </button>
           </div>

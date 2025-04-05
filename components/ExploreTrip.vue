@@ -27,22 +27,43 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
 
       </div>
       <div class="col-span-2 hidden md:block">
-        <NuxtLink to="/druk-path"><img :src="movie.acf.logo_one" alt="" class="hover:opacity-[0.7] cursor-pointer"></NuxtLink>
+        <NuxtLink to="/druk-path">
+          <NuxtImg :src="movie.acf.logo_one" alt="Druk Path Logo" class="hover:opacity-[0.7] cursor-pointer" />
+        </NuxtLink>
       </div>
-      <div class="col-span-2 hidden md:block" >
-        <NuxtLink to="/dolomites"><img :src="movie.acf.logo_two" alt="" class="hover:opacity-[0.7] cursor-pointer"></NuxtLink>
-      </div>
+
       <div class="col-span-2 hidden md:block">
-        <NuxtLink to="/mont-blanc"><img :src="movie.acf.logo_three" alt="" class="hover:opacity-[0.7] cursor-pointer"></NuxtLink>
+        <NuxtLink to="/dolomites">
+          <NuxtImg :src="movie.acf.logo_two" alt="Dolomites Logo" class="hover:opacity-[0.7] cursor-pointer" />
+        </NuxtLink>
       </div>
+
+      <div class="col-span-2 hidden md:block">
+        <NuxtLink to="/mont-blanc">
+          <NuxtImg :src="movie.acf.logo_three" alt="Mont Blanc Logo" class="hover:opacity-[0.7] cursor-pointer"/>
+        </NuxtLink>
+      </div>
+
 
     </div>
     <div class="block md:hidden">
-      <div class="flex ">
-        <NuxtLink to="/druk-path" class="w-1/3"><img :src="movie.acf.logo_four" alt="" class=" w-full object-contain hover:opacity-[0.7] cursor-pointer"></NuxtLink>
-        <NuxtLink to="/dolomites" class="w-1/3"><img :src="movie.acf.logo_five" alt="" class=" w-full object-contain hover:opacity-[0.7] cursor-pointer"></NuxtLink>
-        <NuxtLink to="/mont-blanc" class="w-1/3"><img :src="movie.acf.logo_six" alt="" class=" w-full  object-contain hover:opacity-[0.7] cursor-pointer"></NuxtLink>
+      <div class="flex">
+        <NuxtLink to="/druk-path" class="w-1/3">
+          <NuxtImg :src="movie.acf.logo_four" alt="Druk Path Logo"
+            class="w-full object-contain hover:opacity-[0.7] cursor-pointer" width="200" height="80" />
+        </NuxtLink>
+
+        <NuxtLink to="/dolomites" class="w-1/3">
+          <NuxtImg :src="movie.acf.logo_five" alt="Dolomites Logo"
+            class="w-full object-contain hover:opacity-[0.7] cursor-pointer" width="200" height="80" />
+        </NuxtLink>
+
+        <NuxtLink to="/mont-blanc" class="w-1/3">
+          <NuxtImg :src="movie.acf.logo_six" alt="Mont Blanc Logo"
+            class="w-full object-contain hover:opacity-[0.7] cursor-pointer" width="200" height="80" />
+        </NuxtLink>
       </div>
+
     </div>
 
   </div>

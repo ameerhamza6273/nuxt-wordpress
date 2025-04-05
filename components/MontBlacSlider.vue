@@ -31,12 +31,15 @@ const montBlancPage = computed(() => (props.montBlancPage?.length ? props.montBl
 
             <section class="parallax-slider-navigation cursor-pointer">
                 <article class="nav-indicator prevArrow">
-                    <img src="/public/left-slide-icon.svg" alt="Left Arrow"
-                        class="w-10 absolute z-40 bottom-0 bottom-[40px]  md:bottom-[60px] left-[30%]  sm:left-[6%]" />
+                    <NuxtImg src="/left-slide-icon.svg" alt="Left Arrow"
+                        class="w-10 absolute z-40 bottom-0 bottom-[40px] md:bottom-[60px] left-[30%] sm:left-[6%]"
+                        width="40" height="40" />
                 </article>
+
                 <article class="nav-indicator nextArrow">
-                    <img src="/public/right-slide-icon.svg" alt="Right Arrow"
-                        class="w-10 absolute z-40 bottom-0 bottom-[40px]  md:bottom-[60px] left-[60%] sm:left-[12%] lg:left-[10%]" />
+                    <NuxtImg src="/right-slide-icon.svg" alt="Right Arrow"
+                        class="w-10 absolute z-40 bottom-0 bottom-[40px] md:bottom-[60px] left-[60%] sm:left-[12%] lg:left-[10%]"
+                        width="40" height="40" />
                 </article>
             </section>
             <swiper-slide>

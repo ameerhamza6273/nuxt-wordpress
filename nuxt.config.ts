@@ -13,7 +13,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/devtools',
     '@nuxtjs/tailwindcss',
-    'nuxt-resend'
+    'nuxt-resend',
+    '@nuxt/image'
   ],
   compatibilityDate: '2024-11-01',
   css: [

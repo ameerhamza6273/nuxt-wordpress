@@ -73,12 +73,14 @@ onUnmounted(() => {
           <!-- Navigation Arrows -->
           <section class="parallax-slider-navigation cursor-pointer">
             <article class="nav-indicator prevArrow">
-              <img src="/public/left-slide-icon.svg" alt="Left Arrow" 
+              <NuxtImg src="/left-slide-icon.svg" 
+              alt="Left Arrow" 
               class="w-10 absolute z-40 bottom-24 md:bottom-0 left-[30%] md:left-[20px]" />
             </article>
             <article class="nav-indicator nextArrow">
-              <img src="/public/right-slide-icon.svg" alt="Right Arrow"
-                class="w-10 absolute z-40 bottom-24 md:bottom-0 left-[60%] md:left-[100px]" />
+              <NuxtImg src="/right-slide-icon.svg" 
+              alt="Right Arrow"
+              class="w-10 absolute z-40 bottom-24 md:bottom-0 left-[60%] md:left-[100px]" />
             </article>
           </section>
 

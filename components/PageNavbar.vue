@@ -10,7 +10,7 @@
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-5 px-5 sm:px-8">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-          <img :src="headerData.acf.logo" class="w-16 md:w-24" alt="Logo" />
+          <NuxtImg :src="headerData.acf.logo" class="w-16 md:w-24" alt="Logo" />
         </NuxtLink>
 
         <!-- Mobile Menu Toggle -->
@@ -102,7 +102,7 @@
                 ]"
                 @click="getActiveLink(headerData.acf.link_5)"
               >
-                  <img :src="headerData.acf.icon" alt="icon" 
+                  <NuxtImg :src="headerData.acf.icon" alt="icon" 
                   class="inline w-7 mr-2"
                   :class="activeLink === headerData.acf.link_5 ? ' filter brightness-50' : ''"
                    />
@@ -188,7 +188,7 @@
                 ]"
                 @click="getActiveLink(headerData.acf.link_5); closeMenu()"
               >
-                  <img :src="headerData.acf.icon" alt="icon" 
+                  <NuxtImg :src="headerData.acf.icon" alt="icon" 
                   class="inline w-7 mr-2"
                   :class="activeLink === headerData.acf.link_5 ? ' filter brightness-50' : ''"
                    />

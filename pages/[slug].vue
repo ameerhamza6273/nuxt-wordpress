@@ -5,8 +5,15 @@
     </article>
     <div v-else>
       <PageNavbar :headerData="headerFooter" />
-      <img :src="postData?.featuredImage?.node?.sourceUrl" alt="Featured Image" v-if="postData?.featuredImage"
-        style="width: 100%; object-fit: cover;" class=" h-[300px] sm:h-screen" />
+      <NuxtImg
+      v-if="postData?.featuredImage"
+      :src="postData.featuredImage.node.sourceUrl"
+      alt="Featured Image"
+      width="1000"
+      height="600"
+      class="w-full object-cover h-[300px] sm:h-[85vh]"
+      />
+
       <div class="px-6 md:px-16 py-16">
         <h2 class="text-3xl font-bold">{{ postData?.title || "Loading..." }}</h2>
         <p class="text-md mt-4" v-html="postData?.excerpt"></p>

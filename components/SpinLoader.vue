@@ -2,7 +2,7 @@
   <div
     class="h-screen w-screen overflow-hidden fixed top-0 left-0 bg-[#161616] z-[9999] flex justify-center items-center flex-col"
   >
-    <img
+    <NuxtImg
       src="/Logo.png"
       class="w-60 animate-bubble"
       alt="user"
