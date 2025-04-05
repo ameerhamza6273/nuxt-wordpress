@@ -276,7 +276,9 @@ const selectedDate = ref(new Date());
 
             <!-- Search Input -->
             <input type="text" v-model="searchQuery" placeholder="Search destinations..."
-              class="px-4 py-2 bg-[#000000ab] text-white rounded-md focus:outline-none placeholder-gray-400 w-full" />
+              class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full sm:w-[28%] min-w-[200px] my-1" />
+
+
 
             <!-- Date Range -->
             <div
@@ -289,7 +291,7 @@ const selectedDate = ref(new Date());
               <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl " placeholder="End Date" close-on-scroll
                 auto-apply :enable-time-picker="false" />
             </div>
-          
+
             <div class="flex justify-between mt-4">
               <div class="w-[48%] relative">
                 <button @click="toggleDropdown('dropdown1')"
