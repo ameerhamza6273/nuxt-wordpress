@@ -4,8 +4,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 
+// Props
 const props = defineProps({
   movies: {
     type: Array,
@@ -17,16 +18,33 @@ const props = defineProps({
   },
 });
 
-
+// Find a movie by ID
 const movieId = 27221;
 const movie = computed(() => props.movies.find((m) => m.id === movieId));
+
+// Reactive ref to track screen width
+const isMobile = ref(false);
+
+const checkViewport = () => {
+  isMobile.value = window.innerWidth < 600; // you can change 600 to any breakpoint
+};
+
+onMounted(() => {
+  checkViewport();
+  window.addEventListener("resize", checkViewport);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", checkViewport);
+});
 </script>
 
+
 <template>
-  <div v-if="movie" class="pl-6 sm:pl-8 md:pl-16 md:pt-24 bg-cover bg-center bg-no-repeat"
+  <div v-if="movie" class=" sm:pl-8 md:pl-16 md:pt-24 bg-cover bg-center bg-no-repeat"
     :style="{ backgroundImage: `url('${movie.acf.bgimage}')` }" id="home">
     <div class="grid md:grid-cols-2 grid-cols-1 py-24 sm:py-32">
-      <div class="self-end mt-10 md:mt-0">
+      <div class="self-end mt-10 md:mt-0 pl-6 md:pl-0">
         <h1 class="text-white font-bold max-w-[200px] text-3xl md:text-5xl heading-line-ht"
           style="line-height: 56px">
           {{ movie.acf.title }}
@@ -44,7 +62,9 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
       <div class="bg-transparent mt-10 md:mt-0">
         <!-- Swiper Slider -->
         <swiper :navigation="{ nextEl: '.nextArrow', prevEl: '.prevArrow' }" :pagination="{ clickable: true }"
-          :spaceBetween="20" :slidesPerView="2.5" :modules="[Navigation]" :loop="true" class="w-full relative"
+          :spaceBetween="20"
+          :centeredSlides="isMobile"
+           :slidesPerView="2.5" :modules="[Navigation]" :loop="true" class="w-full relative"
           style="padding-bottom: 70px !important;" :breakpoints="{
             340: { slidesPerView: 1.5 },
             600: { slidesPerView: 2 },
@@ -53,11 +73,12 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
           <!-- Navigation Arrows -->
           <section class="parallax-slider-navigation cursor-pointer">
             <article class="nav-indicator prevArrow">
-              <img src="/public/left-slide-icon.svg" alt="Left Arrow" class="w-10 absolute z-40 bottom-0 left-[20px]" />
+              <img src="/public/left-slide-icon.svg" alt="Left Arrow" 
+              class="w-10 absolute z-40 bottom-24 md:bottom-0 left-[30%] md:left-[20px]" />
             </article>
             <article class="nav-indicator nextArrow">
               <img src="/public/right-slide-icon.svg" alt="Right Arrow"
-                class="w-10 absolute z-40 bottom-0 left-[100px]" />
+                class="w-10 absolute z-40 bottom-24 md:bottom-0 left-[60%] md:left-[100px]" />
             </article>
           </section>
 
@@ -71,7 +92,7 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
                 class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none">
               </div>
 
-              <div class="p-6 px-7 z-10 flex flex-col justify-end min-h-[300px] relative">
+              <div class="p-6 px-7 z-10 flex flex-col md:justify-end min-h-[350px] md:min-h-[300px] relative">
                 <!-- Dynamic Data -->
                 <p class="text-lg text-white text-center z-20">
                   <b>{{ data.acf.title }}</b><br />
