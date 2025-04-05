@@ -43,12 +43,12 @@ const dolomitesPage = computed(() => (props.dolomitesPage?.length ? props.dolomi
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${dolomitesPage.acf.bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
+                        <h1 class="text-white text-center md:text-left font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{dolomitesPage.acf.title}}<br>                             
                             {{dolomitesPage.acf.title_2}}                             
                         </h1>
-                        <p class="text-xl text-white font-light uppercase mt-3"> {{dolomitesPage.acf.subtitle}} </p>
+                        <p class="text-xl text-white font-light uppercase mt-3 text-center md:text-left"> {{dolomitesPage.acf.subtitle}} </p>
                         <div class="p-5 py-7 bg-[#30303091] backdrop-blur-sm rounded-xl mt-16">
                             <div class="text-lg text-white uppercase flex flex-wrap gap-5"><span>{{dolomitesPage.acf.difficulty_title}} :
                                     <b>{{dolomitesPage.acf.difficulty_value}} </b></span> <span>{{dolomitesPage.acf.trip_price_title}} <b>{{dolomitesPage.acf.trip_price_value}}</b></span> <span> {{dolomitesPage.acf.departure_title}}:
@@ -63,12 +63,12 @@ const dolomitesPage = computed(() => (props.dolomitesPage?.length ? props.dolomi
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${dolomitesPage.acf.why_choose_bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 text-3xl uppercase md:text-5xl heading-line-ht"
+                        <h1 class="text-center md:text-left text-white font-bold mt-10 text-3xl uppercase md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{dolomitesPage.acf.title}}<br>                             
                             {{dolomitesPage.acf.title_2}}   
                         </h1>
-                        <p class="text-xl text-white font-light uppercase mt-3"> {{dolomitesPage.acf.why_choose_subtitle}}</p>
+                        <p class="text-center md:text-left text-xl text-white font-light uppercase mt-3"> {{dolomitesPage.acf.why_choose_subtitle}}</p>
                         <div class="p-5 bg-[#30303091] backdrop-blur-sm rounded-xl mt-16">
                             <div class="text-xl text-white font-light flex flex-wrap gap my-2 gap-5 sm:gap-16">
                                 <div class="max-w-[240px]">
@@ -94,12 +94,12 @@ const dolomitesPage = computed(() => (props.dolomitesPage?.length ? props.dolomi
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${dolomitesPage.acf.additional_bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
+                        <h1 class="text-center md:text-left text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{dolomitesPage.acf.title}}<br>                             
                             {{dolomitesPage.acf.title_2}}   
                         </h1>
-                        <p class="text-xl text-white font-light uppercase mt-3">{{dolomitesPage.acf.additional_information_subtitle}}</p>
+                        <p class="text-center md:text-left text-xl text-white font-light uppercase mt-3">{{dolomitesPage.acf.additional_information_subtitle}}</p>
                         <div class="p-5 bg-[#30303091] backdrop-blur-sm rounded-xl mt-16">
                             <div class="text-xl text-white font-light"> {{dolomitesPage.acf.information_title}}</div>
                             <div class="text-xl text-white font-light flex flex-wrap gap my-5 gap-5 sm:gap-16">
@@ -131,21 +131,21 @@ const dolomitesPage = computed(() => (props.dolomitesPage?.length ? props.dolomi
             <swiper-slide>
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${dolomitesPage.acf.book_bg_image}')` }">
-                    <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
+                    <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5 ">
+                        <h1 class="text-center md:text-left text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{dolomitesPage.acf.title}}<br>                             
                             {{dolomitesPage.acf.title_2}}   
                         </h1>
-                        <p class="text-xl text-white font-light mt-3 uppercase">{{dolomitesPage.acf.book_subtitle}}
+                        <p class="text-center md:text-left text-xl text-white font-light mt-3 uppercase">{{dolomitesPage.acf.book_subtitle}}
                         </p>
-                        <div class="text-lg text-white font-light  mt-16 md:max-w-[330px] ">
+                        <div class="text-lg text-white font-light text-center md:text-left mt-16 md:max-w-[330px] ">
                             {{dolomitesPage.acf.book_description}}
                         </div>
                         <div class="flex mt-8">
                             <NuxtLink
                             :to="dolomitesPage.acf.book_action.url"
-                                class="bg-[#ffffff1f]  delay-300 text-white rounded-xl shadow-md py-2 px-10 font-medium border-2 border-white"
+                                class="bg-[#ffffff1f] mx-auto md:ml-0 md:mr-auto delay-300 text-white rounded-xl shadow-md py-2 px-10 font-medium border-2 border-white"
                                 > {{dolomitesPage.acf.book_action.title}}</NuxtLink>
                         </div>
 

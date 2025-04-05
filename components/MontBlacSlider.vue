@@ -43,12 +43,12 @@ const montBlancPage = computed(() => (props.montBlancPage?.length ? props.montBl
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${montBlancPage.acf.bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
+                        <h1 class="text-center md:text-left text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{montBlancPage.acf.title}} <br>                          
                             {{montBlancPage.acf.title_2}}                             
                         </h1>
-                        <p class="text-xl text-white font-light uppercase mt-3"> {{montBlancPage.acf.subtitle}} </p>
+                        <p class="text-center md:text-left text-xl text-white font-light uppercase mt-3"> {{montBlancPage.acf.subtitle}} </p>
                         <div class="p-5 py-7 bg-[#30303091] backdrop-blur-sm rounded-xl mt-16">
                             <div class="text-lg text-white uppercase flex flex-wrap gap-5"><span>{{montBlancPage.acf.difficulty_title}} :
                                     <b>{{montBlancPage.acf.difficulty_value}} </b></span> <span>{{montBlancPage.acf.trip_price_title}} <b>{{montBlancPage.acf.trip_price_value}}</b></span> <span> {{montBlancPage.acf.departure_title}}:
@@ -63,13 +63,13 @@ const montBlancPage = computed(() => (props.montBlancPage?.length ? props.montBl
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${montBlancPage.acf.why_choose_bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold uppercase mt-10 text-3xl md:text-5xl heading-line-ht"
+                        <h1 class="text-center md:text-left text-white font-bold uppercase mt-10 text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{montBlancPage.acf.title}} <br>                          
                             {{montBlancPage.acf.title_2}}       
                            
                         </h1>
-                        <p class="text-xl text-white font-light uppercase mt-3"> {{montBlancPage.acf.why_choose_subtitle}}</p>
+                        <p class="text-center md:text-left text-xl text-white font-light uppercase mt-3"> {{montBlancPage.acf.why_choose_subtitle}}</p>
                         <div class="p-5 bg-[#30303091] backdrop-blur-sm rounded-xl mt-16">
                             <div class="text-xl text-white font-light flex flex-wrap gap my-2 gap-5 sm:gap-16">
                                 <div class="max-w-[240px]">
@@ -95,13 +95,13 @@ const montBlancPage = computed(() => (props.montBlancPage?.length ? props.montBl
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${montBlancPage.acf.additional_bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold uppercase mt-10 text-3xl md:text-5xl heading-line-ht"
+                        <h1 class="text-center md:text-left text-white font-bold uppercase mt-10 text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{montBlancPage.acf.title}} <br>                          
                             {{montBlancPage.acf.title_2}}       
                             
                         </h1>
-                        <p class="text-xl text-white font-light uppercase mt-3">{{montBlancPage.acf.additional_information_subtitle}}</p>
+                        <p class="text-center md:text-left text-xl text-white font-light uppercase mt-3">{{montBlancPage.acf.additional_information_subtitle}}</p>
                         <div class="p-5 bg-[#30303091] backdrop-blur-sm rounded-xl mt-16">
                             <div class="text-xl text-white font-light"> {{montBlancPage.acf.information_title}}</div>
                             <div class="text-xl text-white font-light flex flex-wrap gap my-5 gap-5 sm:gap-16">
@@ -134,21 +134,21 @@ const montBlancPage = computed(() => (props.montBlancPage?.length ? props.montBl
                 <div class=" bg-cover bg-center bg-no-repeat"
                 :style="{ backgroundImage: `url('${montBlancPage.acf.book_bg_image}')` }">
                     <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
-                        <h1 class="text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
+                        <h1 class="text-center md:text-left text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                             style="line-height: 56px;">
                             {{montBlancPage.acf.title}} <br>                          
                             {{montBlancPage.acf.title_2}}       
                            
                         </h1>
-                        <p class="text-xl text-white font-light mt-3 max-w-[300px] uppercase">{{montBlancPage.acf.book_subtitle}}
+                        <p class="text-center md:text-left text-xl text-white font-light mt-3 max-w-[300px] uppercase">{{montBlancPage.acf.book_subtitle}}
                         </p>
-                        <div class="text-lg text-white font-light  mt-16 md:max-w-[330px] ">
+                        <div class="text-center md:text-left text-lg text-white font-light  mt-16 md:max-w-[330px] ">
                             {{montBlancPage.acf.book_description}}
                         </div>
                         <div class="flex mt-8">
                             <NuxtLink
                             :to="montBlancPage.acf.book_action.url"
-                                class="bg-[#ffffff1f]  delay-300 text-white rounded-xl shadow-md py-2 px-10 font-medium border-2 border-white"
+                                class="bg-[#ffffff1f] mx-auto md:ml-0 md:mr-auto delay-300 text-white rounded-xl shadow-md py-2 px-10 font-medium border-2 border-white"
                                 > {{montBlancPage.acf.book_action.title}}</NuxtLink>
                         </div>
 
