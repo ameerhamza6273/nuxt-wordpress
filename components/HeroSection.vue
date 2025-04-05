@@ -45,16 +45,16 @@ onUnmounted(() => {
     :style="{ backgroundImage: `url('${movie.acf.bgimage}')` }" id="home">
     <div class="grid md:grid-cols-2 grid-cols-1 py-24 sm:py-32">
       <div class="self-end mt-10 md:mt-0 pl-6 md:pl-0">
-        <h1 class="text-white font-bold max-w-[200px] text-3xl md:text-5xl heading-line-ht"
+        <h1 class="text-white font-bold text-center md:text-left md:max-w-[200px] text-3xl md:text-5xl heading-line-ht"
           style="line-height: 56px">
           {{ movie.acf.title }}
         </h1>
-        <p class="text-lg text-white max-w-[430px] mt-3 pr-4">
+        <p class="text-lg text-white text-center md:text-left md:max-w-[430px] mt-3 pr-4">
           {{ movie.acf.description }}
         </p>
         <div class="flex mt-8">
           <NuxtLink :to="movie.acf.action.url" target="_blank"
-            class="bg-[#ffffff1f] delay-300 text-white rounded-xl shadow-md py-2 px-4 font-medium border-2 border-white">
+            class="bg-[#ffffff1f] mx-auto md:ml-0 md:mr-auto mb-14 md:mb-0 delay-300 text-white rounded-xl shadow-md py-2 px-4 font-medium border-2 border-white">
             {{ movie.acf.action.title }}
           </NuxtLink>
         </div>

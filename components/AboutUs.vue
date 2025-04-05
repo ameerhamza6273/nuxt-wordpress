@@ -22,7 +22,7 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
 
     >
       <div class="max-w-[1230px] mx-auto py-16">
-        <div class="text-center md:text-left">
+        <div class="text-center ">
           <h2 class="text-white text-xl md:text-2xl mb-10 border-b uppercase inline-block text-center">
             <i>{{ movie.acf.subtitle }}</i>
           </h2>

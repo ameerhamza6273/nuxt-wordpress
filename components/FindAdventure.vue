@@ -376,7 +376,7 @@ const selectedDate = ref(new Date());
         :breakpoints="{
           320: {
             slidesPerView: 1,
-            grid: { rows: 1 },
+            grid: { rows: 2, fill: 'row' },
           },
           768: {
             slidesPerView: 2,
@@ -407,7 +407,7 @@ const selectedDate = ref(new Date());
               <img :src="post.acf.post_image
                 ? post.acf.post_image
                 : 'https://www.x-trekkers.com/wp-content/uploads/2018/05/taste-of-lapland-Santa-scaled.jpg'
-                " alt="Featured Image" class="rounded-t-lg w-full h-[280px] object-cover" />
+                " alt="Featured Image" class="rounded-t-lg w-full h-[220px] md:h-[280px] object-cover" />
 
               <div class="p-4 px-0">
                 <!-- Title and Budget -->
