@@ -258,7 +258,8 @@ const selectedDate = ref(new Date());
       <div class="md:hidden flex justify-center bg-[#404857e6] p-3 px-5">
         <button @click="showModal = true"
           class="bg-[#afb1b4] rounded-xl border border-[#414141] w-full py-3 text-lg font-sebibold rounded-md shadow-lg">
-          <i class="fas fa-search mr-3"></i>  <span v-if="searchQuery">You searched for: <strong>{{ searchQuery }}</strong></span>
+          <i class="fas fa-search mr-3"></i> <span v-if="searchQuery">You searched for: <strong>{{ searchQuery
+              }}</strong></span>
           <span v-else>Start Your Search</span>
         </button>
       </div>
@@ -357,7 +358,11 @@ const selectedDate = ref(new Date());
       </transition>
     </div>
     <!-- slider section -->
-    <div class="max-w-[1290px] mx-auto px-4 sm:px-10 py-10">
+    <div class="max-w-[1290px] mx-auto px-4 sm:px-10 py-10 border-b md:border-b-0">
+      <div v-if="filteredPosts.length === 0" class="text-center py-10 text-lg text-white">
+        No results found, please try different filters.
+      </div>
+
       <!-- Swiper Slider -->
       <swiper v-if="filteredPosts.length > 0" :key="'swiper-' + filteredPosts.length"
         :modules="[Navigation, Pagination, Grid]" :navigation="{
