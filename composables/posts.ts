@@ -4,10 +4,12 @@ export async function getPosts(body: Object) {
   const config = useRuntimeConfig();
 
   try {
-    const response: any = await $fetch(`${config.public.BASE_URL}/posts`, {
+    console.log(`${config.public.BASE_URL}/posts`);
+    const response: any = await $fetch(`${config.public.BASE_URL}/posts?cb=${Date.now()}`, {
       method: "GET",
       body: body,
     });
+    console.log(response, 'this is response');
 
     const posts = usePosts();
     posts.value = response ?? [];

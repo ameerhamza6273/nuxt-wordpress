@@ -123,11 +123,11 @@ const filteredPosts = computed(() => {
       : true;
 
     const budgetMatches = selectedBudget.value
-      ? post.acf?.post_budgets === selectedBudget.value
+      ? post.acf?.budget === selectedBudget.value
       : true;
 
     const difficultyMatches = selectedDifficulty.value
-      ? post.acf?.post_budgets === selectedDifficulty.value // ✅ corrected here
+      ? post.acf?.difficulty === selectedDifficulty.value // ✅ corrected here
       : true;
 
     const postDate = new Date(post.date);
@@ -413,7 +413,7 @@ const selectedDate = ref(new Date());
                   <h3 class="font-semibold text-xl text-white w-[75%]">
                     {{ truncateText(post.title.rendered, 4) }}
                   </h3>
-                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: {{ post.acf.post_budgets ? post.acf.post_budgets : '00'}} </p>
+                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: {{ post.acf.budget ? post.acf.budget : '00'}} </p>
                 </div>
                 <p class="text-[#A5A5A5]">
                   {{
