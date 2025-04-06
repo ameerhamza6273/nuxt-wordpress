@@ -413,7 +413,7 @@ const selectedDate = ref(new Date());
                   <h3 class="font-semibold text-xl text-white w-[75%]">
                     {{ truncateText(post.title.rendered, 4) }}
                   </h3>
-                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: {{ post.acf.post_budget_}} </p>
+                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: {{ post.acf.post_budget_ ? post.acf.post_budget_ : '1000'}} </p>
                 </div>
                 <p class="text-[#A5A5A5]">
                   {{
