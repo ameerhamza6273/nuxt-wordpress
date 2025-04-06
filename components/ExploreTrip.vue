@@ -28,19 +28,19 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
       </div>
       <div class="col-span-2 hidden md:block">
         <NuxtLink to="/druk-path">
-          <NuxtImg :src="movie.acf.logo_one" alt="Druk Path Logo" class="hover:opacity-[0.7] cursor-pointer" />
+          <NuxtImg :src="movie.acf.logo_one" alt="Druk Path Logo" class="w-full hover:opacity-[0.7] cursor-pointer" />
         </NuxtLink>
       </div>
 
       <div class="col-span-2 hidden md:block">
         <NuxtLink to="/dolomites">
-          <NuxtImg :src="movie.acf.logo_two" alt="Dolomites Logo" class="hover:opacity-[0.7] cursor-pointer" />
+          <NuxtImg :src="movie.acf.logo_two" alt="Dolomites Logo" class="w-full hover:opacity-[0.7] cursor-pointer" />
         </NuxtLink>
       </div>
 
       <div class="col-span-2 hidden md:block">
         <NuxtLink to="/mont-blanc">
-          <NuxtImg :src="movie.acf.logo_three" alt="Mont Blanc Logo" class="hover:opacity-[0.7] cursor-pointer"/>
+          <NuxtImg :src="movie.acf.logo_three" alt="Mont Blanc Logo" class="w-full hover:opacity-[0.7] cursor-pointer"/>
         </NuxtLink>
       </div>
 

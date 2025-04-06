@@ -402,7 +402,7 @@ const selectedDate = ref(new Date());
         <!-- Swiper Slides -->
         <swiper-slide v-for="(post, index) in filteredPosts" :key="post.id">
           <div class="rounded-lg mx-1 mt-6 min-h-[450px] overflow-hidden">
-            <NuxtLink :to="{ path: post.slug }">
+            <NuxtLink to="/dolomites">
               <!-- Featured Image -->
               <NuxtImg :src="post.acf.post_image
                 ? post.acf.post_image
