@@ -126,11 +126,11 @@ const filteredPosts = computed(() => {
       : true;
 
     const budgetMatches = selectedBudget.value
-      ? post.acf?.budget === selectedBudget.value
+      ? post.acf?.post_budget_ === selectedBudget.value
       : true;
 
     const difficultyMatches = selectedDifficulty.value
-      ? post.acf?.difficulty === selectedDifficulty.value
+      ? post.acf?.post_budget_ === selectedDifficulty.value
       : true;
 
     // Date filtering logic
@@ -243,13 +243,13 @@ const selectedDate = ref(new Date());
           </button>
           <ul v-if="dropdown2"
             class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-            <li @click="selectDifficulty('Easy')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectDifficulty('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Easy
             </li>
-            <li @click="selectDifficulty('Moderate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectDifficulty('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Moderate
             </li>
-            <li @click="selectDifficulty('Hard')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectDifficulty('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Hard
             </li>
           </ul>
@@ -415,7 +415,7 @@ const selectedDate = ref(new Date());
                   <h3 class="font-semibold text-xl text-white w-[75%]">
                     {{ truncateText(post.title.rendered, 4) }}
                   </h3>
-                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: $$$</p>
+                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: {{ post.acf.post_budget_}} </p>
                 </div>
                 <p class="text-[#A5A5A5]">
                   {{
