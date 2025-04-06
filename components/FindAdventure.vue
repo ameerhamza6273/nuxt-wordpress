@@ -4,6 +4,8 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/grid"; // Add this
+import { navigateTo } from '#app'
+
 import { Navigation, Pagination, Grid } from "swiper/modules";
 
 const startDateLabel = ref("Start Date");
@@ -160,6 +162,12 @@ const clearAllFilters = () => {
   endDateLabel.value = "End Date";
 };
 
+
+const getRoute = (id) => {
+  // Navigate to the post page with the post ID
+  navigateTo(`/post/${id}`)
+}
+
 const selectedDate = ref(new Date());
 </script>
 
@@ -257,7 +265,7 @@ const selectedDate = ref(new Date());
         <button @click="showModal = true"
           class="bg-[#afb1b4] rounded-xl border border-[#414141] w-full py-3 text-lg font-sebibold rounded-md shadow-lg">
           <i class="fas fa-search mr-3"></i> <span v-if="searchQuery">You searched for: <strong>{{ searchQuery
-              }}</strong></span>
+          }}</strong></span>
           <span v-else>Start Your Search</span>
         </button>
       </div>
@@ -330,16 +338,13 @@ const selectedDate = ref(new Date());
                 </button>
                 <ul v-if="dropdown2"
                   class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-                  <li @click="selectDifficulty('$')"
-                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Easy
                   </li>
-                  <li @click="selectDifficulty('$$')"
-                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Moderate
                   </li>
-                  <li @click="selectDifficulty('$$$')"
-                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Hard
                   </li>
                 </ul>
@@ -400,7 +405,7 @@ const selectedDate = ref(new Date());
         <!-- Swiper Slides -->
         <swiper-slide v-for="(post, index) in filteredPosts" :key="post.id">
           <div class="rounded-lg mx-1 mt-6 min-h-[450px] overflow-hidden">
-            <NuxtLink to="/dolomites">
+            <NuxtLink :to="`/post/${post.id}`" class="cursor-pointer">
               <!-- Featured Image -->
               <NuxtImg :src="post.acf.post_image
                 ? post.acf.post_image
@@ -413,7 +418,8 @@ const selectedDate = ref(new Date());
                   <h3 class="font-semibold text-xl text-white w-[75%]">
                     {{ truncateText(post.title.rendered, 4) }}
                   </h3>
-                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: {{ post.acf.budget ? post.acf.budget : '00'}} </p>
+                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: {{ post.acf.budget ? post.acf.budget : '00' }}
+                  </p>
                 </div>
                 <p class="text-[#A5A5A5]">
                   {{

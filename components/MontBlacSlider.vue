@@ -13,7 +13,7 @@ const props = defineProps({
   },
 });
 
-const montBlancPageId = 27397;
+const montBlancPageId = 23008;
 
 // Ensure montBlancPage is not null/undefined before calling .find()
 const montBlancPage = computed(() => (props.montBlancPage?.length ? props.montBlancPage.find((m) => m.id === montBlancPageId) : null));

@@ -51,7 +51,7 @@ onMounted(fetchData);
       <Trips :dedicatedTeam="dedicatedTeam" />
       <ExploreTrip :movies="movies" />
       <FindAdventure :movies="movies" :postData="posts" />
-      <Post :movies="movies" />
+      <Post :movies="movies" :postData="posts" />
       <ReviewsSec :dedicatedTeam="dedicatedTeam" />
       <ContactUs :movies="movies" />
       <PageFooter :footerData="headerFooter" />
