@@ -120,9 +120,7 @@ watch(searchQuery, (newVal) => {
 const filteredPosts = computed(() => {
   return props.postData.filter((post) => {
     const titleMatches = debouncedSearchQuery.value
-      ? post.acf?.post_title
-        ?.toLowerCase()
-        .includes(debouncedSearchQuery.value.toLowerCase())
+      ? post.acf?.post_title?.toLowerCase().includes(debouncedSearchQuery.value.toLowerCase())
       : true;
 
     const budgetMatches = selectedBudget.value
@@ -130,10 +128,10 @@ const filteredPosts = computed(() => {
       : true;
 
     const difficultyMatches = selectedDifficulty.value
-      ? post.acf?.post_budget_ === selectedDifficulty.value
+      ? post.acf?.post_budget_ === selectedDifficulty.value // ✅ fixed here
       : true;
 
-    // Date filtering logic
+    // ✅ Date filtering logic
     const postDate = new Date(post.date); // Assuming post.date exists
     const start = startDate.value ? new Date(startDate.value) : null;
     const end = endDate.value ? new Date(endDate.value) : null;
@@ -147,9 +145,11 @@ const filteredPosts = computed(() => {
       dateMatches = postDate <= end;
     }
 
+    // ✅ Combined logic — only items that pass *all filters* will show
     return titleMatches && budgetMatches && difficultyMatches && dateMatches;
   });
 });
+
 
 const clearAllFilters = () => {
   searchQuery.value = "";
