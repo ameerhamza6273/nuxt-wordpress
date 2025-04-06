@@ -28,7 +28,7 @@ const memberTwo = computed(() => props.dedicatedTeam.find(member => member.id ==
       </div>
 
       <div v-if="memberOne" class="rounded-lg bg-[#000000b9] mx-3 mt-6 md-mt-3 col-span-1">
-        <NuxtImg :src="memberOne.acf.main_image" alt="" class="rounded-t-lg" />
+        <NuxtImg :src="memberOne.acf.main_image" alt="" class="rounded-t-lg w-full" />
         <div class="p-4 sm:px-6">
           <h3 class="font-bold text-xl text-white">{{ memberOne.acf.title }}</h3>
           <p class="text-lg text-white mt-3">{{ memberOne.acf.description }}</p>
@@ -40,7 +40,7 @@ const memberTwo = computed(() => props.dedicatedTeam.find(member => member.id ==
       </div>
 
       <div v-if="memberTwo" class="rounded-lg bg-[#000000b9] mx-3 mt-6 md-mt-3 col-span-1">
-        <NuxtImg  :src="memberTwo.acf.main_image" alt="" class="rounded-t-lg" />
+        <NuxtImg  :src="memberTwo.acf.main_image" alt="" class="rounded-t-lg w-full" />
         <div class="p-4 sm:px-6">
           <h3 class="font-bold text-xl text-white">{{ memberTwo.acf.title }}</h3>
           <p class="text-lg text-white mt-3">{{ memberTwo.acf.description }}</p>
