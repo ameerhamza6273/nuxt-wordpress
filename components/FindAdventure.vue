@@ -249,13 +249,13 @@ const selectedDate = ref(new Date());
           </button>
           <ul v-if="dropdown2"
             class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-            <li @click="selectDifficulty('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectDifficulty('easy')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Easy
             </li>
-            <li @click="selectDifficulty('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectDifficulty('moderate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Moderate
             </li>
-            <li @click="selectDifficulty('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectDifficulty('hard')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Hard
             </li>
           </ul>
@@ -338,13 +338,13 @@ const selectedDate = ref(new Date());
                 </button>
                 <ul v-if="dropdown2"
                   class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-                  <li @click="selectDifficulty('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('easy')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Easy
                   </li>
-                  <li @click="selectDifficulty('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('moderate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Moderate
                   </li>
-                  <li @click="selectDifficulty('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('hard')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Hard
                   </li>
                 </ul>
