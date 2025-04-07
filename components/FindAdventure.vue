@@ -129,20 +129,32 @@ const filteredPosts = computed(() => {
       : true;
 
     const difficultyMatches = selectedDifficulty.value
-      ? post.acf?.difficulty === selectedDifficulty.value // ✅ corrected here
+      ? post.acf?.difficulty === selectedDifficulty.value
       : true;
 
-    const postDate = new Date(post.date);
-    const start = startDate.value ? new Date(startDate.value) : null;
-    const end = endDate.value ? new Date(endDate.value) : null;
+    // Get the post's date range from ACF
+    const postStartDate = post.acf?.start_date ? new Date(post.acf.start_date) : null;
+    const postEndDate = post.acf?.end_date ? new Date(post.acf.end_date) : null;
+    
+    // Get the filter date range
+    const filterStartDate = startDate.value ? new Date(startDate.value) : null;
+    const filterEndDate = endDate.value ? new Date(endDate.value) : null;
 
     let dateMatches = true;
-    if (start && end) {
-      dateMatches = postDate >= start && postDate <= end;
-    } else if (start) {
-      dateMatches = postDate >= start;
-    } else if (end) {
-      dateMatches = postDate <= end;
+    
+    if (filterStartDate && filterEndDate) {
+      // Case 1: Both filter dates are set - check overlap
+      dateMatches = 
+        (postStartDate && postStartDate <= filterEndDate) && 
+        (postEndDate && postEndDate >= filterStartDate);
+    } 
+    else if (filterStartDate) {
+      // Case 2: Only start date is set - posts that start after filter start date
+      dateMatches = postStartDate && postStartDate >= filterStartDate;
+    } 
+    else if (filterEndDate) {
+      // Case 3: Only end date is set - posts that end before filter end date
+      dateMatches = postEndDate && postEndDate <= filterEndDate;
     }
 
     return titleMatches && budgetMatches && difficultyMatches && dateMatches;
@@ -422,13 +434,14 @@ const selectedDate = ref(new Date());
                   </p>
                 </div>
                 <p class="text-[#A5A5A5]">
-                  {{
+                  Date:  {{ post.acf.start_date }} - {{ post.acf.end_date }}
+                  <!-- {{
                     new Date(post.date).toLocaleDateString("en-GB", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
                     })
-                  }}
+                  }} -->
                 </p>
 
                 <!-- Description -->
