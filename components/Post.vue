@@ -1,6 +1,6 @@
 <template>
   <div class="bg-[url('/Blogimage-bg.jpg')] bg-cover bg-center bg-no-repeat">
-      <div class="max-w-[1230px] mx-auto px-4 sm:px-10 py-16">
+      <div class="max-w-[1230px] mx-auto px-3 py-16">
           <h2 class="text-white uppercase text-3xl md:text-5xl font-bold text-center max-w-3xl mx-auto heading-line-ht" style="line-height: 50px;">
               Trail tracking: <br> x-pedition journal
           </h2>
