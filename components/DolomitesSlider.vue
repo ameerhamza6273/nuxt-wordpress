@@ -13,7 +13,7 @@ const props = defineProps({
     },
 });
 
-const dolomitesPageId = 21170;
+const dolomitesPageId = 27396;
 
 // Ensure dolomitesPage is not null/undefined before calling .find()
 const dolomitesPage = computed(() => (props.dolomitesPage?.length ? props.dolomitesPage.find((m) => m.id === dolomitesPageId) : null));

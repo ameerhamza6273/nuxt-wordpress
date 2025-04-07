@@ -75,7 +75,7 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  postData: {
+  tripData: {
     type: Array,
     required: true,
   },
@@ -118,23 +118,23 @@ watch(searchQuery, (newVal) => {
   updateDebouncedQuery(newVal);
   console.log("searchQuery changed to:", newVal);
 });
-const filteredPosts = computed(() => {
-  return props.postData.filter((post) => {
+const filteredTrip = computed(() => {
+  return props.tripData.filter((trip) => {
     const titleMatches = debouncedSearchQuery.value
-      ? post.acf?.post_title?.toLowerCase().includes(debouncedSearchQuery.value.toLowerCase())
+      ? trip.acf?.trip_title?.toLowerCase().includes(debouncedSearchQuery.value.toLowerCase())
       : true;
 
     const budgetMatches = selectedBudget.value
-      ? post.acf?.budget === selectedBudget.value
+      ? trip.acf?.budget === selectedBudget.value
       : true;
 
     const difficultyMatches = selectedDifficulty.value
-      ? post.acf?.difficulty === selectedDifficulty.value
+      ? trip.acf?.difficulty === selectedDifficulty.value
       : true;
 
-    // Get the post's date range from ACF
-    const postStartDate = post.acf?.start_date ? new Date(post.acf.start_date) : null;
-    const postEndDate = post.acf?.end_date ? new Date(post.acf.end_date) : null;
+    // Get the trip's date range from ACF
+    const tripStartDate = trip.acf?.start_date ? new Date(trip.acf.start_date) : null;
+    const tripEndDate = trip.acf?.end_date ? new Date(trip.acf.end_date) : null;
     
     // Get the filter date range
     const filterStartDate = startDate.value ? new Date(startDate.value) : null;
@@ -145,16 +145,16 @@ const filteredPosts = computed(() => {
     if (filterStartDate && filterEndDate) {
       // Case 1: Both filter dates are set - check overlap
       dateMatches = 
-        (postStartDate && postStartDate <= filterEndDate) && 
-        (postEndDate && postEndDate >= filterStartDate);
+        (tripStartDate && tripStartDate <= filterEndDate) && 
+        (tripEndDate && tripEndDate >= filterStartDate);
     } 
     else if (filterStartDate) {
-      // Case 2: Only start date is set - posts that start after filter start date
-      dateMatches = postStartDate && postStartDate >= filterStartDate;
+      // Case 2: Only start date is set - trips that start after filter start date
+      dateMatches = tripStartDate && tripStartDate >= filterStartDate;
     } 
     else if (filterEndDate) {
-      // Case 3: Only end date is set - posts that end before filter end date
-      dateMatches = postEndDate && postEndDate <= filterEndDate;
+      // Case 3: Only end date is set - trips that end before filter end date
+      dateMatches = tripEndDate && tripEndDate <= filterEndDate;
     }
 
     return titleMatches && budgetMatches && difficultyMatches && dateMatches;
@@ -176,8 +176,8 @@ const clearAllFilters = () => {
 
 
 const getRoute = (id) => {
-  // Navigate to the post page with the post ID
-  navigateTo(`/post/${id}`)
+  // Navigate to the trip page with the trip ID
+  navigateTo(`/trip/${id}`)
 }
 
 const selectedDate = ref(new Date());
@@ -236,13 +236,13 @@ const selectedDate = ref(new Date());
           </button>
           <ul v-if="dropdown1"
             class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-            <li @click="selectBudget('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectBudget('$1000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Low
             </li>
-            <li @click="selectBudget('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectBudget('$2000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Medium
             </li>
-            <li @click="selectBudget('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectBudget('$3000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               High
             </li>
           </ul>
@@ -261,14 +261,14 @@ const selectedDate = ref(new Date());
           </button>
           <ul v-if="dropdown2"
             class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-            <li @click="selectDifficulty('easy')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              Easy
+            <li @click="selectDifficulty('Beginner')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+              Beginner
             </li>
-            <li @click="selectDifficulty('moderate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              Moderate
+            <li @click="selectDifficulty('Intermediate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+              Intermediate
             </li>
-            <li @click="selectDifficulty('hard')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              Hard
+            <li @click="selectDifficulty('Expert')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+              Expert
             </li>
           </ul>
         </div>
@@ -325,13 +325,13 @@ const selectedDate = ref(new Date());
                 </button>
                 <ul v-if="dropdown1"
                   class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-                  <li @click="selectBudget('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectBudget('$1000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Low
                   </li>
-                  <li @click="selectBudget('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectBudget('$2000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Medium
                   </li>
-                  <li @click="selectBudget('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectBudget('$3000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     High
                   </li>
                 </ul>
@@ -350,14 +350,14 @@ const selectedDate = ref(new Date());
                 </button>
                 <ul v-if="dropdown2"
                   class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-                  <li @click="selectDifficulty('easy')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                    Easy
+                  <li @click="selectDifficulty('Beginner')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    Beginner
                   </li>
-                  <li @click="selectDifficulty('moderate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                    Moderate
+                  <li @click="selectDifficulty('Intermediate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    Intermediate
                   </li>
-                  <li @click="selectDifficulty('hard')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                    Hard
+                  <li @click="selectDifficulty('Expert')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    Expert
                   </li>
                 </ul>
               </div>
@@ -374,12 +374,12 @@ const selectedDate = ref(new Date());
     </div>
     <!-- slider section -->
     <div class="max-w-[1290px] mx-auto px-4 sm:px-10 py-10 border-b md:border-b-0">
-      <div v-if="filteredPosts.length === 0" class="text-center py-10 text-lg text-white">
+      <div v-if="filteredTrip.length === 0" class="text-center py-10 text-lg text-white">
         No results found, please try different filters.
       </div>
 
       <!-- Swiper Slider -->
-      <swiper v-if="filteredPosts.length > 0" :key="'swiper-' + filteredPosts.length"
+      <swiper v-if="filteredTrip.length > 0" :key="'swiper-' + filteredTrip.length"
         :modules="[Navigation, Pagination, Grid]" :navigation="{
           nextEl: '.nextArrow',
           prevEl: '.prevArrow',
@@ -415,38 +415,34 @@ const selectedDate = ref(new Date());
           </article>
         </section>
         <!-- Swiper Slides -->
-        <swiper-slide v-for="(post, index) in filteredPosts" :key="post.id">
+        <swiper-slide v-for="(trip, index) in filteredTrip" :key="trip.id">
           <div class="rounded-lg mx-1 mt-6 min-h-[450px] overflow-hidden">
-            <NuxtLink :to="`/post/${post.id}`" class="cursor-pointer">
+            <NuxtLink :to="`/trip/${trip.id}`" class="cursor-pointer">
               <!-- Featured Image -->
-              <NuxtImg :src="post.acf.post_image
-                ? post.acf.post_image
+              <NuxtImg :src="trip.acf.trip_image
+                ? trip.acf.trip_image
                 : 'https://www.x-trekkers.com/wp-content/uploads/2018/05/taste-of-lapland-Santa-scaled.jpg'
                 " alt="Featured Image" class="rounded-t-lg w-full h-[220px] md:h-[280px] object-cover" />
 
               <div class="p-4 px-0">
                 <!-- Title and Budget -->
                 <div class="flex items-center justify-between">
-                  <h3 class="font-semibold text-xl text-white w-[75%]">
-                    {{ truncateText(post.title.rendered, 4) }}
+                  <h3 class="font-semibold text-xl text-white w-[60%]">
+                    {{ truncateText(trip.acf.trip_title, 4) }}
                   </h3>
-                  <p class="w-[25%] text-[#A5A5A5] text-right">Budget: {{ post.acf.budget ? post.acf.budget : '00' }}
+                  <p class="w-[40%] text-[#A5A5A5] text-right">Budget: {{ trip.acf.budget ? trip.acf.budget : '00' }}
                   </p>
                 </div>
                 <p class="text-[#A5A5A5]">
-                  Date:  {{ post.acf.start_date }} - {{ post.acf.end_date }}
-                  <!-- {{
-                    new Date(post.date).toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })
-                  }} -->
+                  Date:  {{ trip.acf.start_date }} - {{ trip.acf.end_date }}
+                </p>
+                <p class="text-[#A5A5A5]">
+                  Difficulty:  {{ trip.acf.difficulty }}
                 </p>
 
                 <!-- Description -->
-                <p class="text-[14px] text-[#A5A5A5] my-2 max-h-[130px] overflow-hidden" id="htmlContainer"
-                  v-html="post.content.rendered"></p>
+                <!-- <p class="text-[14px] text-[#A5A5A5] my-2 max-h-[130px] overflow-hidden" id="htmlContainer"
+                  v-html="trip.content.rendered"></p> -->
               </div>
             </NuxtLink>
           </div>

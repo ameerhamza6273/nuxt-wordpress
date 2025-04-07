@@ -13,7 +13,7 @@ const props = defineProps({
   },
 });
 
-const druckPageId = 25664;
+const druckPageId = 27395;
 
 // Ensure druckPage is not null/undefined before calling .find()
 const druckPage = computed(() => (props.druckPage?.length ? props.druckPage.find((m) => m.id === druckPageId) : null));
