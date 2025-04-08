@@ -221,8 +221,25 @@ const selectedDate = ref(new Date());
 
           <span class="px-2">To</span>
 
-          <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl " placeholder="End Date" close-on-scroll
-            auto-apply :enable-time-picker="false" />
+          <div class="relative group">
+  <vue-date-picker
+    v-model="endDate"
+    input-class="w-28 rounded-xl"
+    placeholder="End Date"
+    close-on-scroll
+    auto-apply
+    :enable-time-picker="false"
+    :disabled="!startDate"
+  />
+
+  <!-- Tooltip -->
+  <div
+    v-if="!startDate"
+    class="absolute top-full mt-1 left-0 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
+  >
+    Please select Start Date first
+  </div>
+</div>
         </div>
         <div class="relative w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1">
           <button @click="toggleDropdown('dropdown1')"
@@ -309,7 +326,7 @@ const selectedDate = ref(new Date());
               <span class="px-2 text-white">To</span>
 
               <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl " placeholder="End Date" close-on-scroll
-                auto-apply :enable-time-picker="false" />
+                auto-apply :enable-time-picker="false" :disabled="!startDate" />
             </div>
 
             <div class="flex justify-between mt-4">
