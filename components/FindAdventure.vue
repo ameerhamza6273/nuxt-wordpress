@@ -135,23 +135,23 @@ const filteredTrip = computed(() => {
     // Get the trip's date range from ACF
     const tripStartDate = trip.acf?.start_date ? new Date(trip.acf.start_date) : null;
     const tripEndDate = trip.acf?.end_date ? new Date(trip.acf.end_date) : null;
-    
+
     // Get the filter date range
     const filterStartDate = startDate.value ? new Date(startDate.value) : null;
     const filterEndDate = endDate.value ? new Date(endDate.value) : null;
 
     let dateMatches = true;
-    
+
     if (filterStartDate && filterEndDate) {
       // Case 1: Both filter dates are set - check overlap
-      dateMatches = 
-        (tripStartDate && tripStartDate <= filterEndDate) && 
+      dateMatches =
+        (tripStartDate && tripStartDate <= filterEndDate) &&
         (tripEndDate && tripEndDate >= filterStartDate);
-    } 
+    }
     else if (filterStartDate) {
       // Case 2: Only start date is set - trips that start after filter start date
       dateMatches = tripStartDate && tripStartDate >= filterStartDate;
-    } 
+    }
     else if (filterEndDate) {
       // Case 3: Only end date is set - trips that end before filter end date
       dateMatches = tripEndDate && tripEndDate <= filterEndDate;
@@ -222,24 +222,15 @@ const selectedDate = ref(new Date());
           <span class="px-2">To</span>
 
           <div class="relative group">
-  <vue-date-picker
-    v-model="endDate"
-    input-class="w-28 rounded-xl"
-    placeholder="End Date"
-    close-on-scroll
-    auto-apply
-    :enable-time-picker="false"
-    :disabled="!startDate"
-  />
+            <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl" placeholder="End Date" close-on-scroll
+              auto-apply :enable-time-picker="false" :disabled="!startDate" />
 
-  <!-- Tooltip -->
-  <div
-    v-if="!startDate"
-    class="absolute top-full mt-1 left-0 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
-  >
-    Please select Start Date first
-  </div>
-</div>
+            <!-- Tooltip -->
+            <div v-if="!startDate"
+              class="absolute top-full mt-1 left-0 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+              Please select Start Date first
+            </div>
+          </div>
         </div>
         <div class="relative w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1">
           <button @click="toggleDropdown('dropdown1')"
@@ -281,7 +272,8 @@ const selectedDate = ref(new Date());
             <li @click="selectDifficulty('Beginner')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Beginner
             </li>
-            <li @click="selectDifficulty('Intermediate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectDifficulty('Intermediate')"
+              class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Intermediate
             </li>
             <li @click="selectDifficulty('Expert')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
@@ -294,7 +286,7 @@ const selectedDate = ref(new Date());
         <button @click="showModal = true"
           class="bg-[#afb1b4] rounded-xl border border-[#414141] w-full py-3 text-lg font-sebibold rounded-md shadow-lg">
           <i class="fas fa-search mr-3"></i> <span v-if="searchQuery">You searched for: <strong>{{ searchQuery
-          }}</strong></span>
+              }}</strong></span>
           <span v-else>Start Your Search</span>
         </button>
       </div>
@@ -325,8 +317,17 @@ const selectedDate = ref(new Date());
 
               <span class="px-2 text-white">To</span>
 
-              <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl " placeholder="End Date" close-on-scroll
-                auto-apply :enable-time-picker="false" :disabled="!startDate" />
+
+              <div class="relative group">
+                <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl " placeholder="End Date" close-on-scroll
+                  auto-apply :enable-time-picker="false" :disabled="!startDate" />
+
+                <!-- Tooltip -->
+                <div v-if="!startDate"
+                  class="absolute top-full mt-1 left-0 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                  Please select Start Date first
+                </div>
+              </div>
             </div>
 
             <div class="flex justify-between mt-4">
@@ -367,13 +368,16 @@ const selectedDate = ref(new Date());
                 </button>
                 <ul v-if="dropdown2"
                   class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-                  <li @click="selectDifficulty('Beginner')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('Beginner')"
+                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Beginner
                   </li>
-                  <li @click="selectDifficulty('Intermediate')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('Intermediate')"
+                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Intermediate
                   </li>
-                  <li @click="selectDifficulty('Expert')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectDifficulty('Expert')"
+                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Expert
                   </li>
                 </ul>
@@ -451,13 +455,13 @@ const selectedDate = ref(new Date());
                   </p>
                 </div>
                 <p class="text-[#A5A5A5]">
-                  Date:  {{ trip.acf.start_date }} - {{ trip.acf.end_date }}
+                  Date: {{ trip.acf.start_date }} - {{ trip.acf.end_date }}
                 </p>
                 <p class="text-[#A5A5A5]">
-                  Difficulty:  {{ trip.acf.difficulty }}
+                  Difficulty: {{ trip.acf.difficulty }}
                 </p>
                 <p class="text-[#A5A5A5]">
-                  {{ trip.acf.departure_title }}: {{ trip.acf.departure_value  }}
+                  {{ trip.acf.departure_title }}: {{ trip.acf.departure_value }}
                 </p>
 
                 <!-- Description -->
