@@ -18,9 +18,7 @@ const memberTwo = computed(() => props.dedicatedTeam.find(member => member.id ==
     <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 max-w-[1230px] mx-auto">
       <div class="col-span-1 sm:col-span-2 lg:col-span-1 self-start mx-3">
         <h2 class="text-white font-bold text-3xl md:text-5xl mt-3 heading-line-ht" style="line-height: 56px;">
-          MEET OUR<br> DEDICATED <span class="inline-block lg:hidden">TEAM</span> <br> 
-          <span class="lg:block hidden">TEAM</span>
-          <!-- {{ mainContent.acf.dedicated_title }} -->
+          {{ mainContent.acf.dedicated_title }}
         </h2>
         <p v-if="mainContent" class="text-lg text-white lg:max-w-[330px] mt-5">{{ mainContent.acf.description_1 }}</p>
         <p v-if="mainContent" class="text-lg text-white lg:max-w-[330px] mt-5">{{ mainContent.acf.description_2 }}</p>
