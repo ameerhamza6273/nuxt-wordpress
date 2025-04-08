@@ -12,7 +12,8 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  heroSlider: {
+
+  tripData: {
     type: Array,
     required: true,
   },
@@ -21,7 +22,9 @@ const props = defineProps({
 // Find a movie by ID
 const movieId = 27221;
 const movie = computed(() => props.movies.find((m) => m.id === movieId));
-
+const highlightedTrips = computed(() =>
+  props.tripData.filter((trip) => trip.acf?.highlight === "true")
+);
 // Reactive ref to track screen width
 const isMobile = ref(false);
 
@@ -85,7 +88,7 @@ onUnmounted(() => {
           </section>
 
           <!-- Swiper Slides -->
-          <swiper-slide v-for="(data, index) in heroSlider" :key="index">
+          <swiper-slide v-for="(data, index) in highlightedTrips" :key="index">
             <div class="rounded-xl mx-3 min-h-[300px] overflow-hidden relative"
               :style="{ backgroundImage: `url(${data.acf.bg_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }">
 
@@ -97,12 +100,12 @@ onUnmounted(() => {
               <div class="p-6 px-7 z-10 flex flex-col md:justify-end min-h-[350px] md:min-h-[300px] relative">
                 <!-- Dynamic Data -->
                 <p class="text-lg text-white text-center z-20">
-                  <b>{{ data.acf.title }}</b><br />
-                  {{ data.acf.description }}
+                  <b>{{ data.acf.title }}{{ data.acf.title_2 }}</b><br />
+                  {{ data.acf.subtitle }}
                 </p>
-                <NuxtLink :to="data.acf.action.url"
+                <NuxtLink :to="`/trip/${data.id}`"
                   class="bg-[#ffffff1f] mt-3 delay-300 text-white rounded-xl shadow-md py-2 px-4 block font-medium text-center border-2 border-white cursor-pointer z-20">
-                  {{ data.acf.action.title }}
+                  Book Now
                 </NuxtLink>
               </div>
             </div>

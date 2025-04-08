@@ -48,13 +48,13 @@ onMounted(fetchData);
     </article>
     <article v-else>
       <PageNavbar :headerData="headerFooter" />
-      <HeroSection :movies="movies" :heroSlider="heroSlider" />
+      <HeroSection :movies="movies" :heroSlider="heroSlider" :tripData="tripsPages" />
       
       <AboutUs :movies="movies" />
       <LogoSection :movies="movies" />
       <NewsletterSec :movies="movies" />
       <Trips :dedicatedTeam="dedicatedTeam" />
-      <ExploreTrip :movies="movies" />
+      <ExploreTrip :movies="movies" :tripData="tripsPages" />
       <FindAdventure :movies="movies" :tripData="tripsPages" />
       <Post :movies="movies" :postData="posts" />
       <ReviewsSec :dedicatedTeam="dedicatedTeam" />
