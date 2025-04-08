@@ -20,7 +20,7 @@ const memberTwo = computed(() => props.dedicatedTeam.find(member => member.id ==
         <h2 class="text-white font-bold text-3xl md:text-5xl mt-3 heading-line-ht" style="line-height: 56px;">
           MEET OUR<br> DEDICATED <span class="inline-block lg:hidden">TEAM</span> <br> 
           <span class="lg:block hidden">TEAM</span>
-          <!-- {{ mainContent.acf.title }} -->
+          <!-- {{ mainContent.acf.dedicated_title }} -->
         </h2>
         <p v-if="mainContent" class="text-lg text-white lg:max-w-[330px] mt-5">{{ mainContent.acf.description_1 }}</p>
         <p v-if="mainContent" class="text-lg text-white lg:max-w-[330px] mt-5">{{ mainContent.acf.description_2 }}</p>
@@ -45,8 +45,8 @@ const memberTwo = computed(() => props.dedicatedTeam.find(member => member.id ==
           <h3 class="font-bold text-xl text-white">{{ memberTwo.acf.title }}</h3>
           <p class="text-lg text-white mt-3">{{ memberTwo.acf.description }}</p>
           <div class="flex items-center gap-4 mt-5 mb-2">
-            <NuxtImg src="/public/trip-insta.svg" alt="" class="max-w-[35px]" />
-            <NuxtImg src="/public/trip-facebook.svg" alt="" class="max-w-[35px]" />
+            <NuxtImg src="/trip-insta.svg" alt="" class="max-w-[35px]" />
+            <NuxtImg src="/trip-facebook.svg" alt="" class="max-w-[35px]" />
           </div>
         </div>
       </div>

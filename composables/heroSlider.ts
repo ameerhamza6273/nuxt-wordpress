@@ -4,7 +4,7 @@ export async function getHeroSlider(body: Object) {
     const config = useRuntimeConfig();
   
     try {
-      const response: any = await $fetch(`${config.public.BASE_URL}/hero-slider`, {
+      const response: any = await $fetch(`${config.public.BASE_URL}/hero-slider?cb=${Date.now()}`, {
         method: "GET",
         body: body,
       });

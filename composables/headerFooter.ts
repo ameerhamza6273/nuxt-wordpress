@@ -4,7 +4,7 @@ export async function getHeaderFooter() {
   const config = useRuntimeConfig();
 
   try {
-    const response: any = await $fetch(`${config.public.BASE_URL}/headerfooter`, {
+    const response: any = await $fetch(`${config.public.BASE_URL}/headerfooter?cb=${Date.now()}`, {
       method: "GET",
     });
 

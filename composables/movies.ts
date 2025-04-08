@@ -4,7 +4,7 @@ export async function getMovies(body: Object) {
     const config = useRuntimeConfig();
   
     try {
-      const response: any = await $fetch(`${config.public.BASE_URL}/movie`, {
+      const response: any = await $fetch(`${config.public.BASE_URL}/movie?cb=${Date.now()}`, {
         method: "GET",
         body: body,
       });

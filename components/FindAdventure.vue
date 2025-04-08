@@ -439,6 +439,9 @@ const selectedDate = ref(new Date());
                 <p class="text-[#A5A5A5]">
                   Difficulty:  {{ trip.acf.difficulty }}
                 </p>
+                <p class="text-[#A5A5A5]">
+                  {{ trip.acf.departure_title }}: {{ trip.acf.departure_value  }}
+                </p>
 
                 <!-- Description -->
                 <!-- <p class="text-[14px] text-[#A5A5A5] my-2 max-h-[130px] overflow-hidden" id="htmlContainer"

@@ -95,7 +95,8 @@ onMounted(fetchData);
                                             </b></span>
                                         <span>{{ selectedTrip.acf.trip_price_title ?? 'trip_price title empty' }}
                                             <b>{{ selectedTrip.acf.trip_price_value ?? 'trip_price value empty'
-                                            }}</b></span> <span>
+                                            }}</b></span> 
+                                            <span>
                                             {{ selectedTrip.acf.departure_title ?? 'departure title empty' }}:
                                             <b> {{ selectedTrip.acf.departure_value ?? 'departure value empty'
                                             }}</b></span>
@@ -113,7 +114,8 @@ onMounted(fetchData);
                             <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
                                 <h1 class="text-center md:text-left text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                                     style="line-height: 56px;">
-                                    {{ selectedTrip.acf.title ?? ' Title Empty' }}
+                                    {{ selectedTrip.acf.title }}<br>
+                                    {{ selectedTrip.acf.title_2 }}
 
                                 </h1>
                                 <p class="text-center md:text-left text-xl text-white font-light uppercase mt-3">
@@ -169,7 +171,8 @@ onMounted(fetchData);
                             <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
                                 <h1 class=" text-center md:text-left text-white font-bold uppercase mt-10 text-3xl md:text-5xl heading-line-ht"
                                     style="line-height: 56px;">
-                                    {{ selectedTrip.acf.title ?? 'Title Empty' }}
+                                    {{ selectedTrip.acf.title }}<br>
+                                    {{ selectedTrip.acf.title_2 }}
 
                                 </h1>
                                 <p class="text-center md:text-left text-xl text-white uppercase font-light mt-3">
@@ -257,7 +260,8 @@ onMounted(fetchData);
                             <div class="max-w-[1260px] mx-auto py-24 sm:py-32 px-5 sm:px-8 lg:px-5">
                                 <h1 class="text-center md:text-left text-white font-bold mt-10 uppercase text-3xl md:text-5xl heading-line-ht"
                                     style="line-height: 56px;">
-                                    {{ selectedTrip.acf.title ?? ' Title Empty' }}
+                                    {{ selectedTrip.acf.title }}<br>
+                                    {{ selectedTrip.acf.title_2 }}
 
                                 </h1>
                                 <p class="text-center md:text-left text-xl text-white font-light  mt-3 uppercase">
