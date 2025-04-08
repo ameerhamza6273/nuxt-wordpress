@@ -223,7 +223,7 @@ const selectedDate = ref(new Date());
 
           <div class="relative group">
             <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl" placeholder="End Date" close-on-scroll
-              auto-apply :enable-time-picker="false" :disabled="!startDate" />
+              auto-apply :enable-time-picker="false" :disabled="!startDate" :min-date="startDate" />
 
             <!-- Tooltip -->
             <div v-if="!startDate"
@@ -320,7 +320,7 @@ const selectedDate = ref(new Date());
 
               <div class="relative group">
                 <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl " placeholder="End Date" close-on-scroll
-                  auto-apply :enable-time-picker="false" :disabled="!startDate" />
+                  auto-apply :enable-time-picker="false" :disabled="!startDate" :min-date="startDate" />
 
                 <!-- Tooltip -->
                 <div v-if="!startDate"
