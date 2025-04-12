@@ -184,7 +184,7 @@ const selectedDate = ref(new Date());
 </script>
 
 <template>
-  <div class="bg-black">
+  <div class="bg-black" id="exploreTrips">
     <div class="bg-[url('/perfect-adventure.jpg')] bg-cover bg-center bg-no-repeat">
       <div class="max-w-[1230px] mx-auto py-20" v-if="movie">
         <h2 class="text-white uppercase text-3xl md:text-5xl font-bold text-center max-w-3xl mx-auto heading-line-ht"

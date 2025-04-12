@@ -18,19 +18,19 @@
           </div>
           <div class="flex items-center justify-between sm:justify-around m-5 md:m-0 w-100 md:w-[60%]">
 
-            <NuxtLink to="" class=" cursor-pointer "> 
+            <NuxtLink to="tel:+65 94876198" class=" cursor-pointer "> 
               <NuxtImg :src="footerData.acf.whatsapp_image" alt="user"
                 class="max-w-[40px] md:max-w-[70px]" />
             </NuxtLink>
-            <NuxtLink to="" class=" cursor-pointer "> 
+            <NuxtLink to="https://www.instagram.com/xtrekkers" class=" cursor-pointer "> 
               <NuxtImg :src="footerData.acf.insta_image" alt="user"
                 class="max-w-[40px] md:max-w-[70px]" />
             </NuxtLink>
-            <NuxtLink to="" class=" cursor-pointer "> 
+            <NuxtLink to="https://www.facebook.com/xtrekkers" class=" cursor-pointer "> 
               <NuxtImg :src="footerData.acf.facebook_image" alt="user"
                 class="max-w-[40px] md:max-w-[70px]" />
             </NuxtLink>
-            <NuxtLink to="" class=" cursor-pointer "> 
+            <NuxtLink to="mailto:info@x-trekkers.com" class=" cursor-pointer "> 
               <NuxtImg :src="footerData.acf.email_image" alt="user"
                 class="max-w-[40px] md:max-w-[70px]" />
             </NuxtLink>

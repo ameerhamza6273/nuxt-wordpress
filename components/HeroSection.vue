@@ -56,7 +56,7 @@ onUnmounted(() => {
           {{ movie.acf.description }}
         </p>
         <div class="flex mt-8">
-          <NuxtLink :to="movie.acf.action.url" target="_blank"
+          <NuxtLink :to="movie.acf.action.url" 
             class="bg-[#ffffff1f] mx-auto md:ml-0 md:mr-auto mb-14 md:mb-0 delay-300 text-white rounded-xl shadow-md py-2 px-4 font-medium border-2 border-white">
             {{ movie.acf.action.title }}
           </NuxtLink>
