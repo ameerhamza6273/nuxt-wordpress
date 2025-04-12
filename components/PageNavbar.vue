@@ -142,7 +142,7 @@
 
       </ul>
       <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse mx-auto">
-        <NuxtImg :src="headerData.acf.logo" class="w-16 md:w-24" alt="Logo" />
+        <NuxtImg :src="headerData.acf.logo" class="w-24" alt="Logo" />
       </NuxtLink>
     </div>
   </div>
