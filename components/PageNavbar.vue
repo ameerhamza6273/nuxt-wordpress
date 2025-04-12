@@ -91,7 +91,7 @@
       </div>
 
       <!-- Navigation links -->
-      <ul class="space-y-3 text-center text-white">
+      <ul class="space-y-4 text-center text-white">
         <li>
           <NuxtLink :to="headerData.acf.link_1" class="py-2 text-xl  block"
             :class="activeLink === headerData.acf.link_1 ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
