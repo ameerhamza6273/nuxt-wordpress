@@ -91,49 +91,49 @@
       </div>
 
       <!-- Navigation links -->
-      <ul class="space-y-4 text-center text-white px-6">
+      <ul class="space-y-3 text-center text-white">
         <li>
-          <NuxtLink :to="headerData.acf.link_1" class="py-2 my-2 block"
+          <NuxtLink :to="headerData.acf.link_1" class="py-2 text-xl  block"
             :class="activeLink === headerData.acf.link_1 ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_1); closeMenu()">
-            <NuxtImg :src="headerData.acf.home_icon" alt="icon" class="inline h-4 mr-2"
+            <NuxtImg :src="headerData.acf.home_icon" alt="icon" class="inline h-5 mr-2"
                   :class="activeLink === headerData.acf.link_1 ? ' filter brightness-0' : ''" />
             
             HOME
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink :to="headerData.acf.link_2" class="py-2 my-2 block"
+          <NuxtLink :to="headerData.acf.link_2" class="py-2 text-xl block"
             :class="activeLink === headerData.acf.link_2 ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_2); closeMenu()">
-            <NuxtImg :src="headerData.acf.about_icon" alt="icon" class="inline h-4 mr-2"
+            <NuxtImg :src="headerData.acf.about_icon" alt="icon" class="inline h-5 mr-2"
                   :class="activeLink === headerData.acf.link_2 ? ' filter brightness-0' : ''" />
             ABOUT US
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink :to="headerData.acf.link_3" class="py-2 my-2 block"
+          <NuxtLink :to="headerData.acf.link_3" class="py-2 text-xl  block"
             :class="activeLink === headerData.acf.link_3 ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_3); closeMenu()">
-            <NuxtImg :src="headerData.acf.review_icon" alt="icon" class="inline h-4 mr-2"
+            <NuxtImg :src="headerData.acf.review_icon" alt="icon" class="inline h-5 mr-2"
                   :class="activeLink === headerData.acf.link_3 ? ' filter brightness-0' : ''" />
             REVIEWS
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink :to="headerData.acf.link_5" class="py-2 my-2 block"
+          <NuxtLink :to="headerData.acf.link_5" class="py-2 text-xl  block"
             :class="activeLink === headerData.acf.link_5 ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_5); closeMenu()">
-            <NuxtImg :src="headerData.acf.icon" alt="icon" class="inline h-4 mr-2"
+            <NuxtImg :src="headerData.acf.icon" alt="icon" class="inline h-5 mr-2"
               :class="activeLink === headerData.acf.link_5 ? ' filter brightness-0' : ''" />
             FIND A TRIP
           </NuxtLink>
         </li>
         <li>
-          <NuxtLink :to="headerData.acf.link_4" class="py-2 my-2 block"
+          <NuxtLink :to="headerData.acf.link_4" class="py-2 text-xl block"
             :class="activeLink === headerData.acf.link_4 ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_4); closeMenu()">
-            <NuxtImg :src="headerData.acf.contact_icon" alt="icon" class="inline h-4 mr-2"
+            <NuxtImg :src="headerData.acf.contact_icon" alt="icon" class="inline h-5 mr-2"
                   :class="activeLink === headerData.acf.link_4 ? ' filter brightness-0' : ''" />
             CONTACT US
           </NuxtLink>
