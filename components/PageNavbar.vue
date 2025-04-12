@@ -8,7 +8,7 @@
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-5 px-5 sm:px-8">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-          <NuxtImg :src="headerData.acf.logo" class="w-16 md:w-24" alt="Logo" />
+          <NuxtImg :src="headerData.acf.logo" class="w-20 md:w-24" alt="Logo" />
         </NuxtLink>
         
 
