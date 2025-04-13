@@ -31,8 +31,12 @@ const memberTwo = computed(() => props.dedicatedTeam.find(member => member.id ==
           <h3 class="font-bold text-xl text-white">{{ memberOne.acf.title }}</h3>
           <p class="text-lg text-white mt-3">{{ memberOne.acf.description }}</p>
           <div class="flex items-center gap-4 mt-5 mb-2">
-            <NuxtImg src="/trip-insta.svg" alt="" class="max-w-[35px]" />
-            <NuxtImg src="/trip-facebook.svg" alt="" class="max-w-[35px]" />
+            <NuxtLink :to="memberOne.acf.action">
+              <NuxtImg src="/trip-insta.svg" alt="" class="max-w-[35px]" />
+            </NuxtLink>
+            <NuxtLink :to="memberOne.acf.action_2">
+              <NuxtImg src="/trip-facebook.svg" alt="" class="max-w-[35px]" />
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -43,8 +47,12 @@ const memberTwo = computed(() => props.dedicatedTeam.find(member => member.id ==
           <h3 class="font-bold text-xl text-white">{{ memberTwo.acf.title }}</h3>
           <p class="text-lg text-white mt-3">{{ memberTwo.acf.description }}</p>
           <div class="flex items-center gap-4 mt-5 mb-2">
-            <NuxtImg src="/trip-insta.svg" alt="" class="max-w-[35px]" />
-            <NuxtImg src="/trip-facebook.svg" alt="" class="max-w-[35px]" />
+            <NuxtLink :to="memberTwo.acf.action">
+              <NuxtImg src="/trip-insta.svg" alt="" class="max-w-[35px]" />
+            </NuxtLink>
+            <NuxtLink :to="memberTwo.acf.action_2">
+              <NuxtImg src="/trip-facebook.svg" alt="" class="max-w-[35px]" />
+            </NuxtLink>
           </div>
         </div>
       </div>
