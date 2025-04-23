@@ -244,13 +244,13 @@ const selectedDate = ref(new Date());
           </button>
           <ul v-if="dropdown1"
             class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-            <li @click="selectBudget('$1000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectBudget('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Low
             </li>
-            <li @click="selectBudget('$2000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectBudget('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               Medium
             </li>
-            <li @click="selectBudget('$3000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+            <li @click="selectBudget('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
               High
             </li>
           </ul>
@@ -343,13 +343,13 @@ const selectedDate = ref(new Date());
                 </button>
                 <ul v-if="dropdown1"
                   class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-                  <li @click="selectBudget('$1000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectBudget('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Low
                   </li>
-                  <li @click="selectBudget('$2000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectBudget('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     Medium
                   </li>
-                  <li @click="selectBudget('$3000')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <li @click="selectBudget('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
                     High
                   </li>
                 </ul>
