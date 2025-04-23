@@ -3,14 +3,15 @@
     <!-- Desktop & Tablet Navbar -->
     <nav :class="[
       'fixed w-full z-50 top-0 left-0 text-white transition-all duration-300',
-      isScrolled ? 'bg-[#161616] shadow-[0_4px_10px_rgba(255,255,255,0.2)]' : 'bg-transparent'
+      isScrolled ? 'bg-[#161616] shadow-[0_4px_10px_rgba(255,255,255,0.2)]' : 'bg-transparent',
+      isNavbarVisible ? 'translate-y-0' : '-translate-y-full'
     ]">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-5 px-5 sm:px-8">
         <!-- Logo -->
         <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
           <NuxtImg :src="headerData.acf.logo" class="w-20 md:w-24" alt="Logo" />
         </NuxtLink>
-        
+
 
         <!-- Mobile Menu Toggle -->
         <button class="inline-flex items-center p-2 w-10 h-10 rounded-lg focus:outline-none md:hidden"
@@ -32,7 +33,7 @@
                   ? isScrolled ? 'text-[#dddddd8a] font-bold' : 'text-black font-bold'
                   : 'text-white'
               ]" @click="getActiveLink(headerData.acf.link_1.url)">
-                 {{ headerData.acf.link_1.title }}
+                {{ headerData.acf.link_1.title }}
               </NuxtLink>
             </li>
             <li>
@@ -74,7 +75,7 @@
               ]" @click="getActiveLink(headerData.acf.link_5.url)">
                 <NuxtImg :src="headerData.acf.icon" alt="icon" class="inline w-7 mr-2"
                   :class="activeLink === headerData.acf.link_5.url ? ' filter brightness-50' : ''" />
-                  {{ headerData.acf.link_5.title }}
+                {{ headerData.acf.link_5.title }}
               </NuxtLink>
             </li>
           </ul>
@@ -97,9 +98,9 @@
             :class="activeLink === headerData.acf.link_1.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_1.url); closeMenu()">
             <NuxtImg :src="headerData.acf.home_icon" alt="icon" class="inline h-5 mr-2"
-                  :class="activeLink === headerData.acf.link_1.url ? ' filter brightness-0' : ''" />
-            
-                  {{ headerData.acf.link_1.title }}
+              :class="activeLink === headerData.acf.link_1.url ? ' filter brightness-0' : ''" />
+
+            {{ headerData.acf.link_1.title }}
           </NuxtLink>
         </li>
         <li>
@@ -107,8 +108,8 @@
             :class="activeLink === headerData.acf.link_2.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_2.url); closeMenu()">
             <NuxtImg :src="headerData.acf.about_icon" alt="icon" class="inline h-5 mr-2"
-                  :class="activeLink === headerData.acf.link_2.url ? ' filter brightness-0' : ''" />
-                  {{ headerData.acf.link_2.title }}
+              :class="activeLink === headerData.acf.link_2.url ? ' filter brightness-0' : ''" />
+            {{ headerData.acf.link_2.title }}
           </NuxtLink>
         </li>
         <li>
@@ -116,8 +117,8 @@
             :class="activeLink === headerData.acf.link_3.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_3.url); closeMenu()">
             <NuxtImg :src="headerData.acf.review_icon" alt="icon" class="inline h-5 mr-2"
-                  :class="activeLink === headerData.acf.link_3.url ? ' filter brightness-0' : ''" />
-                  {{ headerData.acf.link_3.title }}
+              :class="activeLink === headerData.acf.link_3.url ? ' filter brightness-0' : ''" />
+            {{ headerData.acf.link_3.title }}
           </NuxtLink>
         </li>
         <li>
@@ -126,7 +127,7 @@
             @click="getActiveLink(headerData.acf.link_5.url); closeMenu()">
             <NuxtImg :src="headerData.acf.icon" alt="icon" class="inline h-5 mr-2"
               :class="activeLink === headerData.acf.link_5.url ? ' filter brightness-0' : ''" />
-              {{ headerData.acf.link_5.title }}
+            {{ headerData.acf.link_5.title }}
           </NuxtLink>
         </li>
         <li>
@@ -134,16 +135,15 @@
             :class="activeLink === headerData.acf.link_4.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_4.url); closeMenu()">
             <NuxtImg :src="headerData.acf.contact_icon" alt="icon" class="inline h-5 mr-2"
-                  :class="activeLink === headerData.acf.link_4.url ? ' filter brightness-0' : ''" />
-                  {{ headerData.acf.link_4.title }}
+              :class="activeLink === headerData.acf.link_4.url ? ' filter brightness-0' : ''" />
+            {{ headerData.acf.link_4.title }}
           </NuxtLink>
 
         </li>
 
       </ul>
       <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse mx-auto">
-        <NuxtImg :src="headerData.acf.logo" class="w-24" alt="Logo"
-        @click="getActiveLink('/#home'); closeMenu()" />
+        <NuxtImg :src="headerData.acf.logo" class="w-24" alt="Logo" @click="getActiveLink('/#home'); closeMenu()" />
       </NuxtLink>
     </div>
   </div>
@@ -156,6 +156,8 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 const isToggled = ref(false);
 const isScrolled = ref(false);
 const activeLink = ref("/#home");
+let lastScrollTop = 0;
+const isNavbarVisible = ref(true);
 
 const toggleMenu = () => {
   isToggled.value = !isToggled.value;
@@ -171,7 +173,28 @@ const closeMenu = () => {
 
 
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50;
+  const scrollTop = window.scrollY;
+  const isDesktop = window.innerWidth >= 1024; // lg: breakpoint (Tailwind default)
+
+  // Always update background color on scroll
+  isScrolled.value = scrollTop > 50;
+
+  if (!isDesktop) {
+    // Mobile/tablet - always show navbar
+    isNavbarVisible.value = true;
+    return;
+  }
+
+  // Desktop - handle scroll direction
+  if (scrollTop > lastScrollTop && scrollTop > 100) {
+    // Scrolling down
+    isNavbarVisible.value = false;
+  } else {
+    // Scrolling up
+    isNavbarVisible.value = true;
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 };
 
 onMounted(() => {
