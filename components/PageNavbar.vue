@@ -3,6 +3,7 @@
     <!-- Desktop & Tablet Navbar -->
     <nav :class="[
       'fixed w-full z-50 top-0 left-0 text-white transition-all duration-300',
+      isTermsPage ? 'bg-[#161616]' :
       isScrolled ? 'bg-[#161616] shadow-[0_4px_10px_rgba(255,255,255,0.2)]' : 'bg-transparent',
       isNavbarVisible ? 'translate-y-0' : '-translate-y-full'
     ]">
@@ -29,6 +30,7 @@
             <li>
               <NuxtLink :to="headerData.acf.link_1.url" :class="[
                 'py-2 px-3 rounded-full font-medium uppercase transition-colors text-sm duration-300',
+                isTermsPage ? 'bg-[#161616]' :
                 activeLink === headerData.acf.link_1.url
                   ? isScrolled ? 'text-[#dddddd8a] font-bold' : 'text-black font-bold'
                   : 'text-white'
@@ -152,6 +154,11 @@
 <script setup>
 import { computed } from "vue";
 import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const isTermsPage = computed(() => route.path.includes('terms-conditions'));
 
 const isToggled = ref(false);
 const isScrolled = ref(false);
