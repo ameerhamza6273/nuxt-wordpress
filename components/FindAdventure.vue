@@ -197,96 +197,100 @@ const selectedDate = ref(new Date());
         </p>
       </div>
       <!-- filter section -->
-      <div class="hidden md:flex items-center bg-[#404857e6] p-3 flex-wrap gap-2 justify-left shadow-lg">
-        <!-- Filters and Clear All -->
-        <div class="flex items-center justify-around space-x-2 text-white w-full sm:w-[15%] min-w-[150px]">
-          <span class="flex items-center space-x-1 cursor-pointer">
-            <i class="fas fa-filter"></i>
-            <span>Filters</span>
-          </span>
-          <span class="text-white">|</span>
-          <span class="text-gray-400 cursor-pointer hover:text-white" @click="clearAllFilters">Clear All</span>
-        </div>
+      <div class="hidden lg:block bg-[#404857e6] p-3 shadow-lg ">
+        <div class="flex items-center  flex-wrap gap-2 justify-left max-w-[1275px] mx-auto">
+          <!-- Filters and Clear All -->
+          <div class="flex items-center justify-around space-x-2 text-white w-full sm:w-[15%] min-w-[150px]">
+            <span class="flex items-center space-x-1 cursor-pointer">
+              <i class="fas fa-filter"></i>
+              <span>Filters</span>
+            </span>
+            <span class="text-white">|</span>
+            <span class="text-gray-400 cursor-pointer hover:text-white" @click="clearAllFilters">Clear All</span>
+          </div>
 
-        <!-- Search Input -->
-        <input type="text" v-model="searchQuery" placeholder="Search destinations..."
-          class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full sm:w-[28%] min-w-[200px] mx-2 my-1" />
+          <!-- Search Input -->
+          <input type="text" v-model="searchQuery" placeholder="Search destinations..."
+            class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full sm:w-[24%] min-w-[180px] mx-2 my-1" />
 
-        <!-- Date Range -->
+          <!-- Date Range -->
 
-        <div
-          class="relative flex items-center justify-between bg-[#afb1b4] rounded-xl overflow-visible p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
-          <vue-date-picker v-model="startDate" class="w-28 rounded-xl " placeholder="Start Date" close-on-scroll
-            auto-apply :enable-time-picker="false" />
+          <div
+            class="relative flex items-center justify-between bg-[#000000ab] rounded-xl overflow-visible p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
+            <vue-date-picker v-model="startDate" class="w-28 rounded-xl " placeholder="Start Date" close-on-scroll
+              auto-apply :enable-time-picker="false" />
 
-          <span class="px-2">To</span>
+            <span class="px-2 text-white">To</span>
 
-          <div class="relative group">
-            <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl" placeholder="End Date" close-on-scroll
-              auto-apply :enable-time-picker="false" :disabled="!startDate" :min-date="startDate" />
+            <div class="relative group">
+              <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl" placeholder="End Date" close-on-scroll
+                auto-apply :enable-time-picker="false" :disabled="!startDate" :min-date="startDate" />
 
-            <!-- Tooltip -->
-            <div v-if="!startDate"
-              class="absolute top-full mt-1 left-0 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-              Please select Start Date first
+              <!-- Tooltip -->
+              <div v-if="!startDate"
+                class="absolute top-full mt-1 left-0 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                Please select Start Date first
+              </div>
             </div>
           </div>
-        </div>
-        <div class="relative w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1">
-          <button @click="toggleDropdown('dropdown1')"
-            class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-3 rounded-xl shadow text-gray-900">
-            {{ selectedBudget || "Select Budget" }}
-            <svg class="-mr-1 size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                clip-rule="evenodd" />
-            </svg>
-          </button>
-          <ul v-if="dropdown1"
-            class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-            <li @click="selectBudget('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              Low
-            </li>
-            <li @click="selectBudget('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              Medium
-            </li>
-            <li @click="selectBudget('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              High
-            </li>
-          </ul>
-        </div>
+          <div class="relative w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1">
+            <button @click="toggleDropdown('dropdown1')"
+              class="inline-flex w-full justify-between items-center bg-[#000000ab] px-3 py-3 rounded-xl shadow text-gray-400">
+              {{ selectedBudget || "Select Budget" }}
+              <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <ul v-if="dropdown1"
+              class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
+              <li @click="selectBudget('$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                Low
+              </li>
+              <li @click="selectBudget('$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                Medium
+              </li>
+              <li @click="selectBudget('$$$')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                High
+              </li>
+            </ul>
+          </div>
 
-        <!-- Dropdown 2: Difficulty Level -->
-        <div class="w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1 relative">
-          <button @click="toggleDropdown('dropdown2')"
-            class="inline-flex w-full justify-between items-center bg-[#afb1b4] px-3 py-3 rounded-xl shadow text-gray-900">
-            {{ selectedDifficulty || "Select Difficulty" }}
-            <svg class="-mr-1 size-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd"
-                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                clip-rule="evenodd" />
-            </svg>
-          </button>
-          <ul v-if="dropdown2"
-            class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
-            <li @click="selectDifficulty('Beginner')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              Beginner
-            </li>
-            <li @click="selectDifficulty('Intermediate')"
-              class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              Intermediate
-            </li>
-            <li @click="selectDifficulty('Expert')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-              Expert
-            </li>
-          </ul>
+          <!-- Dropdown 2: Difficulty Level -->
+          <div class="w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1 relative">
+            <button @click="toggleDropdown('dropdown2')"
+              class="inline-flex w-full justify-between items-center bg-[#000000ab] px-3 py-3 rounded-xl shadow text-gray-400">
+              {{ selectedDifficulty || "Select Difficulty" }}
+              <svg class="-mr-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                  clip-rule="evenodd" />
+              </svg>
+            </button>
+            <ul v-if="dropdown2"
+              class="absolute right-0 z-10 mt-2 w-[100%] bg-white rounded-md shadow-lg ring-1 ring-black/5">
+              <li @click="selectDifficulty('Beginner')"
+                class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                Beginner
+              </li>
+              <li @click="selectDifficulty('Intermediate')"
+                class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                Intermediate
+              </li>
+              <li @click="selectDifficulty('Expert')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                Expert
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="md:hidden flex justify-center bg-[#404857e6] p-3 px-5">
+
+      <div class="lg:hidden flex justify-center bg-[#404857e6] p-3 px-5">
         <button @click="showModal = true"
-          class="bg-[#afb1b4] rounded-xl border border-[#414141] w-full py-3 text-lg font-sebibold rounded-md shadow-lg">
+          class="bg-[#afb1b4] rounded-xl border border-[#414141] w-full max-w-3xl py-3 text-lg font-sebibold rounded-md shadow-lg">
           <i class="fas fa-search mr-3"></i> <span v-if="searchQuery">You searched for: <strong>{{ searchQuery
-              }}</strong></span>
+          }}</strong></span>
           <span v-else>Start Your Search</span>
         </button>
       </div>
@@ -305,13 +309,13 @@ const selectedDate = ref(new Date());
 
             <!-- Search Input -->
             <input type="text" v-model="searchQuery" placeholder="Search destinations..."
-              class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full sm:w-[28%] min-w-[200px] my-1" />
+              class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full my-1" />
 
 
 
             <!-- Date Range -->
             <div
-              class="relative flex items-center justify-between bg-[#000000ab] rounded-md overflow-visible p-1 w-full sm:w-[24%] min-w-[280px] mt-4 ">
+              class="relative flex items-center justify-between bg-[#000000ab] rounded-md overflow-visible p-1 w-full mt-4 ">
               <vue-date-picker v-model="startDate" class="w-28 rounded-xl" placeholder="Start Date" close-on-scroll
                 auto-apply :enable-time-picker="false" />
 
@@ -498,35 +502,17 @@ const selectedDate = ref(new Date());
 }
 
 ::v-deep(.dp__input) {
-  border-radius: 0.75rem;
-  border: 1px solid black;
+  border: none;
+  background-color: #00000000;
+  color: #9ca3af !important;
+
 }
 
 ::v-deep(.dp__input::placeholder) {
-  color: black !important;
-  /* 🔲 placeholder text color */
-  opacity: 1;
-  /* Make sure it's fully visible */
+  color: #9ca3af !important;
 }
 
 ::v-deep(.dp__input_icon) {
-  color: black;
-}
-
-@media screen and (max-width:700px) {
-  ::v-deep(.dp__input) {
-    border: none;
-    background-color: #00000000;
-    color: #9ca3af !important;
-
-  }
-
-  ::v-deep(.dp__input::placeholder) {
-    color: #9ca3af !important;
-  }
-
-  ::v-deep(.dp__input_icon) {
-    color: #9ca3af !important;
-  }
+  color: #9ca3af !important;
 }
 </style>
