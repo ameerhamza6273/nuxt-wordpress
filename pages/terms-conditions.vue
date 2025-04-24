@@ -28,11 +28,11 @@ onMounted(fetchData);
       <PageNavbar :headerData="headerFooter" />
 
       <!-- ✅ Add the Terms Section -->
-      <section class="bg-[#0D0D0D] py-16 px-6 md:px-16 text-white">
-        <h2 class="text-3xl lg:text-5xl font-bold uppercase text-center block" style="margin:100px 0;">
+      <section class="bg-[#0D0D0D] py-16  text-white">
+        <h2 class="bg-[#000] text-3xl lg:text-4xl font-bold uppercase text-center block" style="padding:100px 0;margin:50px 0 ;">
           Terms & Conditions
         </h2>
-        <div class="space-y-8 max-w-5xl mx-auto">
+        <div class=" px-6 md:px-24">
           <div>
             <h3 class="text-xl lg:text-2xl font-semibold text-white mt-2">
               1. Booking and Payment
@@ -96,6 +96,51 @@ onMounted(fetchData);
             </h3>
             <p class="text-white text-base whitespace-pre-line leading-relaxed">
               It is compulsory for all tour members to purchase travel insurance that covers medical evacuations, trip cancellations, hospitalization, medical claims, loss of baggage etc.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold text-white mt-2">
+              8. Right to Reject
+            </h3>
+            <p class="text-white text-base whitespace-pre-line leading-relaxed">
+              It is vital that persons with medical problems make them known to us well in advance of their trip departure. X-Trekkers reserves the right to cancel or withdraw any itinerary or any booking made for a client or decline to accept or retain any person as a member of a trip, if any such person appears likely to endanger the health, safety or impair the comfort and enjoyment of others. X-Trekkers further reserves the right to cancel the reservation of a particular member or members, if for any reason, any carrier, hotel or other contractor refuses to allow the particular member or members to participate in the tour. In any of the foregoing events, no refunds shall be given to such member or members.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold text-white mt-2">
+              9. Travel Documents
+            </h3>
+            <p class="text-white text-base whitespace-pre-line leading-relaxed">
+              It is your responsibility to ensure that your travel document and other necessary travel related documents are in order. X-Trekkers will advise you on what documentation is required. As a guide, you must have an International Passport or other recognized travel document that should be valid for at least six months from the date of travel. You must have the necessary visas, vaccinations and health certificates as required for your travel destination. X-Trekkers will, wherever possible, assist you to obtain the necessary visas. Service charges and visa fee levied will be charged to the traveller’s account. X-Trekkers cannot however guarantee the approval of your application. A full refund of all monies paid to X-Trekkers will be made if the result of the rejection is notified to X-Trekkers at least 45 days prior to departure date. If less than 45 days notice is given, the relevant cancellation charges will apply. X-Trekkers cannot be held responsible or liable for any expenses, reimbursement or refund of tour prices if any passenger is refused entry by any country on the tour for whatsoever reasons, including lack of the necessary documents.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold text-white mt-2">
+              10. Possible Changes
+            </h3>
+            <p class="text-white text-base whitespace-pre-line leading-relaxed">
+              Airline schedules and local conditions may require sightseeing tours, accommodations, hotels and travel routines to be changed. Should this occur, X-Trekkers will, whenever possible, use its best endeavors to make alternative arrangements.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold text-white mt-2">
+              11. Tour Information & Prices
+            </h3>
+            <p class="text-white text-base whitespace-pre-line leading-relaxed">
+              Price shown is current at the time of printing. These prices are subject to change due to increases in airfares, taxes or surcharges; other transport costs; hotel rates, government taxes, etc., and therefore X-Trekkers reserves the right to increase the price accordingly without notice.
+            </p>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold text-white mt-2">
+              12. Responsibility
+            </h3>
+            <p class="text-white text-base whitespace-pre-line leading-relaxed">
+              Please read carefully. These paragraphs define our responsibility with respect to all of our tours. Payment of deposit represents an acceptance by the member of the following terms and conditions:<br>
+              X-Trekkers gives notice that services provided in connection with the tours listed are rendered by suppliers who are not agents or employees of X-Trekkers. All arrangements for accommodations, meals, tours, transportation and all other related services have been made by X-Trekkers only as an agent for the individual tour member. While we endeavor to make tour arrangements with reputable suppliers, each tour member agrees that X-Trekkers shall not be liable for any delay, mishap, inconvenience, expense, irregularity, bodily injury or death to a person or persons, or damage to property occasioned through the negligence or default of any company or individual engaged in providing these arranged services.<br>
+              X-Trekkers shall not be liable, directly or indirectly, for bodily injury or damage to property for any reason whatsoever, including, but not limited to the following causes: Acts of God, detention, annoyance, weather, strikes, civil unrest, theft, default, and change in government regulations, terrorism, negligence, war or failure of conveyance to arrive or depart as scheduled.<br>
+              X-Trekkers reserves the right to substitute hotels and tour leaders and to alter the itinerary when deemed necessary or necessary.<br>
+              All claims against X-Trekkers must be made in writing within 14 days after the completion of the tour. All the terms and conditions mentioned above cannot be changed except in writing by X-Trekkers.<br>
+              Please note that these terms and conditions are correct at the time of publishing. X-Trekkers Adventure Consultant Pte Ltd reserves the right to change/amend any of these booking terms and conditions.<br>
             </p>
           </div>
         </div>
