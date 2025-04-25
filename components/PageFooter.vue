@@ -45,8 +45,8 @@
             {{ footerData.acf.page_1.title }}</NuxtLink>
           <NuxtLink :to="footerData.acf.page_2.url" class="font-bold text-white text-lg md:text-xl uppercase">
             {{ footerData.acf.page_2.title }}</NuxtLink>
-          <NuxtLink :to="footerData.acf.page_3.url" class="font-bold text-white text-lg md:text-xl uppercase">
-            {{ footerData.acf.page_3.title }}</NuxtLink>
+          <div class="font-bold text-white text-lg md:text-xl uppercase">
+            {{ footerData.acf.page_3.title }}</div>
 
         </div>
       </div>
