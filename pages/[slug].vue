@@ -16,10 +16,12 @@
 
       <div class="px-6 md:px-16 py-16">
         <h2 class="text-3xl font-bold">{{ postData?.title || "Loading..." }}</h2>
-        <p class="text-md mt-4" v-html="postData?.excerpt"></p>
+        <!-- <p class="text-md mt-4" v-html="postData?.excerpt"></p> -->
         <!-- <div v-html="postData?.content" class="mt-4"></div> -->
+        <div v-html="postContentHTML" class="mt-4"></div>
+
       </div>
-      <PageFooter />
+      <PageFooter :footerData="headerFooter" />
     </div>
   </div>
 
@@ -27,12 +29,11 @@
 
 <script setup lang="js">
 import { useRoute } from 'vue-router';
-import { ref, onMounted } from 'vue';
-
+import { ref, onMounted, computed } from 'vue';
+import { marked } from 'marked';
 
 const route = useRoute();
 const config = useRuntimeConfig();
-
 
 const loading = ref(true);
 const headerFooter = ref(null);
@@ -81,4 +82,10 @@ const { data: postData, pending, error } = await useFetch(config.public.wordpres
 if (error.value) {
   console.error("Error fetching post data:", error.value);
 }
+
+// ✅ Computed property to convert Markdown to HTML
+const postContentHTML = computed(() => {
+  return postData.value?.content ? marked(postData.value.content) : '';
+});
 </script>
+
