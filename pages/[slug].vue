@@ -90,51 +90,39 @@ const postContentHTML = computed(() => {
 </script>
 
 <style scoped>
+/* Headings */
+.post-data ::v-deep(h1),
+.post-data ::v-deep(h2),
+.post-data ::v-deep(h3),
+.post-data ::v-deep(h4),
+.post-data ::v-deep(h5),
+.post-data ::v-deep(h6) {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
 .post-data ::v-deep(h1) {
   font-size: 2em;
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
-
 .post-data ::v-deep(h2) {
   font-size: 1.5em;
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
-
 .post-data ::v-deep(h3) {
   font-size: 1.17em;
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
-
 .post-data ::v-deep(h4) {
   font-size: 1em;
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
-
 .post-data ::v-deep(h5) {
   font-size: 0.83em;
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
-
 .post-data ::v-deep(h6) {
   font-size: 0.67em;
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
 
 /* Links */
 .post-data ::v-deep(a) {
-  color: #3b82f6; /* nice blue */
+  color: #3b82f6;
   text-decoration: underline;
 }
 
@@ -144,8 +132,56 @@ const postContentHTML = computed(() => {
   margin-left: 1.5rem;
   list-style-type: disc;
 }
-
 .post-data ::v-deep(li) {
   margin-bottom: 0.5rem;
+}
+/* Gallery */
+.post-data ::v-deep .wp-block-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* agar thoda gap chahte ho images ke beech */
+  margin: 20px 0;
+}
+
+.post-data ::v-deep .wp-block-gallery > figure {
+  flex: 1 1 100%;
+}
+
+.post-data ::v-deep figure > a  {
+  max-width: 700px !important; /* Set max width */
+  margin: 20px auto !important; /* Center the element and add top and bottom margins */
+  display: block !important; /* Ensure the figure behaves as a block element */
+}
+
+
+@media (min-width: 768px) {
+  .post-data ::v-deep .wp-block-gallery > figure {
+    flex: 1 1 50%; /* 2 images per row on medium screens */
+  }
+}
+
+@media (min-width: 1024px) {
+  .post-data ::v-deep .wp-block-gallery > figure {
+    flex: 1 1 25%; /* 4 images per row on large screens */
+  }
+}
+
+
+/* Tables */
+.post-data ::v-deep(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+.post-data ::v-deep(th),
+.post-data ::v-deep(td) {
+  border: 1px solid #d1d5db; /* light gray border */
+  padding: 0.75rem 1rem;
+  text-align: left;
+}
+.post-data ::v-deep(th) {
+  background-color: #f3f4f6; /* light background for header */
+  font-weight: bold;
 }
 </style>
