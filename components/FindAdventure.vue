@@ -198,25 +198,18 @@ const selectedDate = ref(new Date());
       </div>
       <!-- filter section -->
       <div class="hidden lg:block bg-[#404857e6] p-3 shadow-lg ">
-        <div class="flex items-center  flex-wrap gap-2 justify-left max-w-[1275px] mx-auto">
+        <div class="flex items-center  flex-wrap gap-2 justify-center max-w-[1230px] mx-auto">
           <!-- Filters and Clear All -->
-          <div class="flex items-center justify-around space-x-2 text-white w-full sm:w-[15%] min-w-[150px]">
-            <span class="flex items-center space-x-1 cursor-pointer">
-              <i class="fas fa-filter"></i>
-              <span>Filters</span>
-            </span>
-            <span class="text-white">|</span>
-            <span class="text-gray-400 cursor-pointer hover:text-white" @click="clearAllFilters">Clear All</span>
-          </div>
+          
 
           <!-- Search Input -->
           <input type="text" v-model="searchQuery" placeholder="Search destinations..."
-            class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full sm:w-[24%] min-w-[180px] mx-2 my-1" />
+            class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full sm:w-[30%] min-w-[220px] mx-2 my-1" />
 
           <!-- Date Range -->
 
           <div
-            class="relative flex items-center justify-between bg-[#000000ab] rounded-xl overflow-visible p-2 w-full sm:w-[24%] min-w-[300px] mx-2 my-1">
+            class="relative flex items-center justify-between bg-[#000000ab] rounded-xl overflow-visible p-2 w-full sm:w-[28%] min-w-[350px] mx-2 my-1">
             <vue-date-picker v-model="startDate" class="w-28 rounded-xl " placeholder="Start Date" close-on-scroll
               auto-apply :enable-time-picker="false" />
 
@@ -233,7 +226,7 @@ const selectedDate = ref(new Date());
               </div>
             </div>
           </div>
-          <div class="relative w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1">
+          <div class="relative w-[12%] min-w-[160px] mx-2 my-1">
             <button @click="toggleDropdown('dropdown1')"
               class="inline-flex w-full justify-between items-center bg-[#000000ab] px-3 py-3 rounded-xl shadow text-gray-400">
               {{ selectedBudget || "Select Budget" }}
@@ -258,7 +251,7 @@ const selectedDate = ref(new Date());
           </div>
 
           <!-- Dropdown 2: Difficulty Level -->
-          <div class="w-[44%] sm:w-[12%] min-w-[170px] mx-2 my-1 relative">
+          <div class=" w-[12%] min-w-[160px] mx-2 my-1 relative">
             <button @click="toggleDropdown('dropdown2')"
               class="inline-flex w-full justify-between items-center bg-[#000000ab] px-3 py-3 rounded-xl shadow text-gray-400">
               {{ selectedDifficulty || "Select Difficulty" }}
@@ -282,6 +275,14 @@ const selectedDate = ref(new Date());
                 Expert
               </li>
             </ul>
+          </div>
+          <div class="flex items-center justify-around space-x-2 text-white w-full sm:w-[6%] min-w-[80px]">
+            <!-- <span class="flex items-center space-x-1 cursor-pointer">
+              <i class="fas fa-filter"></i>
+              <span>Filters</span>
+            </span> -->
+            <!-- <span class="text-white">|</span> -->
+            <span class="text-gray-400 cursor-pointer hover:text-white" @click="clearAllFilters">Clear All</span>
           </div>
         </div>
       </div>
