@@ -14,8 +14,8 @@
       class="w-full object-cover h-[300px] sm:h-[85vh]"
       />
 
-      <div class="px-6 md:px-16 py-16">
-        <h2 class="text-3xl font-bold">{{ postData?.title || "Loading..." }}</h2>
+      <div class="px-6 md:px-16 py-16 post-data">
+        <h1 class="text-3xl font-bold">{{ postData?.title || "Loading..." }}</h1>
         <!-- <p class="text-md mt-4" v-html="postData?.excerpt"></p> -->
         <!-- <div v-html="postData?.content" class="mt-4"></div> -->
         <div v-html="postContentHTML" class="mt-4"></div>
@@ -89,3 +89,63 @@ const postContentHTML = computed(() => {
 });
 </script>
 
+<style scoped>
+.post-data ::v-deep(h1) {
+  font-size: 2em;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-data ::v-deep(h2) {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-data ::v-deep(h3) {
+  font-size: 1.17em;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-data ::v-deep(h4) {
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-data ::v-deep(h5) {
+  font-size: 0.83em;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-data ::v-deep(h6) {
+  font-size: 0.67em;
+  font-weight: bold;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Links */
+.post-data ::v-deep(a) {
+  color: #3b82f6; /* nice blue */
+  text-decoration: underline;
+}
+
+/* Lists */
+.post-data ::v-deep(ul),
+.post-data ::v-deep(ol) {
+  margin-left: 1.5rem;
+  list-style-type: disc;
+}
+
+.post-data ::v-deep(li) {
+  margin-bottom: 0.5rem;
+}
+</style>
