@@ -132,34 +132,50 @@ const filteredTrip = computed(() => {
       ? trip.acf?.difficulty === selectedDifficulty.value
       : true;
 
-    // Get the trip's date range from ACF
-    const tripStartDate = trip.acf?.start_date ? new Date(trip.acf.start_date) : null;
-    const tripEndDate = trip.acf?.end_date ? new Date(trip.acf.end_date) : null;
+    // Get all trip start and end dates
+    const tripDates = [
+      trip.acf?.start_date ? new Date(trip.acf.start_date) : null,
+      trip.acf?.start_date2 ? new Date(trip.acf.start_date2) : null,
+      trip.acf?.start_date3 ? new Date(trip.acf.start_date3) : null,
+    ];
 
-    // Get the filter date range
+    const tripEndDates = [
+      trip.acf?.end_date ? new Date(trip.acf.end_date) : null,
+      trip.acf?.end_date2 ? new Date(trip.acf.end_date2) : null,
+      trip.acf?.end_date3 ? new Date(trip.acf.end_date3) : null,
+    ];
+
     const filterStartDate = startDate.value ? new Date(startDate.value) : null;
     const filterEndDate = endDate.value ? new Date(endDate.value) : null;
 
     let dateMatches = true;
 
-    if (filterStartDate && filterEndDate) {
-      // Case 1: Both filter dates are set - check overlap
-      dateMatches =
-        (tripStartDate && tripStartDate <= filterEndDate) &&
-        (tripEndDate && tripEndDate >= filterStartDate);
-    }
-    else if (filterStartDate) {
-      // Case 2: Only start date is set - trips that start after filter start date
-      dateMatches = tripStartDate && tripStartDate >= filterStartDate;
-    }
-    else if (filterEndDate) {
-      // Case 3: Only end date is set - trips that end before filter end date
-      dateMatches = tripEndDate && tripEndDate <= filterEndDate;
+    // If none of the trip dates are available, always show this trip
+    if (tripDates.every(date => date === null) && tripEndDates.every(date => date === null)) {
+      dateMatches = true;
+    } else if (filterStartDate && filterEndDate) {
+      // Check if any of the date ranges overlap
+      dateMatches = tripDates.some((start, index) => {
+        const end = tripEndDates[index];
+        return start && end && start <= filterEndDate && end >= filterStartDate;
+      });
+    } else if (filterStartDate) {
+      // Check if any start date is after filter start
+      dateMatches = tripDates.some((start) => {
+        return start && start >= filterStartDate;
+      });
+    } else if (filterEndDate) {
+      // Check if any end date is before filter end
+      dateMatches = tripEndDates.some((end) => {
+        return end && end <= filterEndDate;
+      });
     }
 
     return titleMatches && budgetMatches && difficultyMatches && dateMatches;
   });
 });
+
+
 
 
 
@@ -200,7 +216,7 @@ const selectedDate = ref(new Date());
       <div class="hidden lg:block bg-[#404857e6] p-3 shadow-lg ">
         <div class="flex items-center  flex-wrap gap-2 justify-center max-w-[1230px] mx-auto">
           <!-- Filters and Clear All -->
-          
+
 
           <!-- Search Input -->
           <input type="text" v-model="searchQuery" placeholder="Search destinations..."
@@ -459,9 +475,23 @@ const selectedDate = ref(new Date());
                   <p class="w-[40%] text-[#A5A5A5] text-right">Budget: {{ trip.acf.budget ? trip.acf.budget : '00' }}
                   </p>
                 </div>
+
                 <p class="text-[#A5A5A5]">
-                  Date: {{ trip.acf.start_date }} - {{ trip.acf.end_date }}
+                  <template v-if="trip.acf.start_date && trip.acf.end_date">
+                    Date:
+                    {{ trip.acf.start_date }} - {{ trip.acf.end_date }}
+                    <template v-if="trip.acf.start_date2 && trip.acf.end_date2">
+                      , {{ trip.acf.start_date2 }} - {{ trip.acf.end_date2 }}
+                    </template>
+                    <template v-if="trip.acf.start_date3 && trip.acf.end_date3">
+                      , {{ trip.acf.start_date3 }} - {{ trip.acf.end_date3 }}
+                    </template>
+                  </template>
+                  <template v-else>
+                    Duration: Custom
+                  </template>
                 </p>
+
                 <p class="text-[#A5A5A5]">
                   Difficulty: {{ trip.acf.difficulty }}
                 </p>
