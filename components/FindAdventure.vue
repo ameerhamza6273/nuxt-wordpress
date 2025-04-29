@@ -495,7 +495,7 @@ const selectedDate = ref(new Date());
                 <p class="text-[#A5A5A5]">
                   Difficulty: {{ trip.acf.difficulty }}
                 </p>
-                <p class="text-[#A5A5A5]">
+                <p class="text-[#A5A5A5]" v-if="trip.acf.departure_title">
                   {{ trip.acf.departure_title }}: {{ trip.acf.departure_value }}
                 </p>
 

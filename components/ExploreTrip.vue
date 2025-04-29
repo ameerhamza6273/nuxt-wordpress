@@ -43,9 +43,10 @@ const highlightedTrips = computed(() =>
           <NuxtImg :src="trip.acf.explore_trip_desktop" alt="Druk Path Logo"
             class="w-full hover:opacity-[0.7] cursor-pointer" />
           <div class="absolute right-12 bottom-0 transform translate-y-0 rotate-90 origin-right">
-            <h2 class="text-white uppercase text-4xl xl:text-5xl font-bold  tracking-wider whitespace-nowrap">
-              {{ trip.acf.trip_title }}
+            <h2 class="text-white uppercase text-4xl xl:text-5xl font-bold tracking-wider whitespace-nowrap">
+              {{ trip.acf.trip_title.length > 20 ? trip.acf.trip_title.substring(0, 20) + '...' : trip.acf.trip_title }}
             </h2>
+
           </div>
         </NuxtLink>
       </div>
@@ -58,7 +59,7 @@ const highlightedTrips = computed(() =>
               class="w-full object-contain hover:opacity-[0.7] cursor-pointer" width="200" height="80" />
             <!-- The text will appear at the bottom of the image on mobile -->
             <div class="absolute bottom-0 left-0 w-full p-2 py-6">
-              <p class="text-white uppercase text-lg sm:text-3xl font-bold tracking-wider" style="line-height: 20px;" >
+              <p class="text-white uppercase text-lg sm:text-3xl font-bold tracking-wider" style="line-height: 20px;">
                 {{ trip.acf.trip_title }}
               </p>
             </div>
@@ -73,10 +74,9 @@ const highlightedTrips = computed(() =>
 </template>
 
 <style scoped>
-@media (min-width:650px){
-  .text-lg.sm\:text-3xl.font-bold{
+@media (min-width:650px) {
+  .text-lg.sm\:text-3xl.font-bold {
     line-height: 46px !important;
   }
 }
-
 </style>
