@@ -211,9 +211,9 @@ onMounted(fetchData);
                                             {{ selectedTrip.acf.estimated_cost_title ?? 'Estimated Cost Title' }}:
                                             {{ selectedTrip.acf.estimated_cost_value ?? 'Estimated Cost Value' }}<br>
                                             {{ selectedTrip.acf.more_details_title ?? 'More Details' }}:
-                                            <NuxtLink :to="selectedTrip.acf.additional_action?.url ?? '#'"
+                                            <NuxtLink :to="selectedTrip.acf.additional_action2?.url ?? '#'"
                                                 class="text-[#76DDFF]">
-                                                {{ selectedTrip.acf.additional_action?.title ?? 'Read More' }}
+                                                {{ selectedTrip.acf.additional_action2?.title ?? 'Read More' }}
                                             </NuxtLink>
                                         </div>
 
@@ -227,9 +227,9 @@ onMounted(fetchData);
                                             {{ selectedTrip.acf.estimated_cost_title ?? 'Estimated Cost Title' }}:
                                             {{ selectedTrip.acf.estimated_cost_value ?? 'Estimated Cost Value' }}<br>
                                             {{ selectedTrip.acf.more_details_title ?? 'More Details' }}:
-                                            <NuxtLink :to="selectedTrip.acf.additional_action?.url ?? '#'"
+                                            <NuxtLink :to="selectedTrip.acf.additional_action3?.url ?? '#'"
                                                 class="text-[#76DDFF]">
-                                                {{ selectedTrip.acf.additional_action?.title ?? 'Read More' }}
+                                                {{ selectedTrip.acf.additional_action3?.title ?? 'Read More' }}
                                             </NuxtLink>
                                         </div>
 
@@ -243,9 +243,9 @@ onMounted(fetchData);
                                             {{ selectedTrip.acf.estimated_cost_title ?? 'Estimated Cost Title' }}:
                                             {{ selectedTrip.acf.estimated_cost_value ?? 'Estimated Cost Value' }}<br>
                                             {{ selectedTrip.acf.more_details_title ?? 'More Details' }}:
-                                            <NuxtLink :to="selectedTrip.acf.additional_action?.url ?? '#'"
+                                            <NuxtLink :to="selectedTrip.acf.additional_action4?.url ?? '#'"
                                                 class="text-[#76DDFF]">
-                                                {{ selectedTrip.acf.additional_action?.title ?? 'action empty' }}
+                                                {{ selectedTrip.acf.additional_action4?.title ?? 'action empty' }}
                                             </NuxtLink>
                                         </div>
                                     </div>
