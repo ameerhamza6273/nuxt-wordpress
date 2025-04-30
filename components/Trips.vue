@@ -44,7 +44,7 @@ const assistantMembers = computed(() => props.teamMembers);
 
           <SwiperSlide v-for="member in assistantMembers" :key="member.id">
             <div class="rounded-lg bg-[#000000b9] mx-1 min-h-[500px]">
-              <NuxtImg :src="member.acf.main_image" alt="" class="rounded-t-lg w-full" />
+              <NuxtImg :src="member.acf.main_image" alt="" class="rounded-t-lg w-full max-h-[307px] min-h-[300px] h-full" style="object-fit: cover;" />
               <div class="p-4 sm:px-6">
                 <h3 class="font-bold text-xl text-white">{{ member.acf.title }}</h3>
                 <p class="text-lg text-white mt-3">{{ member.acf.description }}</p>
