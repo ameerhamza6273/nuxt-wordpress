@@ -40,17 +40,21 @@
               </button>
               <ul v-if="dropdownVisible"
                 class="absolute z-10 mt-2 w-full bg-white rounded-md shadow-lg ring-1 ring-black/5">
-                <li @click="selectSubject('movie.acf.subject_field_1')"
+                <li @click="selectSubject(movie.acf.subject_field_1)"
                   class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  {{movie.acf.subject_field_1}}
+                  {{ movie.acf.subject_field_1 }}
                 </li>
-                <li @click="selectSubject('movie.acf.subject_field_2')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  {{movie.acf.subject_field_2}}
+
+                <li @click="selectSubject(movie.acf.subject_field_2)"
+                  class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  {{ movie.acf.subject_field_2 }}
                 </li>
-                <li @click="selectSubject('movie.acf.subject_field_3')" class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  {{movie.acf.subject_field_3}}
+
+                <li @click="selectSubject(movie.acf.subject_field_3)"
+                  class="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  {{ movie.acf.subject_field_3 }}
                 </li>
-                
+
               </ul>
             </div>
 
