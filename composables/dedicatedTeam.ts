@@ -5,7 +5,7 @@ export async function getDedicatedTeam() {
     const config = useRuntimeConfig();
   
     try {
-      const response: any = await $fetch(`${config.public.BASE_URL}/dedicatedteam?cb=${Date.now()}`, {
+      const response: any = await $fetch(`${config.public.BASE_URL}/reviews-appraisals?cb=${Date.now()}`, {
         method: "GET",
       });
       

@@ -16,7 +16,7 @@ const props = defineProps({
   },
 });
 
-const mainContent = computed(() => props.dedicatedTeam.find(member => member.id === 27266) || null);
+const mainContent = computed(() => props.dedicatedTeam.find(member => member.id === 27772) || null);
 const assistantMembers = computed(() => props.teamMembers);
 
 </script>

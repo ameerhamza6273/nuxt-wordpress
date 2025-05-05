@@ -13,10 +13,10 @@ const props = defineProps({
 });
 
 // ✅ ID-based filtering
-const mainReview = computed(() => props.dedicatedTeam.find(member => member.id === 27287) || null);
-const firstReview = computed(() => props.dedicatedTeam.find(member => member.id === 27293) || null);
-const secondReview = computed(() => props.dedicatedTeam.find(member => member.id === 27294) || null);
-const thirdReview = computed(() => props.dedicatedTeam.find(member => member.id === 27295) || null);
+const mainReview = computed(() => props.dedicatedTeam.find(member => member.id === 27770) || null);
+const firstReview = computed(() => props.dedicatedTeam.find(member => member.id === 27774) || null);
+const secondReview = computed(() => props.dedicatedTeam.find(member => member.id === 27779) || null);
+const thirdReview = computed(() => props.dedicatedTeam.find(member => member.id === 27780) || null);
 </script>
 <template>
   <div id="reviews">
@@ -35,8 +35,8 @@ const thirdReview = computed(() => props.dedicatedTeam.find(member => member.id 
             <div class="flex flex-col md:flex-row md:items-center gap-4 text-center">
               <p class="mt-3 text-lg text-white font-bold md:hidden block">Keson Lim</p>
               <NuxtImg src="/5-Star-Ratings.png" alt="5 Star Ratings"
-                class="max-w-[200px] mx-auto md:ml-0 md:mr-auto" />
-              <p class="text-lg text-white">{{ mainReview?.acf?.description }}</p>
+                class="max-w-[200px] mx-auto  md:mx-0" />
+              <p class="text-lg text-white">5.0 RATING</p>
             </div>
             <div class="md:block hidden">
               <p class="mt-12 text-lg text-white font-bold hidden md:block">Keson Lim</p>
