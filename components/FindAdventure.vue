@@ -120,8 +120,15 @@ watch(searchQuery, (newVal) => {
 });
 const filteredTrip = computed(() => {
   return props.tripData.filter((trip) => {
-    const titleMatches = debouncedSearchQuery.value
-      ? trip.acf?.trip_title?.toLowerCase().includes(debouncedSearchQuery.value.toLowerCase())
+    const query = debouncedSearchQuery.value?.toLowerCase() || '';
+
+    const title = trip.acf?.trip_title?.toLowerCase() || '';
+    const country = trip.acf?.country?.toLowerCase() || null;
+
+    const titleMatches = query ? title.includes(query) : true;
+
+    const countryMatches = query
+      ? (country ? country.includes(query) : true)
       : true;
 
     const budgetMatches = selectedBudget.value
@@ -132,7 +139,6 @@ const filteredTrip = computed(() => {
       ? trip.acf?.difficulty === selectedDifficulty.value
       : true;
 
-    // Get all trip start and end dates
     const tripDates = [
       trip.acf?.start_date ? new Date(trip.acf.start_date) : null,
       trip.acf?.start_date2 ? new Date(trip.acf.start_date2) : null,
@@ -150,30 +156,27 @@ const filteredTrip = computed(() => {
 
     let dateMatches = true;
 
-    // If none of the trip dates are available, always show this trip
     if (tripDates.every(date => date === null) && tripEndDates.every(date => date === null)) {
       dateMatches = true;
     } else if (filterStartDate && filterEndDate) {
-      // Check if any of the date ranges overlap
       dateMatches = tripDates.some((start, index) => {
         const end = tripEndDates[index];
         return start && end && start <= filterEndDate && end >= filterStartDate;
       });
     } else if (filterStartDate) {
-      // Check if any start date is after filter start
       dateMatches = tripDates.some((start) => {
         return start && start >= filterStartDate;
       });
     } else if (filterEndDate) {
-      // Check if any end date is before filter end
       dateMatches = tripEndDates.some((end) => {
         return end && end <= filterEndDate;
       });
     }
 
-    return titleMatches && budgetMatches && difficultyMatches && dateMatches;
+    return (titleMatches || countryMatches) && budgetMatches && difficultyMatches && dateMatches;
   });
 });
+
 
 
 
@@ -219,7 +222,7 @@ const selectedDate = ref(new Date());
 
 
           <!-- Search Input -->
-          <input type="text" v-model="searchQuery" placeholder="Search destinations..."
+          <input type="text" v-model="searchQuery" placeholder="Search destinations with Name or Country..."
             class="px-4 py-3 bg-[#000000ab] text-white rounded-xl border border-[#000000ab] focus:outline-none placeholder-gray-400 w-full sm:w-[30%] min-w-[220px] mx-2 my-1" />
 
           <!-- Date Range -->
@@ -491,13 +494,16 @@ const selectedDate = ref(new Date());
                     Duration: Custom
                   </template>
                 </p>
-
-                <p class="text-[#A5A5A5]">
+                <p class="text-[#A5A5A5]" v-if="trip.acf.country">
+                  Country : {{ trip.acf.country }}
+                </p>
+                <p class="text-[#A5A5A5]" v-if="trip.acf.difficulty">
                   Difficulty: {{ trip.acf.difficulty }}
                 </p>
                 <p class="text-[#A5A5A5]" v-if="trip.acf.departure_title">
                   {{ trip.acf.departure_title }}: {{ trip.acf.departure_value }}
                 </p>
+                
 
                 <!-- Description -->
                 <!-- <p class="text-[14px] text-[#A5A5A5] my-2 max-h-[130px] overflow-hidden" id="htmlContainer"
