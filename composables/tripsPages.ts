@@ -4,13 +4,13 @@ export async function getTripsPages() {
   const config = useRuntimeConfig();
 
   try {
-    const response: any = await $fetch(`${config.public.BASE_URL}/trips-pages?cb=${Date.now()}`, {
+    const response: any = await $fetch(`${config.public.BASE_URL}/trips-pages?per_page=100`, {
       method: "GET",
     });
 
     const tripsPagesData = useTripsPages();
     tripsPagesData.value = response ?? [];
-    
+
     console.log("GET TRIPS PAGES DATA", response);
     return [response, null];
   } catch (error) {
