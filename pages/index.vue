@@ -52,7 +52,7 @@ onMounted(fetchData);
       <AboutUs :movies="movies" />
       <LogoSection :movies="movies" />
       <NewsletterSec :movies="movies" />
-      <Trips :dedicatedTeam="dedicatedTeam" :teamMembers="teamMembers" />
+      <Trips :dedicatedTeam="movies" :teamMembers="teamMembers" />
       <ExploreTrip :movies="movies" :tripData="tripsPages" />
       <FindAdventure :movies="movies" :tripData="tripsPages" />
       <Post :movies="movies" :postData="posts" />

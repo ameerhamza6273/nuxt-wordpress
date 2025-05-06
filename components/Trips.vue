@@ -16,7 +16,7 @@ const props = defineProps({
   },
 });
 
-const mainContent = computed(() => props.dedicatedTeam.find(member => member.id === 27772) || null);
+const mainContent = computed(() => props.dedicatedTeam.find(member => member.id === 27783) || null);
 const assistantMembers = computed(() => props.teamMembers);
 
 </script>
@@ -27,9 +27,9 @@ const assistantMembers = computed(() => props.teamMembers);
     <div class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 max-w-[1230px] mx-auto">
       <div class="col-span-1 sm:col-span-2 lg:col-span-1 self-start mx-3">
         <h2 class="text-white font-bold text-3xl md:text-5xl mt-3 heading-line-ht" style="line-height: 56px;">
-          {{ mainContent.acf.dedicated_title }}
+          {{ mainContent.acf.title }}
         </h2>
-        <p v-if="mainContent" class="text-lg text-white lg:max-w-[330px] mt-5">{{ mainContent.acf.description_1 }}</p>
+        <p v-if="mainContent" class="text-lg text-white lg:max-w-[330px] mt-5">{{ mainContent.acf.description }}</p>
         <p v-if="mainContent" class="text-lg text-white lg:max-w-[330px] mt-5">{{ mainContent.acf.description_2 }}</p>
         <p v-if="mainContent" class="text-lg text-white lg:max-w-[330px] mt-5">{{ mainContent.acf.description_3 }}</p>
       </div>
