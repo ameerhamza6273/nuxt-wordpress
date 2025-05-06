@@ -33,20 +33,25 @@ const thirdReview = computed(() => props.dedicatedTeam.find(member => member.id 
 
           <div class="p-6 md:p-8 bg-[#2927279a] md:bg-[#191818c4] mt-10 md:mt-16 rounded-lg">
             <div class="flex flex-col md:flex-row md:items-center gap-4 text-center">
-              <p class="mt-3 text-lg text-white font-bold md:hidden block">Keson Lim</p>
-              <NuxtImg src="/5-Star-Ratings.png" alt="5 Star Ratings"
-                class="max-w-[200px] mx-auto  md:mx-0" />
+              <p class="mt-3 text-lg text-white font-bold md:hidden block">
+                {{ mainReview?.acf?.dedicated_title }}
+              </p>
+              <NuxtImg src="/5-Star-Ratings.png" alt="5 Star Ratings" class="max-w-[200px] mx-auto  md:mx-0" />
               <p class="text-lg text-white">5.0 RATING</p>
             </div>
-            <div class="md:block hidden">
-              <p class="mt-12 text-lg text-white font-bold hidden md:block">Keson Lim</p>
-              <p v-if="mainReview?.acf?.description_1" class="mt-6 md:mt-3 text-lg text-white">{{
-                mainReview?.acf?.description_1
-                }}</p>
-              <p v-if="mainReview?.acf?.description_2" class="mt-6 text-lg text-white">{{ mainReview?.acf?.description_2
-              }}</p>
-              <p v-if="mainReview?.acf?.description_3" class="mt-6 text-lg text-white">{{ mainReview?.acf?.description_3
-              }}</p>
+            <div class="md:block hidden line-clamp-8">
+              <h1 class="mt-12 text-lg text-white font-bold hidden md:block">
+                {{ mainReview?.acf?.dedicated_title }}
+              </h1>
+              <p v-if="mainReview?.acf?.description_1" class="mt-6 md:mt-3 text-lg text-white">
+                {{ mainReview?.acf?.description_1 }}
+              </p>
+              <p v-if="mainReview?.acf?.description_2" class="mt-6 text-lg text-white">
+                {{ mainReview?.acf?.description_2}}
+              </p>
+              <p v-if="mainReview?.acf?.description_3" class="mt-6 text-lg text-white">
+                {{ mainReview?.acf?.description_3 }}                
+              </p>
             </div>
             <div class="block md:hidden">
               <div v-if="!showMore" class="block md:block">

@@ -4,7 +4,7 @@
     <p class="mt-8 text-lg text-white font-bold line-clamp-1">{{ review.acf.title }}</p>
     <p class="mt-3 text-lg text-white line-clamp-5">{{ review.acf.description }}</p>
     <p class="mt-8 text-lg text-[#00FFF2] underline cursor-pointer">
-      <NuxtLink :to="review.acf?.action?.url || '/#'">See more</NuxtLink>
+      <NuxtLink :to="review.acf?.action || '/#'">See more</NuxtLink>
     </p>
   </div>
 </template>
