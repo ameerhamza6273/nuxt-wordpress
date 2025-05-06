@@ -5,7 +5,7 @@ export async function getPosts(body: Object) {
 
   try {
     console.log(`${config.public.BASE_URL}/posts`);
-    const response: any = await $fetch(`${config.public.BASE_URL}/posts?cb=${Date.now()}`, {
+    const response: any = await $fetch(`${config.public.BASE_URL}/posts?per_page=100&cb=${Date.now()}`, {
       method: "GET",
       body: body,
     });
