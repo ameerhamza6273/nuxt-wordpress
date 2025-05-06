@@ -113,10 +113,10 @@ const thirdReview = computed(() => props.dedicatedTeam.find(member => member.id 
           </div>
 
           <!-- Desktop Static Layout (Hidden on mobile) -->
-          <div class="hidden md:flex flex-row items-center justify-between gap-1 md:gap-10 lg:gap-28">
-            <ReviewCard v-if="firstReview" :review="firstReview" />
-            <ReviewCard v-if="secondReview" :review="secondReview" />
-            <ReviewCard v-if="thirdReview" :review="thirdReview" />
+          <div class="hidden md:flex flex-row items-stretch justify-between gap-1 md:gap-10 min-h-[300px]">
+            <ReviewCard v-if="firstReview" :review="firstReview" class="flex-1" />
+            <ReviewCard v-if="secondReview" :review="secondReview" class="flex-1" />
+            <ReviewCard v-if="thirdReview" :review="thirdReview" class="flex-1" />
           </div>
 
         </div>
