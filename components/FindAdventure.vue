@@ -120,16 +120,12 @@ watch(searchQuery, (newVal) => {
 });
 const filteredTrip = computed(() => {
   return props.tripData.filter((trip) => {
-    const query = debouncedSearchQuery.value?.toLowerCase() || '';
+    const query = debouncedSearchQuery.value?.toLowerCase() || "";
 
-    const title = trip.acf?.trip_title?.toLowerCase() || '';
-    const country = trip.acf?.country?.toLowerCase() || null;
+    const title = trip.acf?.trip_title?.toLowerCase() || "";
+    const country = trip.acf?.country?.toLowerCase() || "";
 
-    const titleMatches = query ? title.includes(query) : true;
-
-    const countryMatches = query
-      ? (country ? country.includes(query) : true)
-      : true;
+    const titleMatches = query ? title.includes(query) || country.includes(query) : true;
 
     const budgetMatches = selectedBudget.value
       ? trip.acf?.budget === selectedBudget.value
@@ -143,12 +139,16 @@ const filteredTrip = computed(() => {
       trip.acf?.start_date ? new Date(trip.acf.start_date) : null,
       trip.acf?.start_date2 ? new Date(trip.acf.start_date2) : null,
       trip.acf?.start_date3 ? new Date(trip.acf.start_date3) : null,
+      trip.acf?.start_date4 ? new Date(trip.acf.start_date4) : null,
+      trip.acf?.start_date5 ? new Date(trip.acf.start_date5) : null,
     ];
 
     const tripEndDates = [
       trip.acf?.end_date ? new Date(trip.acf.end_date) : null,
       trip.acf?.end_date2 ? new Date(trip.acf.end_date2) : null,
       trip.acf?.end_date3 ? new Date(trip.acf.end_date3) : null,
+      trip.acf?.end_date4 ? new Date(trip.acf.end_date4) : null,
+      trip.acf?.end_date5 ? new Date(trip.acf.end_date5) : null,
     ];
 
     const filterStartDate = startDate.value ? new Date(startDate.value) : null;
@@ -173,9 +173,10 @@ const filteredTrip = computed(() => {
       });
     }
 
-    return (titleMatches || countryMatches) && budgetMatches && difficultyMatches && dateMatches;
+    return titleMatches && budgetMatches && difficultyMatches && dateMatches;
   });
 });
+
 
 
 
@@ -230,13 +231,13 @@ const selectedDate = ref(new Date());
           <div
             class="relative flex items-center justify-between bg-[#000000ab] rounded-xl overflow-visible p-2 w-full sm:w-[28%] min-w-[350px] mx-2 my-1">
             <vue-date-picker v-model="startDate" class="w-28 rounded-xl " placeholder="Start Date" close-on-scroll
-              auto-apply :enable-time-picker="false" />
+              auto-apply :enable-time-picker="false" :format="'dd/MM/yyyy'" />
 
             <span class="px-2 text-white">To</span>
 
             <div class="relative group">
               <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl" placeholder="End Date" close-on-scroll
-                auto-apply :enable-time-picker="false" :disabled="!startDate" :min-date="startDate" />
+                auto-apply :enable-time-picker="false" :disabled="!startDate" :min-date="startDate" :format="'dd/MM/yyyy'" />
 
               <!-- Tooltip -->
               <div v-if="!startDate"
@@ -337,14 +338,14 @@ const selectedDate = ref(new Date());
             <div
               class="relative flex items-center justify-between bg-[#000000ab] rounded-md overflow-visible p-1 w-full mt-4 ">
               <vue-date-picker v-model="startDate" class="w-28 rounded-xl" placeholder="Start Date" close-on-scroll
-                auto-apply :enable-time-picker="false" />
+                auto-apply :enable-time-picker="false" :format="'dd/MM/yyyy'" />
 
               <span class="px-2 text-white">To</span>
 
 
               <div class="relative group">
                 <vue-date-picker v-model="endDate" input-class="w-28 rounded-xl " placeholder="End Date" close-on-scroll
-                  auto-apply :enable-time-picker="false" :disabled="!startDate" :min-date="startDate" />
+                  auto-apply :enable-time-picker="false" :disabled="!startDate" :min-date="startDate" :format="'dd/MM/yyyy'" />
 
                 <!-- Tooltip -->
                 <div v-if="!startDate"
@@ -488,6 +489,12 @@ const selectedDate = ref(new Date());
                     </template>
                     <template v-if="trip.acf.start_date3 && trip.acf.end_date3">
                       , {{ trip.acf.start_date3 }} - {{ trip.acf.end_date3 }}
+                    </template>
+                    <template v-if="trip.acf.start_date4 && trip.acf.end_date4">
+                      , {{ trip.acf.start_date4 }} - {{ trip.acf.end_date4 }}
+                    </template>
+                    <template v-if="trip.acf.start_date5 && trip.acf.end_date5">
+                      , {{ trip.acf.start_date5 }} - {{ trip.acf.end_date5 }}
                     </template>
                   </template>
                   <template v-else>
