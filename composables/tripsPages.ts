@@ -4,7 +4,7 @@ export async function getTripsPages() {
   const config = useRuntimeConfig();
 
   try {
-    const response: any = await $fetch(`${config.public.BASE_URL}/trips-pages?per_page=100`, {
+    const response: any = await $fetch(`${config.public.BASE_URL}/trips-pages?per_page=100&cb=${Date.now()}`, {
       method: "GET",
     });
 
