@@ -15,24 +15,27 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
 const email = ref("");
 
 const submitEmailForm = async () => {
-  const config = useRuntimeConfig();
-  if (email.value) {
-    const htmlContent = `<p>Email: ${email.value}</p>`;
+  console.log(email.value)
+  await postSubscriber(email.value)
+  // const config = useRuntimeConfig();
 
-    const body = {
-      htmlContent,
-      from: config.public.FROM_EMAIL,
-      to: config.public.TO_EMAIL,
-      replyTo: config.public.REPLY_TO_EMAIL,
-      subject: "New Email Signup", // Subject ko customize kar sakte ho
-    };
+  // // if (email.value) {
+  // //   const htmlContent = `<p>Email: ${email.value}</p>`;
 
-    sendEmail(body);
-    alert("Your email has been submitted.");
-    email.value = "";
-  } else {
-    alert("Please enter a valid email.");
-  }
+  // //   const body = {
+  // //     htmlContent,
+  // //     from: config.public.FROM_EMAIL,
+  // //     to: config.public.TO_EMAIL,
+  // //     replyTo: config.public.REPLY_TO_EMAIL,
+  // //     subject: "New Email Signup", // Subject ko customize kar sakte ho
+  // //   };
+
+  // //   sendEmail(body);
+  //   alert("Your email has been submitted.");
+  //   email.value = "";
+  // } else {
+  //   alert("Please enter a valid email.");
+  // }
 };
 
 </script>
