@@ -124,9 +124,9 @@ const submitForm = async () => {
     const body = {
       htmlContent,
       from: config.public.FROM_EMAIL,
-      to: config.public.TO_EMAIL,
-      replyTo: config.public.REPLY_TO_EMAIL,
-      subject: " Contact Us Form Data ",
+      to: config.public.TEST_EMAIL,
+      replyTo: email.value,
+      subject: "Contact Us Form Data",
     };
 
     sendEmail(body);
