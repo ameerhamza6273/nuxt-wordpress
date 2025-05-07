@@ -58,7 +58,7 @@
                 {{ headerData.acf.link_3.title }}
               </NuxtLink>
             </li>
-            <li>
+            <!-- <li>
               <NuxtLink :to="headerData.acf.link_4.url" :class="[
                 'py-2 px-3 rounded-full font-medium uppercase transition-colors text-sm duration-300',
                 activeLink === headerData.acf.link_4.url
@@ -67,7 +67,7 @@
               ]" @click="getActiveLink(headerData.acf.link_4.url)">
                 {{ headerData.acf.link_4.title }}
               </NuxtLink>
-            </li>
+            </li> -->
             <li>
               <NuxtLink :to="headerData.acf.link_5.url" :class="[
                 'py-2 px-3 rounded-full font-medium uppercase transition-colors text-sm duration-300',
@@ -132,7 +132,7 @@
             {{ headerData.acf.link_5.title }}
           </NuxtLink>
         </li>
-        <li>
+        <!-- <li>
           <NuxtLink :to="headerData.acf.link_4.url" class="py-2 text-xl block uppercase"
             :class="activeLink === headerData.acf.link_4.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
             @click="getActiveLink(headerData.acf.link_4.url); closeMenu()">
@@ -141,7 +141,7 @@
             {{ headerData.acf.link_4.title }}
           </NuxtLink>
 
-        </li>
+        </li> -->
 
       </ul>
       <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse mx-auto">
