@@ -10,6 +10,18 @@ export default defineNuxtConfig({
       ],
     },
   },
+  nitro: {
+    devProxy: {
+      '/wp-json': {
+        target: 'https://cms.x-trekkers.com/wp-json',  // ← replace with your WPX subdomain
+        changeOrigin: true,
+      },
+      '/graphql': {
+        target: 'https://cms.x-trekkers.com/graphql',  // ← replace with your WPX subdomain
+        changeOrigin: true,
+      },
+    }
+  },
   modules: [
     '@nuxt/devtools',
     '@nuxtjs/tailwindcss',
