@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       SUBJECT: process.env.SUBJECT,
       CLIENT_EMAIL: process.env.CLIENT_EMAIL,
       REPLY_TO_EMAIL: process.env.REPLY_TO_EMAIL,
-      GOOGLE_SHEETS_HOOK_URL: process.env.GOOGLE_SHEETS_HOOK_URL,
+      GOOGLE_SHEETS_HOOK_URL: 'https://script.google.com/macros/s/AKfycbwBBuLMJxDVqpyD-q7pKAlRrADDS5JjjdYtBJp3ZVschc_ClC32kHZqAzN-tZuBiP0UPQ/exec?gid=0',
     },
   },
   build: {
