@@ -437,7 +437,7 @@ const selectedDate = ref(new Date());
         :breakpoints="{
           320: {
             slidesPerView: 1,
-            grid: { rows: 2, fill: 'row' },
+            grid: { rows: 1, fill: 'row' },
           },
           768: {
             slidesPerView: 2,
