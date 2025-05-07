@@ -441,7 +441,7 @@ const selectedDate = ref(new Date());
           },
           768: {
             slidesPerView: 2,
-            grid: { rows: 2, fill: 'row' },
+            grid: { rows: 1, fill: 'row' },
           },
           1024: {
             slidesPerView: 3,
