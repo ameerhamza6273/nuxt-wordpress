@@ -111,6 +111,13 @@ const selectSubject = (subject) => {
   dropdownVisible.value = false;
 };
 
+const resetForm = () => {
+  name.value = ""
+  email.value = ""
+  message.value = ""
+  selectedSubject.value = ""
+}
+
 const submitForm = async () => {
   const config = useRuntimeConfig();
   if (name.value && email.value && message.value && selectedSubject.value) {
@@ -126,15 +133,17 @@ const submitForm = async () => {
       from: config.public.FROM_EMAIL,
       to: config.public.TEST_EMAIL,
       replyTo: email.value,
-      subject: "Contact Us Form Data",
-    };
+      subject: `Contact Us Form - ${selectedSubject.value}`,
+    }
 
-    sendEmail(body);
-    alert("Your details have been sent to us. Someone will be in touch.");
-    name.value = "";
-    email.value = "";
-    message.value = "";
-    selectedSubject.value = "";
+    try {
+      const response = await sendEmail(body)
+      console.log(response)
+      alert("Your details have been sent to us. Someone will be in touch.")
+      resetForm()
+    } catch(error) {
+      console.error(error)
+    }
   } else {
     alert("Please fill in all fields before submitting.");
   }

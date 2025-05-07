@@ -78,7 +78,7 @@ watch(
       <FindAdventure :movies="movies" :tripData="tripsPages" />
       <Post :movies="movies" :postData="posts" />
       <ReviewsSec :dedicatedTeam="dedicatedTeam" />
-      <!-- <ContactUs :movies="movies" /> -->
+      <ContactUs :movies="movies" />
       <PageFooter :footerData="headerFooter" />
     </article>
   </section>
