@@ -25,7 +25,7 @@ export default defineNuxtConfig({
     public: {
       wordpressUrl: 'https://www.x-trekkers.com/graphql',
       BASE_URL: 'https://www.x-trekkers.com/wp-json/wp/v2',
-      RESEND_API_KEY: process.env.RESEND_API_KEY,
+      RESEND_API_KEY: 're_3FdwX9zD_91PcrVVRvc1kdHKSdcsGETvC',
       FROM_EMAIL: process.env.FROM_EMAIL,
       TO_EMAIL: process.env.TO_EMAIL,
       SUBJECT: process.env.SUBJECT,
