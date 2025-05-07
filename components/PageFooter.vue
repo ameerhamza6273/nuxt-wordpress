@@ -18,15 +18,15 @@
           </div>
           <div class="flex items-center justify-between sm:justify-around m-5 md:m-0 w-100 md:w-[60%]">
 
-            <NuxtLink to="https://wa.me/6594876198" class=" cursor-pointer "> 
+            <NuxtLink to="https://wa.me/6594876198" class=" cursor-pointer" external target="_blank"> 
               <NuxtImg :src="footerData.acf.whatsapp_image" alt="user"
                 class="max-w-[40px] md:max-w-[70px]" />
             </NuxtLink>
-            <NuxtLink to="https://www.instagram.com/xtrekkers" class=" cursor-pointer "> 
+            <NuxtLink to="https://www.instagram.com/xtrekkers" class=" cursor-pointer" external target="_blank"> 
               <NuxtImg :src="footerData.acf.insta_image" alt="user"
                 class="max-w-[40px] md:max-w-[70px]" />
             </NuxtLink>
-            <NuxtLink to="https://www.facebook.com/xtrekkers" class=" cursor-pointer "> 
+            <NuxtLink to="https://www.facebook.com/xtrekkers" class=" cursor-pointer" external target="_blank"> 
               <NuxtImg :src="footerData.acf.facebook_image" alt="user"
                 class="max-w-[40px] md:max-w-[70px]" />
             </NuxtLink>

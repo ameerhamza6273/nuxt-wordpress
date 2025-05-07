@@ -51,10 +51,10 @@ const assistantMembers = computed(() => props.teamMembers);
                 <p class="text-lg text-white mt-3">{{ member.acf.description }}</p>
                 <div class="flex items-center gap-4 mt-5 mb-2">
                   <NuxtLink :to="member.acf.action">
-                    <NuxtImg src="/trip-insta.svg" alt="" class="max-w-[35px]" />
+                    <NuxtImg src="/trip-insta.svg" alt="" class="max-w-[35px]" external target="_blank" />
                   </NuxtLink>
                   <NuxtLink :to="member.acf.action_2">
-                    <NuxtImg src="/trip-facebook.svg" alt="" class="max-w-[35px]" />
+                    <NuxtImg src="/trip-facebook.svg" alt="" class="max-w-[35px]" external target="_blank" />
                   </NuxtLink>
                 </div>
               </div>
