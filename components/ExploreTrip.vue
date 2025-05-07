@@ -30,11 +30,11 @@ const highlightedTrips = computed(() =>
         <h3 class="text-white  text-xl lg:text-2xl mb-6 lg:mb-16 uppercase border-b inline-block ">
           <i>{{ movie.acf.subtitle }}</i>
         </h3>
-        <h2 class="text-white font-bold max-w-[400px] text-3xl lg:text-5xl mt-3 uppercase heading-line-ht"
-          style="line-height: 56px;">
+        <h2 class="text-white font-bold w-full md:max-w-[400px] text-3xl lg:text-5xl mt-3 uppercase text-center md:text-left"
+            style="line-height: 56px;">
           {{ movie.acf.title }}
         </h2>
-        <p class="text-lg text-white  mt-5">{{ movie.acf.description }} </p>
+        <p class="text-lg text-white mt-5">{{ movie.acf.description }} </p>
 
       </div>
 
