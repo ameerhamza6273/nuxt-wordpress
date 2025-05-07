@@ -23,6 +23,7 @@ async function fetchData() {
 
 onMounted(fetchData);
 </script>
+
 <template>
   <div>
     <article v-if="loading">
