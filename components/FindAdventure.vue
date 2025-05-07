@@ -435,13 +435,13 @@ const selectedDate = ref(new Date());
           dynamicBullets: true,
         }" :space-between="20" :loop="false" class="w-full relative" :style="{ 'padding-bottom': '70px' }"
         :breakpoints="{
-          320: {
+          600: {
             slidesPerView: 1,
             grid: { rows: 1, fill: 'row' },
           },
           768: {
             slidesPerView: 2,
-            grid: { rows: 1, fill: 'row' },
+            grid: { rows: 2, fill: 'row' },
           },
           1024: {
             slidesPerView: 3,
