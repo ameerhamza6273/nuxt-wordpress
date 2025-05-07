@@ -37,7 +37,7 @@ const movie = computed(() => props.movies.find((m) => m.id === movieId));
 
           <p class="mt-5 sm:mt-8 max-w-4xl text-lg text-white text-center mx-auto">
             {{ movie.acf.description }}
-            <NuxtLink :to="movie.acf.action.url" class="text-[#00FFF2] underline">
+            <NuxtLink :to="movie.acf.action.url" class="text-[#00FFF2] underline" external target="_blank">
               {{ movie.acf.action.title }}
             </NuxtLink>
           </p>
