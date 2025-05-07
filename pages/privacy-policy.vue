@@ -509,8 +509,6 @@ onMounted(fetchData);
                         </p>
                        
                     </div>
-
-
                 </div>
             </section>
 
