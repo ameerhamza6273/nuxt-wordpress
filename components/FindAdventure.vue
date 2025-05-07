@@ -433,6 +433,7 @@ const selectedDate = ref(new Date());
         }" :pagination="{
           clickable: true,
           dynamicBullets: true,
+          
         }" :space-between="20" :loop="false" class="w-full relative" :style="{ 'padding-bottom': '70px' }"
         :breakpoints="{
           600: {
