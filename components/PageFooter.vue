@@ -18,7 +18,7 @@
           </div>
           <div class="flex items-center justify-between sm:justify-around m-5 md:m-0 w-100 md:w-[60%]">
 
-            <NuxtLink to="tel:+65 94876198" class=" cursor-pointer "> 
+            <NuxtLink to="https://wa.me/6594876198" class=" cursor-pointer "> 
               <NuxtImg :src="footerData.acf.whatsapp_image" alt="user"
                 class="max-w-[40px] md:max-w-[70px]" />
             </NuxtLink>
