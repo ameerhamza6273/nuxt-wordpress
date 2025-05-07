@@ -100,10 +100,11 @@ onUnmounted(() => {
               <div class="p-6 px-7 z-10 flex flex-col md:justify-end min-h-[350px] md:min-h-[300px] relative">
                 <!-- Dynamic Data -->
                 <p class="text-lg text-white text-center z-20">
-                  <b>{{ data.acf.title }}{{ data.acf.title_2 }}</b><br />
+                  <b>{{ data.acf.title }} {{ data.acf.title_2 }}</b><br />
                   {{ data.acf.subtitle }}
                 </p>
-                <NuxtLink :to="`/trip/${data.id}`"
+                <NuxtLink 
+                  :to="`/trip/${data.id}`"
                   class="bg-[#ffffff1f] mt-3 delay-300 text-white rounded-xl shadow-md py-2 px-4 block font-medium text-center border-2 border-white cursor-pointer z-20">
                   Book Now
                 </NuxtLink>
