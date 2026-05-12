@@ -1,239 +1,131 @@
 <template>
-  <div v-if="headerData">
-    <!-- Desktop & Tablet Navbar -->
-    <nav :class="[
-      'fixed w-full z-50 top-0 left-0 text-white transition-all duration-300',
-      isTermsPage || isPrivacyPage ? 'bg-[#161616]' :
-      isScrolled ? 'bg-[#161616] shadow-[0_4px_10px_rgba(255,255,255,0.2)]' : 'bg-transparent',
-      isNavbarVisible ? 'translate-y-0' : '-translate-y-full'
-    ]">
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto py-5 px-5 sm:px-8">
-        <!-- Logo -->
-        <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse">
-          <NuxtImg :src="headerData.acf.logo" class="w-20 md:w-24" alt="Logo" />
+  <header class="w-full z-50 bg-white sticky top-0 shadow-sm">
+    <nav class="border-b border-gray-100 py-2">
+      <div class="max-w-[1300px] mx-auto px-4 md:px-6 flex items-center justify-between">
+        
+        <NuxtLink to="/" class="shrink-0">
+          <NuxtImg 
+            src="/logic-auto-parts-website-logo.jpeg" 
+            alt="Logic Auto Parts" 
+            class="h-10 md:h-16 w-auto"
+          />
         </NuxtLink>
 
+        <div class="lg:hidden">
+          <a href="tel:+18005550199" 
+             class="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full border border-gray-200 transition-active active:scale-95">
+            <i class="fa-solid fa-phone text-[#e31e24] text-xs"></i>
+            <span class="text-[12px] font-bold text-gray-900 tracking-tight">(800) 555-0199</span>
+          </a>
+        </div>
 
-        <!-- Mobile Menu Toggle -->
-        <button class="inline-flex items-center p-2 w-10 h-10 rounded-lg focus:outline-none md:hidden"
-          @click="toggleMenu">
-          <span class="sr-only">Open main menu</span>
-          <svg v-if="!isToggled" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-          <span v-else class="text-4xl font-medium">×</span>
-        </button>
+        <ul class="hidden lg:flex items-center space-x-6 mx-auto">
+          <li v-for="brand in ['BMW', 'VOLVO', 'AUDI', 'VW', 'MERCEDES', 'PORSCHE']" :key="brand">
+            <NuxtLink to="#" class="text-sm font-bold text-gray-900 hover:text-[#e31e24] transition-colors uppercase tracking-tight">
+              {{ brand }}
+            </NuxtLink>
+          </li>
+        </ul>
 
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex items-center space-x-6">
-          <ul class="flex items-center space-x-5">
-            <li>
-              <NuxtLink :to="headerData.acf.link_1.url" :class="[
-                'py-2 px-3 rounded-full font-medium uppercase transition-colors text-sm duration-300',
-                isTermsPage || isPrivacyPage ? 'bg-[#161616]' :
-                activeLink === headerData.acf.link_1.url
-                  ? isScrolled ? 'text-[#dddddd8a] font-bold' : 'text-black font-bold'
-                  : 'text-white'
-              ]" @click="getActiveLink(headerData.acf.link_1.url)">
-                {{ headerData.acf.link_1.title }}
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink :to="headerData.acf.link_2.url" :class="[
-                'py-2 px-3 rounded-full font-medium uppercase transition-colors text-sm duration-300',
-                activeLink === headerData.acf.link_2.url
-                  ? isScrolled ? 'text-[#dddddd8a] font-bold' : 'text-black font-bold'
-                  : 'text-white'
-              ]" @click="getActiveLink(headerData.acf.link_2.url)">
-                {{ headerData.acf.link_2.title }}
-              </NuxtLink>
-            </li>
-            <li>
-              <NuxtLink :to="headerData.acf.link_3.url" :class="[
-                'py-2 px-3 rounded-full font-medium uppercase transition-colors text-sm duration-300',
-                activeLink === headerData.acf.link_3.url
-                  ? isScrolled ? 'text-[#dddddd8a] font-bold' : 'text-black font-bold'
-                  : 'text-white'
-              ]" @click="getActiveLink(headerData.acf.link_3.url)">
-                {{ headerData.acf.link_3.title }}
-              </NuxtLink>
-            </li>
-            <!-- <li>
-              <NuxtLink :to="headerData.acf.link_4.url" :class="[
-                'py-2 px-3 rounded-full font-medium uppercase transition-colors text-sm duration-300',
-                activeLink === headerData.acf.link_4.url
-                  ? isScrolled ? 'text-[#dddddd8a] font-bold' : 'text-black font-bold'
-                  : 'text-white'
-              ]" @click="getActiveLink(headerData.acf.link_4.url)">
-                {{ headerData.acf.link_4.title }}
-              </NuxtLink>
-            </li> -->
-            <li>
-              <NuxtLink :to="headerData.acf.link_5.url" :class="[
-                'py-2 px-3 rounded-full font-medium uppercase transition-colors text-sm duration-300',
-                activeLink === headerData.acf.link_5.url
-                  ? isScrolled ? 'text-[#dddddd8a] font-bold' : 'text-black font-bold'
-                  : 'text-white'
-              ]" @click="getActiveLink(headerData.acf.link_5.url)">
-                <NuxtImg :src="headerData.acf.icon" alt="icon" class="inline w-7 mr-2"
-                  :class="activeLink === headerData.acf.link_5.url ? ' filter brightness-50' : ''" />
-                {{ headerData.acf.link_5.title }}
-              </NuxtLink>
-            </li>
-          </ul>
+        <div class="flex items-center gap-3">
+          <div class="relative hidden xl:block w-[250px]">
+            <input type="text" placeholder="Search Part..." class="w-full bg-[#fcfcfc] border-2 border-gray-100 rounded-lg py-2 pl-4 pr-10 text-sm focus:border-[#f2a900] outline-none" />
+            <button class="absolute right-1 top-1 bottom-1 bg-[#e31e24] text-white px-3 rounded-md">
+              <i class="fa-solid fa-magnifying-glass text-xs"></i>
+            </button>
+          </div>
+
+          <div class="hidden md:block relative group">
+            <button class="flex items-center gap-2 border border-gray-200 rounded-lg px-4 py-2 text-[12px] font-bold text-gray-800 group-hover:border-[#f2a900] transition-all">
+              <i class="fa-solid fa-user-circle text-lg text-gray-400 group-hover:text-[#f2a900]"></i>
+              <span>MY ACCOUNT</span>
+              <i class="fa-solid fa-chevron-down text-[10px] ml-1 transition-transform group-hover:rotate-180"></i>
+            </button>
+
+            <div class="absolute right-0 top-full pt-2 hidden group-hover:block w-52 z-50 animate-in fade-in slide-in-from-top-1">
+              <div class="bg-white shadow-xl rounded-lg border border-gray-100 overflow-hidden py-1">
+                <NuxtLink v-for="item in accountLinks" :key="item.label" :to="item.to" 
+                  class="flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#e31e24] transition-colors">
+                  <i :class="[item.icon, 'text-gray-400 w-5']"></i>
+                  {{ item.label }}
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+
+          <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="lg:hidden text-2xl text-gray-800 p-1">
+            <i :class="isMobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars-staggered'"></i>
+          </button>
         </div>
       </div>
     </nav>
 
-    <!-- Mobile Navbar -->
-    <div v-if="isToggled" class="fixed inset-0 z-50 bg-[#000] flex flex-col justify-between pb-5 md:hidden">
-      <!-- Close button -->
-      <div class="text-white flex items-center justify-between p-4">
-        <div class=" md:hidden ">MENU</div>
-        <button @click="closeMenu" class="text-4xl">&times;</button>
+    
+
+    <Transition name="slide">
+      <div v-if="isMobileMenuOpen" class="fixed inset-0 z-[60] lg:hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="isMobileMenuOpen = false"></div>
+        <div class="absolute right-0 top-0 bottom-0 w-[280px] bg-white flex flex-col shadow-2xl">
+          
+          <div class="p-5 border-b flex justify-between items-center bg-gray-50">
+            <span class="font-black text-[10px] tracking-[3px] uppercase text-gray-500">Navigation</span>
+            <button @click="isMobileMenuOpen = false" class="text-3xl text-gray-400">&times;</button>
+          </div>
+          
+          <div class="overflow-y-auto flex-1">
+            <ul class="py-2">
+              <li v-for="brand in ['BMW', 'VOLVO', 'AUDI', 'VW', 'MERCEDES', 'PORSCHE']" :key="brand">
+                <NuxtLink to="#" class="block px-6 py-4 text-sm font-black border-b border-gray-50 hover:bg-gray-50 hover:text-[#e31e24] uppercase transition-colors">
+                  {{ brand }}
+                </NuxtLink>
+              </li>
+            </ul>
+
+            <div class="mt-4 border-t-4 border-gray-50">
+              <button 
+                @click="isAccountDropdownOpen = !isAccountDropdownOpen"
+                class="w-full flex items-center justify-between px-6 py-5 text-sm font-black text-gray-900 uppercase transition-colors hover:bg-gray-50"
+              >
+                <div class="flex items-center gap-3">
+                  <i class="fa-solid fa-user-circle text-lg text-[#e31e24]"></i>
+                  <span>My Account</span>
+                </div>
+                <i :class="['fa-solid fa-chevron-down text-xs transition-transform duration-300', isAccountDropdownOpen ? 'rotate-180' : '']"></i>
+              </button>
+
+              <div v-show="isAccountDropdownOpen" class="bg-gray-50 overflow-hidden transition-all duration-300">
+                <NuxtLink v-for="item in accountLinks" :key="item.label" :to="item.to" 
+                  class="flex items-center gap-4 px-10 py-4 text-xs font-black border-b border-gray-100 last:border-0 hover:text-[#e31e24] uppercase transition-colors">
+                  <i :class="[item.icon, 'text-[#e31e24] w-5']"></i>
+                  {{ item.label }}
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <!-- Navigation links -->
-      <ul class="space-y-4 text-center text-white">
-        <li>
-          <NuxtLink :to="headerData.acf.link_1.url" class="py-2 text-xl  block uppercase"
-            :class="activeLink === headerData.acf.link_1.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
-            @click="getActiveLink(headerData.acf.link_1.url); closeMenu()">
-            <NuxtImg :src="headerData.acf.home_icon" alt="icon" class="inline h-5 mr-2"
-              :class="activeLink === headerData.acf.link_1.url ? ' filter brightness-0' : ''" />
-
-            {{ headerData.acf.link_1.title }}
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink :to="headerData.acf.link_2.url" class="py-2 text-xl block uppercase"
-            :class="activeLink === headerData.acf.link_2.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
-            @click="getActiveLink(headerData.acf.link_2.url); closeMenu()">
-            <NuxtImg :src="headerData.acf.about_icon" alt="icon" class="inline h-5 mr-2"
-              :class="activeLink === headerData.acf.link_2.url ? ' filter brightness-0' : ''" />
-            {{ headerData.acf.link_2.title }}
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink :to="headerData.acf.link_3.url" class="py-2 text-xl  block uppercase"
-            :class="activeLink === headerData.acf.link_3.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
-            @click="getActiveLink(headerData.acf.link_3.url); closeMenu()">
-            <NuxtImg :src="headerData.acf.review_icon" alt="icon" class="inline h-5 mr-2"
-              :class="activeLink === headerData.acf.link_3.url ? ' filter brightness-0' : ''" />
-            {{ headerData.acf.link_3.title }}
-          </NuxtLink>
-        </li>
-        <li>
-          <NuxtLink :to="headerData.acf.link_5.url" class="py-2 text-xl  block uppercase"
-            :class="activeLink === headerData.acf.link_5.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
-            @click="getActiveLink(headerData.acf.link_5.url); closeMenu()">
-            <NuxtImg :src="headerData.acf.icon" alt="icon" class="inline h-5 mr-2"
-              :class="activeLink === headerData.acf.link_5.url ? ' filter brightness-0' : ''" />
-            {{ headerData.acf.link_5.title }}
-          </NuxtLink>
-        </li>
-        <!-- <li>
-          <NuxtLink :to="headerData.acf.link_4.url" class="py-2 text-xl block uppercase"
-            :class="activeLink === headerData.acf.link_4.url ? 'text-[#000] font-bold bg-[#D9D9D9]' : 'text-[#fff] font-bold bg-transparent'"
-            @click="getActiveLink(headerData.acf.link_4.url); closeMenu()">
-            <NuxtImg :src="headerData.acf.contact_icon" alt="icon" class="inline h-5 mr-2"
-              :class="activeLink === headerData.acf.link_4.url ? ' filter brightness-0' : ''" />
-            {{ headerData.acf.link_4.title }}
-          </NuxtLink>
-
-        </li> -->
-
-      </ul>
-      <NuxtLink to="/" class="flex items-center space-x-3 rtl:space-x-reverse mx-auto">
-        <NuxtImg :src="headerData.acf.logo" class="w-24" alt="Logo" @click="getActiveLink('/#home'); closeMenu()" />
-      </NuxtLink>
-    </div>
-  </div>
+    </Transition>
+  </header>
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
-import { useRoute } from 'vue-router';
+const isMobileMenuOpen = ref(false);
+const isAccountDropdownOpen = ref(false); // Add this line
+
+const accountLinks = [
+  { label: 'Sign In', to: '#', icon: 'fa-solid fa-right-to-bracket' },
+  { label: 'Create Account', to: '#', icon: 'fa-solid fa-user-plus' },
+  { label: 'Track Order', to: '#', icon: 'fa-solid fa-box-open' }
+];
 
 const route = useRoute();
-
-const isTermsPage = computed(() => route.path.includes('terms-conditions'));
-const isPrivacyPage = computed(() => route.path.includes('privacy-policy'));
-
-const isToggled = ref(false);
-const isScrolled = ref(false);
-const activeLink = ref("/#home");
-let lastScrollTop = 0;
-const isNavbarVisible = ref(true);
-
-const toggleMenu = () => {
-  isToggled.value = !isToggled.value;
-};
-
-const getActiveLink = (title) => {
-  activeLink.value = title;
-};
-
-const closeMenu = () => {
-  isToggled.value = false;
-};
-
-
-const handleScroll = () => {
-  const scrollTop = window.scrollY;
-  const isDesktop = window.innerWidth >= 1024; // lg: breakpoint (Tailwind default)
-
-  // Always update background color on scroll
-  isScrolled.value = scrollTop > 50;
-
-  if (!isDesktop) {
-    // Mobile/tablet - always show navbar
-    isNavbarVisible.value = true;
-    return;
-  }
-
-  // Desktop - handle scroll direction
-  if (scrollTop > lastScrollTop && scrollTop > 100) {
-    // Scrolling down
-    isNavbarVisible.value = false;
-  } else {
-    // Scrolling up
-    isNavbarVisible.value = true;
-  }
-
-  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-};
-
-onMounted(() => {
-  window.addEventListener("scroll", handleScroll, { passive: true });
+watch(() => route.fullPath, () => { 
+  isMobileMenuOpen.value = false; 
+  isAccountDropdownOpen.value = false; // Close dropdown on route change
 });
-
-onBeforeUnmount(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
-
-
-const props = defineProps({
-  headerData: {
-    type: Array,
-    required: true,
-    default: () => [] // ✅ Prevents undefined errors
-  }
-});
-const headerData = computed(() => props.headerData?.find(member => member.id === 27325) || null);
-watch(isToggled, (newVal) => {
-  if (newVal) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
-  }
-});
-
 </script>
 
 <style scoped>
-.active-link {
-  font-weight: bold;
-}
+.slide-enter-active, .slide-leave-active { transition: transform 0.3s ease; }
+.slide-enter-from, .slide-leave-to { transform: translateX(100%); }
 </style>

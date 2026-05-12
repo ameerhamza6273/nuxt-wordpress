@@ -1,30 +1,12 @@
 <script setup>
 
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 
-const loading = ref(true);
-const headerFooter = ref(null);
-
-async function fetchData() {
-  loading.value = true;
-
-  const [headerFooterRes, headerFooterErr] = await getHeaderFooter();
-
-  if (headerFooterRes) headerFooter.value = headerFooterRes;
-
-  if (headerFooterErr) console.error("Error fetching header & footer:", headerFooterErr);
-
-  loading.value = false;
-}
-
-onMounted(fetchData);
 </script>
 <template>
   <div>
-    <article v-if="loading">
-      <SpinLoader />
-    </article>
-    <article v-else>
+   
+    <article>
       <PageNavbar :headerData="headerFooter" />
 
       <!-- ✅ Add the Terms Section -->
