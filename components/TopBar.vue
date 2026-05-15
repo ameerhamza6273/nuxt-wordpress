@@ -8,12 +8,12 @@ const features = [
   { 
     icon: 'fa-solid fa-rotate-left', 
     text: 'Hassle-Free Returns', 
-    link: '/returns' // Returns & Exchanges page
+    link: '/selection' // Returns & Exchanges page
   },
   { 
     icon: 'fa-solid fa-shield-halved', 
     text: 'Lifetime Replacement', 
-    link: '/warranty' // Lifetime Warranty page
+    link: '/lifetime-guarantee' // Lifetime Warranty page
   }
 ];
 </script>

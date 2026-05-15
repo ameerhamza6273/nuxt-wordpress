@@ -8,7 +8,7 @@
         <NuxtImg src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=1600" class="w-full h-full object-cover" />
       </div>
       <div class="container mx-auto px-4 relative z-10">
-        <span class="text-[#e31e24] font-black text-[11px] tracking-[4px] uppercase block mb-4">Fast & Reliable</span>
+        <span class="text-[#e31e24] font-black text-sm tracking-[4px] uppercase block mb-4">Fast & Reliable</span>
         <h1 class="text-4xl md:text-6xl font-extrabold mb-6 tracking-tighter uppercase">Coast-to-Coast Shipping</h1>
         <p class="text-gray-400 text-lg max-w-2xl mx-auto">
           Get your premium European parts in 5 days or less. Free shipping on all orders over $49.

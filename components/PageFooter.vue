@@ -57,7 +57,7 @@
         </div>
       </div>
 
-      <hr class="my-6 border-white/10">
+      <hr class="mb-6 mt-12 border-white/10">
       <div class="text-center opacity-75 text-sm tracking-wider">
         © {{ new Date().getFullYear() }} Logic Auto Parts. All Rights Reserved.
       </div>
