@@ -77,7 +77,7 @@ const quickLinks = [
   { name: 'About Us', url: '/about' },
   { name: 'DIY Blog', url: '/blog' },
   { name: 'Contact Us', url: '/contact' },
-  { name: 'Terms & Conditions', url: '/terms' }
+  { name: 'Terms & Conditions', url: '/terms-conditions' }
 ];
 </script>
 

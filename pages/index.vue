@@ -5,11 +5,7 @@ const filterFields = [
   { label: 'Model', options: [] }, // Initially empty
   { label: 'Sub Model', options: [] }
 ];
-const features = [
-  { icon: 'fa-solid fa-truck-fast', text: 'Free Shipping Over $49' },
-  { icon: 'fa-solid fa-rotate-left', text: 'Hassle-Free Returns' },
-  { icon: 'fa-solid fa-shield-halved', text: 'Lifetime Replacement' }
-];
+
 const handleSearch = () => {
   console.log('Searching for parts...');
 };
@@ -79,21 +75,7 @@ const brands = [
    
     <article>
       <PageNavbar/>
-      <div class="bg-[#fafafa] border-b border-gray-100 py-3">
-      <div class="max-w-[1300px] mx-auto px-2">
-        <div class="grid grid-cols-3 gap-4 md:divide-x md:divide-gray-200">
-          <div v-for="(feature, index) in features" :key="index" 
-               class="flex flex-col md:flex-row items-center justify-center text-center group cursor-pointer">
-            <div class="w-9 md:w-14 flex items-center justify-center">
-                <i :class="[feature.icon, 'text-[#e31e24] text-xl group-hover:scale-110 transition-transform']"></i>
-            </div>
-            <span class="text-[12px] hover:text-[#e31e24] transition-colors md:text-[13px] font-black text-gray-700 tracking-tighter md:tracking-widest uppercase leading-tight md:leading-normal">
-              {{ feature.text }}
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
+      <TopBar />
         <section class="relative min-h-[650px] flex items-center py-16 md:py-24 overflow-hidden bg-gray-900">
           <div class="absolute inset-0 z-0">
             <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10"></div>
