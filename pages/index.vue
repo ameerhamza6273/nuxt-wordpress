@@ -1,10 +1,5 @@
 <script setup>
-const filterFields = [
-  { label: 'Year', options: ['2024', '2023', '2022', '2021', '2020'] },
-  { label: 'Make', options: ['BMW', 'Mercedes-Benz', 'Audi', 'Volkswagen', 'Porsche'] },
-  { label: 'Model', options: [] }, // Initially empty
-  { label: 'Sub Model', options: [] }
-];
+
 
 const handleSearch = () => {
   console.log('Searching for parts...');
@@ -76,75 +71,8 @@ const brands = [
     <article>
       <PageNavbar/>
       <TopBar />
-        <section class="relative min-h-[650px] flex items-center py-16 md:py-24 overflow-hidden bg-gray-900">
-          <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10"></div>
-            <NuxtImg 
-              src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920" 
-              alt="Hero Background"
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-
-          <div class="container max-w-[1300px] mx-auto px-4 md:px-6 relative z-20">
-            <div class="flex flex-col lg:flex-row items-center gap-12">
-              
-              <div class="w-full lg:w-7/12 text-center lg:text-left">
-                <h1 class="text-4xl md:text-6xl font-black text-white leading-[1.1] mb-6 tracking-tighter">
-                  DRIVEN BY <br>
-                  <span class="text-[#f2a900]">QUALITY</span> EXPERTISE
-                </h1>
-                <p class="text-lg md:text-xl text-gray-300 max-w-[550px] mb-8 leading-relaxed mx-auto lg:mx-0">
-                  Your trusted source for Genuine, OE, & OEM Online Car Parts.
-                  Specializing in high-performance European vehicles with precision and care.
-                </p>
-                
-                <div class="hidden lg:flex gap-3">
-                  <span class="bg-[#e31e24] text-white text-[11px] font-black px-4 py-2 rounded uppercase tracking-wider">
-                    Lifetime Warranty
-                  </span>
-                  <span class="bg-[#f2a900] text-black text-[11px] font-black px-4 py-2 rounded uppercase tracking-wider">
-                    Fast Shipping
-                  </span>
-                </div>
-              </div>
-
-              <div class="w-full lg:w-5/12 max-w-[500px]">
-                <div class="bg-white rounded-xl p-8 shadow-2xl border-t-[6px] border-[#e31e24]">
-                  <h4 class="text-2xl font-black text-gray-900 text-center mb-8 uppercase tracking-wide">
-                    Select Your Vehicle
-                  </h4>
-                  
-                  <form @submit.prevent="handleSearch" class="space-y-5">
-                    <div v-for="field in filterFields" :key="field.label">
-                      <label class="block text-[11px] font-black text-gray-700 uppercase mb-2 tracking-widest">
-                        {{ field.label }}
-                      </label>
-                      <select 
-                        class="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm text-gray-800 focus:ring-2 focus:ring-[#f2a900] focus:border-[#f2a900] outline-none transition-all cursor-pointer"
-                      >
-                        <option selected disabled>Select {{ field.label }}</option>
-                        <option v-for="option in field.options" :key="option" :value="option">
-                          {{ option }}
-                        </option>
-                      </select>
-                    </div>
-
-                    <button 
-                      type="submit" 
-                      class="w-full bg-[#e31e24] hover:bg-[#bd171d] text-white font-black py-4 rounded-lg flex items-center justify-center gap-3 transition-all active:scale-[0.98] mt-4 shadow-lg shadow-red-900/20"
-                    >
-                      <i class="fa-solid fa-car-side text-lg"></i>
-                      <span class="uppercase tracking-widest">Find My Parts</span>
-                    </button>
-                  </form>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
+      <HeroSection />
+      
 <section class="py-20 bg-white">
     <div class="max-w-[1300px] mx-auto px-4 md:px-6">
       

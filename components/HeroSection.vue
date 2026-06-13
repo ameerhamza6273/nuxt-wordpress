@@ -1,126 +1,189 @@
 <script setup>
-import { Swiper, SwiperSlide } from "swiper/vue";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { Navigation } from "swiper/modules";
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
-// Props
-const props = defineProps({
-  movies: {
-    type: Array,
-    required: true,
-  },
+// 🔴 APNA WORDPRESS URL YAHAN LIKHEIN (Bina aakhri slash / ke)
+const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8' 
 
-  tripData: {
-    type: Array,
-    required: true,
-  },
-});
+const router = useRouter()
 
-// Find a movie by ID
-const movieId = 27221;
-const movie = computed(() => props.movies.find((m) => m.id === movieId));
-const highlightedTrips = computed(() =>
-  props.tripData.filter((trip) => trip.acf?.highlight === "true")
-);
-// Reactive ref to track screen width
-const isMobile = ref(false);
+const years = ref([])
+const makes = ref([])
+const models = ref([])
 
-const checkViewport = () => {
-  isMobile.value = window.innerWidth < 600; // you can change 600 to any breakpoint
-};
+const selectedYear = ref('')
+const selectedMake = ref('')
+const selectedModel = ref('')
+
+const loadingYears = ref(false)
+const loadingMakes = ref(false)
+const loadingModels = ref(false)
+
+// Direct WordPress Fetcher
+const fetchAttributes = async (slugType, targetRef, loadingRef, parentSlug = '') => {
+  loadingRef.value = true
+  try {
+    const cleanParent = parentSlug ? encodeURIComponent(String(parentSlug).trim()) : ''
+    
+    // Ab request Nuxt server par nahi, direct WordPress par jayegi
+    const apiUrl = `${WP_URL}/wp-json/custom/v1/vehicle-attributes?slug=${slugType}&parent=${cleanParent}`
+    
+    const data = await $fetch(apiUrl, { method: 'GET' })
+    targetRef.value = data || []
+  } catch (err) {
+    console.error(`Direct connection crash on ${slugType}:`, err)
+    targetRef.value = []
+  } finally {
+    loadingRef.value = false
+  }
+}
+
+// Watcher 1: Year badalne par Makes load karein
+watch(selectedYear, (newYear) => {
+  selectedMake.value = ''
+  selectedModel.value = ''
+  makes.value = []
+  models.value = []
+
+  if (newYear && String(newYear).trim() !== '') {
+    fetchAttributes('pa_make', makes, loadingMakes, newYear)
+  }
+})
+
+// Watcher 2: Make badalne par Models load karein
+watch(selectedMake, (newMake) => {
+  selectedModel.value = ''
+  models.value = []
+
+  if (newMake && String(newMake).trim() !== '' && selectedYear.value) {
+    const comboParam = `${String(selectedYear.value).trim()}|${String(newMake).trim()}`
+    fetchAttributes('pa_model', models, loadingModels, comboParam)
+  }
+})
+
+
+const handleSearch = () => {
+  if (!selectedYear.value || !selectedMake.value || !selectedModel.value) return
+
+  // Slugs ki madad se Array me se real Object dhoondhein
+  // selectedYear me already "99-09" jaisa text hai kyunke wahan slug aur name same hain
+  const activeMakeObj = makes.value.find(m => m.slug === selectedMake.value)
+  const activeModelObj = models.value.find(mod => mod.slug === selectedModel.value)
+
+  // URL me Name bhejenge taake shop/product page crash na ho aur design/logic same rahe
+  router.push({
+    path: '/products',
+    query: {
+      year: selectedYear.value, // "99-09"
+      make: activeMakeObj ? activeMakeObj.name : selectedMake.value, // "Subaru" instead of "subaru"
+      model: activeModelObj ? activeModelObj.name : selectedModel.value, // "Impreza" instead of "impreza"
+      page: 1
+    }
+  })
+}
 
 onMounted(() => {
-  checkViewport();
-  window.addEventListener("resize", checkViewport);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", checkViewport);
-});
+  // Page load par direct unique Years pull honge
+  fetchAttributes('pa_year', years, loadingYears)
+})
 </script>
 
-
 <template>
-  <div v-if="movie" class=" sm:pl-8 md:pl-16 md:pt-24 bg-cover bg-center bg-no-repeat"
-    :style="{ backgroundImage: `url('${movie.acf.bgimage}')` }" id="home">
-    <div class="grid md:grid-cols-2 grid-cols-1 py-24 sm:py-32">
-      <div class="self-end mt-10 md:mt-0 pl-6 md:pl-0">
-        <h1 class="text-white font-bold text-center md:text-left md:max-w-[200px] text-3xl md:text-5xl heading-line-ht"
-          style="line-height: 56px">
-          {{ movie.acf.title }}
-        </h1>
-        <p class="text-lg text-white text-center md:text-left md:max-w-[430px] mt-3 pr-4">
-          {{ movie.acf.description }}
-        </p>
-        <div class="flex mt-8">
-          <NuxtLink :to="movie.acf.action.url" 
-            class="bg-[#ffffff1f] mx-auto md:ml-0 md:mr-auto mb-14 md:mb-0 delay-300 text-white rounded-xl shadow-md py-2 px-4 font-medium border-2 border-white">
-            {{ movie.acf.action.title }}
-          </NuxtLink>
+  <section class="relative min-h-[650px] flex items-center py-16 md:py-24 overflow-hidden bg-gray-900">
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent z-10"></div>
+      <NuxtImg src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1920" alt="Hero Background"
+        class="w-full h-full object-cover" loading="lazy" />
+    </div>
+
+    <div class="container max-w-[1300px] mx-auto px-4 md:px-6 relative z-20">
+      <div class="flex flex-col lg:flex-row items-center gap-12">
+
+        <div class="w-full lg:w-7/12 text-center lg:text-left">
+          <h1 class="text-4xl md:text-6xl font-black text-white leading-[1.1] mb-6 tracking-tighter">
+            DRIVEN BY <br>
+            <span class="text-[#f2a900]">QUALITY</span> EXPERTISE
+          </h1>
+          <p class="text-lg md:text-xl text-gray-300 max-w-[550px] mb-8 leading-relaxed mx-auto lg:mx-0">
+            Your trusted source for Genuine, OE, & OEM Online Car Parts.
+            Specializing in high-performance European vehicles with precision and care.
+          </p>
+
+          <div class="hidden lg:flex gap-3">
+            <span class="bg-[#e31e24] text-white text-[11px] font-black px-4 py-2 rounded uppercase tracking-wider">
+              Lifetime Warranty
+            </span>
+            <span class="bg-[#f2a900] text-black text-[11px] font-black px-4 py-2 rounded uppercase tracking-wider">
+              Fast Shipping
+            </span>
+          </div>
         </div>
-      </div>
-      <div class="bg-transparent mt-10 md:mt-0">
-        <!-- Swiper Slider -->
-        <swiper :navigation="{ nextEl: '.nextArrow', prevEl: '.prevArrow' }" :pagination="{ clickable: true }"
-          :spaceBetween="20"
-          :centeredSlides="isMobile"
-           :slidesPerView="2.5" :modules="[Navigation]" :loop="true" class="w-full relative"
-          style="padding-bottom: 70px !important;" :breakpoints="{
-            340: { slidesPerView: 1.5 },
-            600: { slidesPerView: 2 },
-            1124: { slidesPerView: 2.5 }
-          }">
-          <!-- Navigation Arrows -->
-          <section class="parallax-slider-navigation cursor-pointer">
-            <article class="nav-indicator prevArrow">
-              <NuxtImg src="/left-slide-icon.svg" 
-              alt="Left Arrow" 
-              class="w-10 absolute z-40 bottom-24 md:bottom-0 left-[30%] md:left-[20px]" />
-            </article>
-            <article class="nav-indicator nextArrow">
-              <NuxtImg src="/right-slide-icon.svg" 
-              alt="Right Arrow"
-              class="w-10 absolute z-40 bottom-24 md:bottom-0 left-[60%] md:left-[100px]" />
-            </article>
-          </section>
 
-          <!-- Swiper Slides -->
-          <swiper-slide v-for="(data, index) in highlightedTrips" :key="index">
-            <div class="rounded-xl mx-3 min-h-[300px] overflow-hidden relative"
-              :style="{ backgroundImage: `url(${data.acf.bg_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }">
+        <div class="w-full lg:w-5/12 max-w-[500px]">
+          <div class="bg-white rounded-xl p-8 shadow-2xl border-t-[6px] border-[#e31e24]">
+            <h4 class="text-2xl font-black text-gray-900 text-center mb-8 uppercase tracking-wide">
+              Select Your Vehicle
+            </h4>
 
-              <!-- Gradient Overlay -->
-              <div
-                class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none">
+            <form @submit.prevent="handleSearch" class="space-y-5">
+              <div>
+                <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">
+                  Select Year
+                </label>
+                <select v-model="selectedYear"
+                  class="w-full bg-gray-50 border border-gray-100 rounded-xl p-4 text-sm font-bold text-gray-800 focus:bg-white focus:ring-2 focus:ring-[#f2a900] outline-none transition-all cursor-pointer">
+                  <option value="" disabled>Select Year</option>
+                  <option v-for="y in years" :key="y.slug" :value="y.slug">{{ y.name }}</option>
+                </select>
               </div>
 
-              <div class="p-6 px-7 z-10 flex flex-col md:justify-end min-h-[350px] md:min-h-[300px] relative">
-                <!-- Dynamic Data -->
-                <p class="text-lg text-white text-center z-20">
-                  <b>{{ data.acf.title }} {{ data.acf.title_2 }}</b><br />
-                  {{ data.acf.subtitle }}
-                </p>
-                <NuxtLink 
-                  :to="`/trip/${data.id}`"
-                  class="bg-[#ffffff1f] mt-3 delay-300 text-white rounded-xl shadow-md py-2 px-4 block font-medium text-center border-2 border-white cursor-pointer z-20">
-                  Book Now
-                </NuxtLink>
+              <div>
+                <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">
+                  Select Make <span v-if="loadingMakes"
+                    class="text-xs text-[#e31e24] lowercase animate-pulse">(fetching...)</span>
+                </label>
+                <select v-model="selectedMake" :disabled="!selectedYear || loadingMakes"
+                  class="w-full bg-gray-50 border border-gray-100 rounded-xl p-4 text-sm font-bold text-gray-800 disabled:opacity-50 focus:bg-white focus:ring-2 focus:ring-[#f2a900] outline-none transition-all cursor-pointer">
+                  <option value="" disabled>Select Make</option>
+                  <option v-for="m in makes" :key="m.slug" :value="m.slug">{{ m.name }}</option>
+                </select>
               </div>
-            </div>
 
-          </swiper-slide>
-        </swiper>
+              <div>
+                <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">
+                  Select Model <span v-if="loadingModels"
+                    class="text-xs text-[#e31e24] lowercase animate-pulse">(fetching...)</span>
+                </label>
+                <select v-model="selectedModel" :disabled="!selectedMake || loadingModels"
+                  class="w-full bg-gray-50 border border-gray-100 rounded-xl p-4 text-sm font-bold text-gray-800 disabled:opacity-50 focus:bg-white focus:ring-2 focus:ring-[#f2a900] outline-none transition-all cursor-pointer">
+                  <option value="" disabled>Select Model</option>
+                  <option v-for="mod in models" :key="mod.slug" :value="mod.slug">
+                    {{ mod.name }}
+                  </option>
+                </select>
+              </div>
+
+              <button type="submit" :disabled="!selectedModel"
+                class="w-full bg-[#e31e24] hover:bg-black disabled:bg-gray-200 text-white disabled:text-gray-400 font-black py-5 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 shadow-xl uppercase tracking-widest text-xs mt-4">
+                <i class="fa-solid fa-car-side"></i> Search Catalog
+              </button>
+            </form>
+          </div>
+        </div>
+
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-.mySwiper {
-    margin-top: 20px;
+h1 {
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
-
+section {
+  background-attachment: fixed;
+}
+select:focus {
+  background-color: white;
+}
 </style>

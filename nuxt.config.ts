@@ -44,6 +44,9 @@ export default defineNuxtConfig({
       INFO_XT_EMAIL: process.env.INFO_XT_EMAIL,
       TEST_EMAIL: process.env.TEST_EMAIL,
       TEST_EMAIL_2: process.env.TEST_EMAIL_2,
+      wcApiUrl: process.env.NUXT_PUBLIC_WC_API_URL,
+      wcConsumerKey: process.env.NUXT_PUBLIC_WC_CONSUMER_KEY,
+      wcConsumerSecret: process.env.NUXT_PUBLIC_WC_CONSUMER_SECRET,
     },
   },
   build: {
