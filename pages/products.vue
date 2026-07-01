@@ -15,7 +15,13 @@
                 <h4 class="text-xl font-black uppercase tracking-tight">
                   {{ route.query.year || 'N/A' }} {{ route.query.make || 'Select Vehicle' }}
                 </h4>
-                <p class="text-xs text-gray-400 mt-1 font-medium">{{ route.query.model || 'No Model Selected' }}</p>
+                <p class="text-xs text-gray-300 mt-1 font-bold">
+                  {{ route.query.model || 'No Model' }} 
+                  <span v-if="route.query.submodel" class="text-gray-400"> | {{ route.query.submodel }}</span>
+                </p>
+                <p v-if="route.query.engine" class="text-[11px] text-[#f2a900] mt-1 font-black uppercase tracking-wide">
+                  Engine: {{ route.query.engine }}
+                </p>
                 <button @click="router.push('/')"
                   class="mt-4 text-xs font-black text-[#e31e24] uppercase tracking-wider flex items-center gap-2 hover:text-white transition-colors">
                   <i class="fa-solid fa-rotate"></i> Change Vehicle
@@ -64,8 +70,10 @@
               <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                   <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Home / Parts Search</span>
-                  <h2 class="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tighter mt-1">
-                    {{ route.query.make || '' }} {{ route.query.model || 'All' }} <span class="text-[#e31e24]">Parts</span>
+                  <h2 class="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tighter mt-1 leading-tight">
+                    {{ route.query.year || '' }} {{ route.query.make || '' }} {{ route.query.model || 'All' }} 
+                    <span v-if="route.query.submodel" class="text-gray-500 font-bold text-xl block md:inline md:text-2xl"> ({{ route.query.submodel }})</span>
+                    <span class="text-[#e31e24]"> Parts</span>
                   </h2>
                 </div>
 
@@ -177,24 +185,20 @@ const activeCatGroup = ref(null)
 const sortBy = ref(route.query.order_by || 'relevance')
 const currentPage = computed(() => parseInt(route.query.page) || 1)
 const selectedCategorySlug = computed(() => route.query.category || '')
-
-// ... baqi saara code (WP_URL, products, dynamicCategories wagera) upar aise hi rahega
-
 const totalPages = ref(1)
 
 const toggleCategory = (groupId) => {
   activeCatGroup.value = activeCatGroup.value === groupId ? null : groupId
 }
 
-// 💎 NEW: Route Guard to prevent direct empty refresh or bypass
+// 💎 Dynamic Route Guard for 5 payload attributes
 const checkRouteValidity = () => {
-  // Agar URL me year ya make nahi hai, to chup-chap home page par bhej do
-  if (!route.query.year || !route.query.make) {
+  if (!route.query.year || !route.query.make || !route.query.model || !route.query.submodel || !route.query.engine) {
     router.replace('/')
   }
 }
 
-// Fetch Categories directly from WordPress setup
+// Fetch Categories (🟢 UPDATED: Now sends Submodel and Engine parameters directly)
 const fetchVehicleFacetedCategories = async () => {
   if (!route.query.year) return
   loadingCategories.value = true
@@ -204,7 +208,9 @@ const fetchVehicleFacetedCategories = async () => {
       params: {
         year: route.query.year || '',
         make: route.query.make || '',
-        model: route.query.model || ''
+        model: route.query.model || '',
+        submodel: route.query.submodel || '', // 🟢 NEW dynamic attribute
+        engine: route.query.engine || ''      // 🟢 NEW dynamic attribute
       }
     })
     
@@ -226,7 +232,7 @@ const fetchVehicleFacetedCategories = async () => {
   }
 }
 
-// Main Dynamic Engine Fetch
+// Main Dynamic Engine Fetch (🟢 UPDATED: Now passing Submodel and Engine payload)
 const triggerFetch = async () => {
   loading.value = true
   try {
@@ -236,15 +242,20 @@ const triggerFetch = async () => {
         year: route.query.year || '',
         make: route.query.make || '',
         model: route.query.model || '',
+        submodel: route.query.submodel || '', // 🟢 NEW fitment target
+        engine: route.query.engine || '',     // 🟢 NEW fitment target
         page: currentPage.value,
         category: selectedCategorySlug.value || undefined,
         sort: sortBy.value
       }
     })
-    products.value = response || []
+    // Products and safe response handling
+    products.value = response?.data || response || []
+    totalPages.value = response?.total_pages || 1
   } catch (err) {
     console.error("Fitment collection processing failure:", err)
     products.value = []
+    totalPages.value = 1
   } finally {
     loading.value = false
   }
@@ -263,28 +274,30 @@ const filterBySubCategory = (subSlug) => {
   router.push({ query: { ...route.query, page: 1, category: subSlug || undefined } })
 }
 
-// 🔄 UPDATED WATCH: Purane watch ki jagah ab yeh lagega guard ke sath
+// 🔄 Watcher (🟢 UPDATED: Watches all 5 attributes for direct hot-reloads)
 watch(() => route.query, (newQuery, oldQuery) => {
-  // Guard check on every query change
-  if (!newQuery.year || !newQuery.make) {
+  if (!newQuery.year || !newQuery.make || !newQuery.model || !newQuery.submodel || !newQuery.engine) {
     router.replace('/')
     return
   }
 
-  // Agar gaari badal gayi hai toh sidebar categories dobara fetch karein
-  if (oldQuery && (newQuery.year !== oldQuery.year || newQuery.make !== oldQuery.make || newQuery.model !== oldQuery.model)) {
+  // Agar gaari badal gayi hai toh sidebar categories dynamic reload karein
+  if (oldQuery && (
+    newQuery.year !== oldQuery.year || 
+    newQuery.make !== oldQuery.make || 
+    newQuery.model !== oldQuery.model ||
+    newQuery.submodel !== oldQuery.submodel ||
+    newQuery.engine !== oldQuery.engine
+  )) {
     fetchVehicleFacetedCategories()
   }
   triggerFetch()
 }, { deep: true })
 
-// 🔄 UPDATED ONMOUNTED: Purane onMounted ki jagah ab yeh lagega guard ke sath
 onMounted(() => {
-  // Page load/refresh hote hi sabse pehle check karo parameters hain ya nahi
   checkRouteValidity()
   
-  // Agar parameters valid hain, tabhi data fetch karo
-  if (route.query.year && route.query.make) {
+  if (route.query.year && route.query.make && route.query.model && route.query.submodel && route.query.engine) {
     fetchVehicleFacetedCategories()
     triggerFetch()
   }

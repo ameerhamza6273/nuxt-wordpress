@@ -10,23 +10,29 @@ const router = useRouter()
 const years = ref([])
 const makes = ref([])
 const models = ref([])
+const submodels = ref([]) // 🟢 Naya state
+const engines = ref([])   // 🟢 Naya state
 
 const selectedYear = ref('')
 const selectedMake = ref('')
 const selectedModel = ref('')
+const selectedSubmodel = ref('') // 🟢 Naya selection
+const selectedEngine = ref('')   // 🟢 Naya selection
 
 const loadingYears = ref(false)
 const loadingMakes = ref(false)
 const loadingModels = ref(false)
+const loadingSubmodels = ref(false) // 🟢 Naya loader
+const loadingEngines = ref(false)   // 🟢 Naya loader
 
-// Direct WordPress Fetcher
+// Direct WordPress Fetcher (Updated to v2/vehicle)
 const fetchAttributes = async (slugType, targetRef, loadingRef, parentSlug = '') => {
   loadingRef.value = true
   try {
     const cleanParent = parentSlug ? encodeURIComponent(String(parentSlug).trim()) : ''
     
-    // Ab request Nuxt server par nahi, direct WordPress par jayegi
-    const apiUrl = `${WP_URL}/wp-json/custom/v1/vehicle-attributes?slug=${slugType}&parent=${cleanParent}`
+    // Naya Full-Proof route v2/vehicle jise humne test kiya tha
+    const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=${slugType}&parent=${cleanParent}`
     
     const data = await $fetch(apiUrl, { method: 'GET' })
     targetRef.value = data || []
@@ -42,8 +48,12 @@ const fetchAttributes = async (slugType, targetRef, loadingRef, parentSlug = '')
 watch(selectedYear, (newYear) => {
   selectedMake.value = ''
   selectedModel.value = ''
+  selectedSubmodel.value = ''
+  selectedEngine.value = ''
   makes.value = []
   models.value = []
+  submodels.value = []
+  engines.value = []
 
   if (newYear && String(newYear).trim() !== '') {
     fetchAttributes('pa_make', makes, loadingMakes, newYear)
@@ -53,7 +63,11 @@ watch(selectedYear, (newYear) => {
 // Watcher 2: Make badalne par Models load karein
 watch(selectedMake, (newMake) => {
   selectedModel.value = ''
+  selectedSubmodel.value = ''
+  selectedEngine.value = ''
   models.value = []
+  submodels.value = []
+  engines.value = []
 
   if (newMake && String(newMake).trim() !== '' && selectedYear.value) {
     const comboParam = `${String(selectedYear.value).trim()}|${String(newMake).trim()}`
@@ -61,29 +75,65 @@ watch(selectedMake, (newMake) => {
   }
 })
 
+// Watcher 3: Model badalne par Submodels load karein (🟢 NEW)
+watch(selectedModel, (newModel) => {
+  selectedSubmodel.value = ''
+  selectedEngine.value = ''
+  submodels.value = []
+  engines.value = []
+
+  if (newModel && String(newModel).trim() !== '' && selectedMake.value && selectedYear.value) {
+    // Unique slug se database ka original case-sensitive Name nikalna
+    const activeModelObj = models.value.find(mod => mod.slug === newModel)
+    const modelName = activeModelObj ? activeModelObj.name : newModel
+
+    // Original accurate names ka combo string parameter
+    const comboParam = `${String(selectedYear.value).trim()}|${String(selectedMake.value).trim()}|${String(modelName).trim()}`
+    fetchAttributes('pa_submodel', submodels, loadingSubmodels, comboParam)
+  }
+})
+
+// Watcher 4: Submodel badalne par Engines load karein (PERFECT CLEAN STRING)
+watch(selectedSubmodel, (newSubmodel) => {
+  selectedEngine.value = ''
+  engines.value = []
+
+  if (newSubmodel && String(newSubmodel).trim() !== '') {
+    const activeModelObj = models.value.find(mod => mod.slug === selectedModel.value)
+    const modelName = activeModelObj ? activeModelObj.name : selectedModel.value
+
+    const activeSubObj = submodels.value.find(sub => sub.slug === newSubmodel)
+    const subName = activeSubObj ? activeSubObj.name : newSubmodel
+
+    const comboParam = `${String(selectedYear.value).trim()}|${String(selectedMake.value).trim()}|${String(modelName).trim()}|${String(subName).trim()}`
+    fetchAttributes('pa_engine', engines, loadingEngines, comboParam)
+  }
+})
 
 const handleSearch = () => {
-  if (!selectedYear.value || !selectedMake.value || !selectedModel.value) return
+  if (!selectedYear.value || !selectedMake.value || !selectedModel.value || !selectedSubmodel.value || !selectedEngine.value) return
 
-  // Slugs ki madad se Array me se real Object dhoondhein
-  // selectedYear me already "99-09" jaisa text hai kyunke wahan slug aur name same hain
+  // Real data arrays se objects dhoondhein taake direct case-sensitive standard titles bhej sakein
   const activeMakeObj = makes.value.find(m => m.slug === selectedMake.value)
   const activeModelObj = models.value.find(mod => mod.slug === selectedModel.value)
+  const activeSubmodelObj = submodels.value.find(sub => sub.slug === selectedSubmodel.value)
+  const activeEngineObj = engines.value.find(eng => eng.slug === selectedEngine.value)
 
-  // URL me Name bhejenge taake shop/product page crash na ho aur design/logic same rahe
+  // URL query payload with all 5 parameters
   router.push({
     path: '/products',
     query: {
-      year: selectedYear.value, // "99-09"
-      make: activeMakeObj ? activeMakeObj.name : selectedMake.value, // "Subaru" instead of "subaru"
-      model: activeModelObj ? activeModelObj.name : selectedModel.value, // "Impreza" instead of "impreza"
+      year: selectedYear.value, 
+      make: activeMakeObj ? activeMakeObj.name : selectedMake.value, 
+      model: activeModelObj ? activeModelObj.name : selectedModel.value, 
+      submodel: activeSubmodelObj ? activeSubmodelObj.name : selectedSubmodel.value, // 🟢 NEW
+      engine: activeEngineObj ? activeEngineObj.name : selectedEngine.value,         // 🟢 NEW
       page: 1
     }
   })
 }
 
 onMounted(() => {
-  // Page load par direct unique Years pull honge
   fetchAttributes('pa_year', years, loadingYears)
 })
 </script>
@@ -163,7 +213,35 @@ onMounted(() => {
                 </select>
               </div>
 
-              <button type="submit" :disabled="!selectedModel"
+              <div>
+                <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">
+                  Select Submodel <span v-if="loadingSubmodels"
+                    class="text-xs text-[#e31e24] lowercase animate-pulse">(fetching...)</span>
+                </label>
+                <select v-model="selectedSubmodel" :disabled="!selectedModel || loadingSubmodels"
+                  class="w-full bg-gray-50 border border-gray-100 rounded-xl p-4 text-sm font-bold text-gray-800 disabled:opacity-50 focus:bg-white focus:ring-2 focus:ring-[#f2a900] outline-none transition-all cursor-pointer">
+                  <option value="" disabled>Select Submodel</option>
+                  <option v-for="sub in submodels" :key="sub.slug" :value="sub.slug">
+                    {{ sub.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-black text-gray-400 uppercase mb-2 tracking-widest">
+                  Select Engine Size <span v-if="loadingEngines"
+                    class="text-xs text-[#e31e24] lowercase animate-pulse">(fetching...)</span>
+                </label>
+                <select v-model="selectedEngine" :disabled="!selectedSubmodel || loadingEngines"
+                  class="w-full bg-gray-50 border border-gray-100 rounded-xl p-4 text-sm font-bold text-gray-800 disabled:opacity-50 focus:bg-white focus:ring-2 focus:ring-[#f2a900] outline-none transition-all cursor-pointer">
+                  <option value="" disabled>Select Engine Size</option>
+                  <option v-for="eng in engines" :key="eng.slug" :value="eng.slug">
+                    {{ eng.name }}
+                  </option>
+                </select>
+              </div>
+
+              <button type="submit" :disabled="!selectedEngine"
                 class="w-full bg-[#e31e24] hover:bg-black disabled:bg-gray-200 text-white disabled:text-gray-400 font-black py-5 rounded-xl flex items-center justify-center gap-3 transition-all duration-300 shadow-xl uppercase tracking-widest text-xs mt-4">
                 <i class="fa-solid fa-car-side"></i> Search Catalog
               </button>
