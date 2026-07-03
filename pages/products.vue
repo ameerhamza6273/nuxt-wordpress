@@ -218,12 +218,13 @@
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-// Global Shared State Import
-const { addToCart } = useCart()
+// 1. Direct functions aur variables ko import karein (onMounted delete kar diya kyunke wo upar pehle se maujood hai)
+import { cartItems, addToCart } from '~/composables/useCart.js'
+// Agar aap page load par items fetch kar rahe hain toh baaki code wese hi rahega
+const route = useRoute()
 
 const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8'
 
-const route = useRoute()
 const router = useRouter()
 
 const products = ref([])
@@ -235,9 +236,18 @@ const activeCatGroup = ref(null)
 // Local state tracking reactive loops for product quantites counters
 const quantities = ref({})
 
-const sortBy = ref(route.query.order_by || 'relevance')
-const currentPage = computed(() => parseInt(route.query.page) || 1)
-const selectedCategorySlug = computed(() => route.query.category || '')
+// Route queries ko safely fallback string/object ke sath check karein
+const sortBy = ref(route?.query?.order_by || 'relevance')
+
+const currentPage = computed(() => {
+  if (!route || !route.query) return 1
+  return parseInt(route.query.page) || 1
+})
+
+const selectedCategorySlug = computed(() => {
+  if (!route || !route.query) return ''
+  return route.query.category || ''
+})
 const totalPages = ref(1)
 
 const toggleCategory = (groupId) => {
@@ -245,7 +255,7 @@ const toggleCategory = (groupId) => {
 }
 
 const checkRouteValidity = () => {
-  if (!route.query.year || !route.query.make || !route.query.model || !route.query.submodel || !route.query.engine) {
+  if (!route?.query || !route.query.year || !route.query.make || !route.query.model || !route.query.submodel || !route.query.engine) {
     router.replace('/')
   }
 }
@@ -329,9 +339,6 @@ const triggerFetch = async () => {
 const handleAddToCart = (product) => {
   const selectedQty = quantities.value[product.id] || 1
   addToCart(product, selectedQty)
-
-  // Custom temporary alert visual cue
-  alert(`${product.title} (${selectedQty} Qty) added to shopping cart!`)
 }
 
 const changePage = (newPage) => {
@@ -369,7 +376,18 @@ onMounted(() => {
   checkRouteValidity()
 
   if (route.query.year && route.query.make && route.query.model && route.query.submodel && route.query.engine) {
-    fetchVehicleFacetedCategories()
+    fetchVehicleFacetedCategories().then(() => {
+      // 🟢 Safe Check: Pehle ensure karein ke array exist karta hai ya nahi
+      if (selectedCategorySlug.value && Array.isArray(dynamicCategories.value)) {
+        const matchingCat = dynamicCategories.value.find(c => 
+          c.slug === selectedCategorySlug.value || 
+          (c.children && Array.isArray(c.children) && c.children.some(child => child.slug === selectedCategorySlug.value))
+        )
+        if (matchingCat) {
+          activeCatGroup.value = matchingCat.id
+        }
+      }
+    })
     triggerFetch()
   }
 })
