@@ -13,10 +13,10 @@
                   My Garage
                 </span>
                 <h4 class="text-xl font-black uppercase tracking-tight">
-                  {{ route.query.year || 'N/A' }} {{ route.query.make || 'Select Vehicle' }}
+                  {{ route.query.year || '' }} {{ route.query.make || 'Select Vehicle' }}
                 </h4>
                 <p class="text-xs text-gray-300 mt-1 font-bold">
-                  {{ route.query.model || 'No Model' }}
+                  {{ route.query.model || 'All Models' }}
                   <span v-if="route.query.submodel" class="text-gray-400"> | {{ route.query.submodel }}</span>
                 </p>
                 <p v-if="route.query.engine" class="text-[11px] text-[#f2a900] mt-1 font-black uppercase tracking-wide">
@@ -75,7 +75,7 @@
                   <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Home / Parts Search</span>
                   <h2
                     class="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tighter mt-1 leading-tight">
-                    {{ route.query.year || '' }} {{ route.query.make || '' }} {{ route.query.model || 'All' }}
+                    {{ route.query.year || '' }} {{ route.query.make || '' }} {{ route.query.model || 'All Available' }}
                     <span v-if="route.query.submodel"
                       class="text-gray-500 font-bold text-xl block md:inline md:text-2xl"> ({{ route.query.submodel
                       }})</span>
@@ -188,19 +188,34 @@
                   </div>
                 </div>
 
-                <div v-if="totalPages > 1" class="flex items-center justify-center gap-2 pt-6">
+                <div v-if="totalPages > 1"
+                  class="flex items-center justify-center gap-2 pt-10 border-t border-gray-100 mt-8">
+
                   <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1"
-                    class="px-4 py-2 rounded-xl border border-gray-200 text-xs font-black uppercase text-gray-700 hover:bg-gray-900 hover:text-white disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-700 transition-all">
-                    Prev
+                    class="px-4 h-10 rounded-xl border border-gray-200 text-xs font-black uppercase text-gray-700 bg-white transition-all duration-300
+           hover:bg-gray-950 hover:text-white hover:border-gray-950
+           disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-gray-400 disabled:hover:border-gray-200 disabled:cursor-not-allowed flex items-center gap-1.5 shadow-sm">
+                    <i class="fa-solid fa-chevron-left text-[10px]"></i> Prev
                   </button>
-                  <button v-for="page in totalPages" :key="page" @click="changePage(page)"
-                    :class="['w-9 h-9 rounded-xl text-xs font-black transition-all', currentPage === page ? 'bg-[#e31e24] text-white' : 'border border-gray-200 text-gray-700 hover:bg-gray-50']">
-                    {{ page }}
-                  </button>
+
+                  <div class="flex items-center gap-1.5">
+                    <button v-for="page in totalPages" :key="page" @click="changePage(page)" :class="[
+                      'w-10 h-10 rounded-xl text-xs font-black transition-all duration-300 shadow-sm flex items-center justify-center',
+                      currentPage === page
+                        ? 'bg-[#e31e24] text-white border border-[#e31e24] shadow-md shadow-[#e31e24]/20'
+                        : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-900 hover:text-gray-900'
+                    ]">
+                      {{ page }}
+                    </button>
+                  </div>
+
                   <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages"
-                    class="px-4 py-2 rounded-xl border border-gray-200 text-xs font-black uppercase text-gray-700 hover:bg-gray-900 hover:text-white disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-gray-700 transition-all">
-                    Next
+                    class="px-4 h-10 rounded-xl border border-gray-200 text-xs font-black uppercase text-gray-700 bg-white transition-all duration-300
+           hover:bg-gray-950 hover:text-white hover:border-gray-950
+           disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-gray-400 disabled:hover:border-gray-200 disabled:cursor-not-allowed flex items-center gap-1.5 shadow-sm">
+                    Next <i class="fa-solid fa-chevron-right text-[10px]"></i>
                   </button>
+
                 </div>
 
               </div>
@@ -217,26 +232,20 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
-// 1. Direct functions aur variables ko import karein (onMounted delete kar diya kyunke wo upar pehle se maujood hai)
 import { cartItems, addToCart } from '~/composables/useCart.js'
-// Agar aap page load par items fetch kar rahe hain toh baaki code wese hi rahega
+
 const route = useRoute()
-
-const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8'
-
 const router = useRouter()
+const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8'
 
 const products = ref([])
 const dynamicCategories = ref([])
 const loading = ref(false)
 const loadingCategories = ref(false)
 const activeCatGroup = ref(null)
-
-// Local state tracking reactive loops for product quantites counters
 const quantities = ref({})
+const totalPages = ref(1)
 
-// Route queries ko safely fallback string/object ke sath check karein
 const sortBy = ref(route?.query?.order_by || 'relevance')
 
 const currentPage = computed(() => {
@@ -248,26 +257,28 @@ const selectedCategorySlug = computed(() => {
   if (!route || !route.query) return ''
   return route.query.category || ''
 })
-const totalPages = ref(1)
 
 const toggleCategory = (groupId) => {
   activeCatGroup.value = activeCatGroup.value === groupId ? null : groupId
 }
 
+// 🟢 MODIFIED: Ab check safe hai, kam se kam 'make' (Brand) mojood hona chahiye home page par wapas phenkne se pehle
 const checkRouteValidity = () => {
-  if (!route?.query || !route.query.year || !route.query.make || !route.query.model || !route.query.submodel || !route.query.engine) {
+  if (!route?.query || !route.query.make) {
     router.replace('/')
   }
 }
-// 🟢 NEW: Input validation for manual entries
+
 const validateQuantity = (productId) => {
   const qty = quantities.value[productId]
   if (!qty || parseInt(qty) < 1 || isNaN(qty)) {
     quantities.value[productId] = 1
   }
 }
+
+// 🟢 MODIFIED: Fallback parameters agar baaki categories empty hon tab bhi chalega
 const fetchVehicleFacetedCategories = async () => {
-  if (!route.query.year) return
+  if (!route.query.make) return
   loadingCategories.value = true
   try {
     const data = await $fetch(`${WP_URL}/wp-json/custom/v1/vehicle-categories`, {
@@ -300,6 +311,7 @@ const fetchVehicleFacetedCategories = async () => {
 }
 
 const triggerFetch = async () => {
+  if (!route.query.make) return
   loading.value = true
   try {
     const response = await $fetch(`${WP_URL}/wp-json/custom/v1/products-filter`, {
@@ -316,12 +328,53 @@ const triggerFetch = async () => {
       }
     })
 
-    const items = response?.data || response || []
-    products.value = items
-    totalPages.value = response?.total_pages || 1
+    // 🔍 KICK-ASS DEBUGGER: Browser Console mein exact check karne ke liye
+    console.log("--- PAGINATION RAW RESPONSE START ---")
+    console.log(response)
+    console.log("--- END ---")
 
-    // Initialize quantity model targets for fetched variables 
-    items.forEach(p => {
+    // 🟢 1. Checking if response has a nested 'data' key (Like standard WP Response wrappers)
+    if (response && response.data) {
+      products.value = Array.isArray(response.data) ? response.data : []
+      
+      // Strict integer checking for total_pages
+      if (response.total_pages) {
+        totalPages.value = parseInt(response.total_pages)
+      } else if (response.total_items) {
+        totalPages.value = Math.ceil(parseInt(response.total_items) / 10)
+      } else {
+        totalPages.value = products.value.length >= 10 ? currentPage.value + 1 : currentPage.value
+      }
+    } 
+    // 🟢 2. Checking if response itself is a straight array
+    else if (Array.isArray(response)) {
+      products.value = response
+      
+      // Agar direct items array hai, toh backend automatic pagination filter setup kar chuka hai (LIMIT/OFFSET).
+      // Agar response length 10 hai, iska matlab agla page exist karta hai!
+      if (response.length >= 10) {
+        totalPages.value = currentPage.value + 1
+      } else {
+        // Agar response 10 se kam hai, toh yeh aakhri page hai.
+        totalPages.value = currentPage.value
+      }
+    } 
+    // 🟢 3. Fail-safe reset
+    else {
+      products.value = []
+      totalPages.value = 1
+    }
+
+    // Safety fallback: Agar page data kisi wajah se 0 ya minus ho jaye
+    if (isNaN(totalPages.value) || totalPages.value < 1) {
+      totalPages.value = 1
+    }
+
+    console.log("Parsed products length:", products.value.length)
+    console.log("Calculated Total Pages inside Nuxt State:", totalPages.value)
+
+    // Quantities init loop
+    products.value.forEach(p => {
       if (!quantities.value[p.id]) {
         quantities.value[p.id] = 1
       }
@@ -335,7 +388,6 @@ const triggerFetch = async () => {
   }
 }
 
-// Action Trigger Handler for Cart State Update
 const handleAddToCart = (product) => {
   const selectedQty = quantities.value[product.id] || 1
   addToCart(product, selectedQty)
@@ -354,8 +406,9 @@ const filterBySubCategory = (subSlug) => {
   router.push({ query: { ...route.query, page: 1, category: subSlug || undefined } })
 }
 
+// 🟢 MODIFIED: Flexible parameter watchers logic
 watch(() => route.query, (newQuery, oldQuery) => {
-  if (!newQuery.year || !newQuery.make || !newQuery.model || !newQuery.submodel || !newQuery.engine) {
+  if (!newQuery.make) {
     router.replace('/')
     return
   }
@@ -365,22 +418,24 @@ watch(() => route.query, (newQuery, oldQuery) => {
     newQuery.make !== oldQuery.make ||
     newQuery.model !== oldQuery.model ||
     newQuery.submodel !== oldQuery.submodel ||
-    newQuery.engine !== oldQuery.engine
+    newQuery.engine !== oldQuery.engine ||
+    newQuery.page !== oldQuery.page ||
+    newQuery.category !== oldQuery.category ||
+    newQuery.order_by !== oldQuery.order_by
   )) {
     fetchVehicleFacetedCategories()
+    triggerFetch()
   }
-  triggerFetch()
 }, { deep: true })
 
 onMounted(() => {
   checkRouteValidity()
 
-  if (route.query.year && route.query.make && route.query.model && route.query.submodel && route.query.engine) {
+  if (route.query.make) {
     fetchVehicleFacetedCategories().then(() => {
-      // 🟢 Safe Check: Pehle ensure karein ke array exist karta hai ya nahi
       if (selectedCategorySlug.value && Array.isArray(dynamicCategories.value)) {
-        const matchingCat = dynamicCategories.value.find(c => 
-          c.slug === selectedCategorySlug.value || 
+        const matchingCat = dynamicCategories.value.find(c =>
+          c.slug === selectedCategorySlug.value ||
           (c.children && Array.isArray(c.children) && c.children.some(child => child.slug === selectedCategorySlug.value))
         )
         if (matchingCat) {

@@ -15,12 +15,24 @@
           </a>
         </div>
 
-        <ul class="hidden lg:flex items-center space-x-6 mx-auto">
-          <li v-for="brand in ['BMW', 'VOLVO', 'AUDI', 'VW', 'MERCEDES', 'PORSCHE']" :key="brand">
-            <NuxtLink to="#"
-              class="text-sm font-bold text-gray-900 hover:text-[#e31e24] transition-colors uppercase tracking-tight">
-              {{ brand }}
-            </NuxtLink>
+        <ul class="hidden lg:flex items-center space-x-6 mx-auto h-full">
+          <li v-for="item in brandsData" :key="item.brand" class="relative group py-4">
+            <div class="cursor-pointer text-sm font-bold text-gray-900 group-hover:text-[#e31e24] transition-colors uppercase tracking-tight flex items-center gap-1 selective-none select-none">
+              {{ item.brand }}
+              <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 group-hover:text-[#e31e24] transition-transform group-hover:rotate-180"></i>
+            </div>
+
+            <div v-if="item.categories && item.categories.length > 0" class="absolute left-[70px] -translate-x-1/2 top-full pt-2 hidden group-hover:block w-48 z-50 animate-in fade-in slide-in-from-top-2">
+              <div class="bg-white shadow-2xl rounded-lg border border-gray-100 overflow-hidden py-3">
+                <div class="max-h-[350px] overflow-y-auto px-2 space-y-0.5">
+                  <NuxtLink v-for="modelName in item.categories" :key="modelName" 
+                    :to="{ path: '/products', query: { make: item.brand, submodel: modelName, page: 1 } }"
+                    class="block px-3 py-2 text-[13px] font-bold text-gray-700 hover:bg-gray-50 hover:text-[#e31e24] rounded-md transition-colors">
+                    {{ modelName }}
+                  </NuxtLink>
+                </div>
+              </div>
+            </div>
           </li>
         </ul>
 
@@ -44,7 +56,6 @@
             <div
               class="absolute right-0 top-full pt-2 hidden group-hover:block w-52 z-50 animate-in fade-in slide-in-from-top-1">
               <div class="bg-white shadow-xl rounded-lg border border-gray-100 overflow-hidden py-1">
-                
                 <template v-if="!isLoggedIn">
                   <NuxtLink v-for="item in guestLinks" :key="item.label" :to="item.to"
                     class="flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#e31e24] transition-colors">
@@ -61,7 +72,6 @@
                     <i class="fa-solid fa-right-from-bracket text-red-400 w-5"></i> Log Out
                   </button>
                 </template>
-
               </div>
             </div>
           </div>
@@ -78,7 +88,6 @@
           <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="lg:hidden text-2xl text-gray-800 p-1">
             <i :class="isMobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars-staggered'"></i>
           </button>
-
         </div>
       </div>
     </nav>
@@ -94,12 +103,21 @@
           </div>
 
           <div class="overflow-y-auto flex-1">
-            <ul class="py-2">
-              <li v-for="brand in ['BMW', 'VOLVO', 'AUDI', 'VW', 'MERCEDES', 'PORSCHE']" :key="brand">
-                <NuxtLink to="#"
-                  class="block px-6 py-4 text-sm font-black border-b border-gray-50 hover:bg-gray-50 hover:text-[#e31e24] uppercase transition-colors">
-                  {{ brand }}
-                </NuxtLink>
+            <ul class="py-1">
+              <li v-for="item in brandsData" :key="item.brand" class="border-b border-gray-50">
+                <button @click="toggleMobileBrand(item.brand)"
+                  class="w-full flex items-center justify-between px-6 py-4 text-sm font-black hover:bg-gray-50 uppercase text-gray-900 transition-colors">
+                  <span>{{ item.brand }}</span>
+                  <i :class="['fa-solid fa-chevron-down text-xs transition-transform duration-300', activeMobileBrand === item.brand ? 'rotate-180 text-[#e31e24]' : 'text-gray-400']"></i>
+                </button>
+                
+                <div v-show="activeMobileBrand === item.brand && item.categories && item.categories.length > 0" class="bg-gray-50 border-t border-gray-100/50 transition-all duration-300">
+                  <NuxtLink v-for="modelName in item.categories" :key="modelName" 
+                    :to="{ path: '/products', query: { make: item.brand, submodel: modelName, page: 1 } }"
+                    class="block pl-10 pr-6 py-3 text-[13px] font-bold text-gray-600 hover:text-[#e31e24] transition-colors border-b border-gray-100 last:border-0">
+                    {{ modelName }}
+                  </NuxtLink>
+                </div>
               </li>
             </ul>
 
@@ -114,7 +132,6 @@
               </button>
 
               <div v-show="isAccountDropdownOpen" class="bg-gray-50 overflow-hidden transition-all duration-300">
-                
                 <template v-if="!isLoggedIn">
                   <NuxtLink v-for="item in guestLinks" :key="item.label" :to="item.to"
                     class="flex items-center gap-4 px-10 py-4 text-xs font-black border-b border-gray-100 last:border-0 hover:text-[#e31e24] uppercase transition-colors">
@@ -131,7 +148,6 @@
                     <i class="fa-solid fa-right-from-bracket text-red-500 w-5"></i> Log Out
                   </button>
                 </template>
-
               </div>
             </div>
           </div>
@@ -145,15 +161,28 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { cartItems } from '~/composables/useCart.js'
+import { sharedBrandsData } from '~/composables/useNavData.js'
 
 const isMobileMenuOpen = ref(false)
 const isAccountDropdownOpen = ref(false)
+const activeMobileBrand = ref(null)
 
-// Session Auth States Variables
 const isLoggedIn = ref(false)
 const userName = ref('')
 
-// Initialize login state context verification straight from browser storage pipeline
+// 🟢 Fallback computed logic: Navbar empty na lage jab tak API hit clear na kare
+const brandsData = computed(() => {
+  if (sharedBrandsData.value && sharedBrandsData.value.length > 0) {
+    return sharedBrandsData.value
+  }
+  // Base skeleton titles structured before API response resolution
+  return [
+    { brand: 'BMW', categories: [] },
+    { brand: 'Mercedes-Benz', categories: [] },
+    { brand: 'Land Rover', categories: [] }
+  ]
+})
+
 const checkAuthSession = () => {
   if (process.client) {
     const token = localStorage.getItem('atms_user_token')
@@ -173,12 +202,18 @@ onMounted(() => {
   checkAuthSession()
 })
 
-// Cart item numeric count calculator
+const toggleMobileBrand = (brand) => {
+  if (activeMobileBrand.value === brand) {
+    activeMobileBrand.value = null
+  } else {
+    activeMobileBrand.value = brand
+  }
+}
+
 const totalCartItems = computed(() => {
   return cartItems.value.reduce((total, item) => total + item.quantity, 0)
 })
 
-// Correct mapped path routing arrays according to our pages strategy structure
 const guestLinks = [
   { label: 'Sign In', to: '/checkout-auth', icon: 'fa-solid fa-right-to-bracket' },
   { label: 'Create Account', to: '/register', icon: 'fa-solid fa-user-plus' },
@@ -201,7 +236,8 @@ const route = useRoute()
 watch(() => route.fullPath, () => {
   isMobileMenuOpen.value = false
   isAccountDropdownOpen.value = false
-  checkAuthSession() // Sync route context session dynamic components states modifications
+  activeMobileBrand.value = null
+  checkAuthSession()
 })
 </script>
 

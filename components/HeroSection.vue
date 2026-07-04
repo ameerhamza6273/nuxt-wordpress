@@ -1,39 +1,35 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { sharedBrandsData } from '~/composables/useNavData.js'
 
-// 🔴 APNA WORDPRESS URL YAHAN LIKHEIN (Bina aakhri slash / ke)
 const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8' 
-
 const router = useRouter()
 
 const years = ref([])
 const makes = ref([])
 const models = ref([])
-const submodels = ref([]) // 🟢 Naya state
-const engines = ref([])   // 🟢 Naya state
+const submodels = ref([]) 
+const engines = ref([])   
 
 const selectedYear = ref('')
 const selectedMake = ref('')
 const selectedModel = ref('')
-const selectedSubmodel = ref('') // 🟢 Naya selection
-const selectedEngine = ref('')   // 🟢 Naya selection
+const selectedSubmodel = ref('') 
+const selectedEngine = ref('')   
 
 const loadingYears = ref(false)
 const loadingMakes = ref(false)
 const loadingModels = ref(false)
-const loadingSubmodels = ref(false) // 🟢 Naya loader
-const loadingEngines = ref(false)   // 🟢 Naya loader
+const loadingSubmodels = ref(false) 
+const loadingEngines = ref(false)   
 
-// Direct WordPress Fetcher (Updated to v2/vehicle)
+// Aapka original full-proof data fetcher
 const fetchAttributes = async (slugType, targetRef, loadingRef, parentSlug = '') => {
   loadingRef.value = true
   try {
     const cleanParent = parentSlug ? encodeURIComponent(String(parentSlug).trim()) : ''
-    
-    // Naya Full-Proof route v2/vehicle jise humne test kiya tha
     const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=${slugType}&parent=${cleanParent}`
-    
     const data = await $fetch(apiUrl, { method: 'GET' })
     targetRef.value = data || []
   } catch (err) {
@@ -43,8 +39,51 @@ const fetchAttributes = async (slugType, targetRef, loadingRef, parentSlug = '')
     loadingRef.value = false
   }
 }
+const syncHeaderNavigationMenu = async () => {
+  const targetBrands = ['BMW', 'Mercedes-Benz', 'Land Rover']
+  const finalMenuStructure = []
 
-// Watcher 1: Year badalne par Makes load karein
+  try {
+    for (const brandName of targetBrands) {
+      let submodelsList = []
+      
+      // 🟢 Kyunki database flat hai, hum backend ko batate hain ke 'pa_submodel' chahiye jahan parent/make sirf brandName ho
+      // Agar aapki API pipe '|' split karti hai, toh hum sirf brandName bhejenge taake woh 'make' column check kare
+      const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=pa_submodel&parent=${encodeURIComponent(brandName)}`
+      
+      try {
+        const data = await $fetch(apiUrl, { method: 'GET' })
+        console.log(`Database Submodels for ${brandName}:`, data)
+
+        if (data && Array.isArray(data)) {
+          // Unique submodels filter kar rahe hain jo objects ya strings ki surat mein aayenge
+          submodelsList = data.map(item => {
+            if (typeof item === 'string') return item;
+            if (item && typeof item === 'object') {
+              return item.name || item.submodel || item.slug || '';
+            }
+            return '';
+          }).filter((value, index, self) => value !== '' && self.indexOf(value) === index) // Unique values only
+        }
+      } catch (e) {
+        console.error(`Fetch error for ${brandName}:`, e)
+      }
+
+      finalMenuStructure.push({
+        brand: brandName,
+        categories: submodelsList
+      })
+    }
+
+    if (finalMenuStructure.length > 0) {
+      sharedBrandsData.value = finalMenuStructure
+    }
+
+  } catch (error) {
+    console.error("Global secure data mapper crash:", error)
+  }
+}
+// Watchers (Aapke original unchanged watchers)
 watch(selectedYear, (newYear) => {
   selectedMake.value = ''
   selectedModel.value = ''
@@ -60,7 +99,6 @@ watch(selectedYear, (newYear) => {
   }
 })
 
-// Watcher 2: Make badalne par Models load karein
 watch(selectedMake, (newMake) => {
   selectedModel.value = ''
   selectedSubmodel.value = ''
@@ -75,7 +113,6 @@ watch(selectedMake, (newMake) => {
   }
 })
 
-// Watcher 3: Model badalne par Submodels load karein (🟢 NEW)
 watch(selectedModel, (newModel) => {
   selectedSubmodel.value = ''
   selectedEngine.value = ''
@@ -83,17 +120,14 @@ watch(selectedModel, (newModel) => {
   engines.value = []
 
   if (newModel && String(newModel).trim() !== '' && selectedMake.value && selectedYear.value) {
-    // Unique slug se database ka original case-sensitive Name nikalna
     const activeModelObj = models.value.find(mod => mod.slug === newModel)
     const modelName = activeModelObj ? activeModelObj.name : newModel
 
-    // Original accurate names ka combo string parameter
     const comboParam = `${String(selectedYear.value).trim()}|${String(selectedMake.value).trim()}|${String(modelName).trim()}`
     fetchAttributes('pa_submodel', submodels, loadingSubmodels, comboParam)
   }
 })
 
-// Watcher 4: Submodel badalne par Engines load karein (PERFECT CLEAN STRING)
 watch(selectedSubmodel, (newSubmodel) => {
   selectedEngine.value = ''
   engines.value = []
@@ -113,28 +147,27 @@ watch(selectedSubmodel, (newSubmodel) => {
 const handleSearch = () => {
   if (!selectedYear.value || !selectedMake.value || !selectedModel.value || !selectedSubmodel.value || !selectedEngine.value) return
 
-  // Real data arrays se objects dhoondhein taake direct case-sensitive standard titles bhej sakein
   const activeMakeObj = makes.value.find(m => m.slug === selectedMake.value)
   const activeModelObj = models.value.find(mod => mod.slug === selectedModel.value)
   const activeSubmodelObj = submodels.value.find(sub => sub.slug === selectedSubmodel.value)
   const activeEngineObj = engines.value.find(eng => eng.slug === selectedEngine.value)
 
-  // URL query payload with all 5 parameters
   router.push({
     path: '/products',
     query: {
       year: selectedYear.value, 
       make: activeMakeObj ? activeMakeObj.name : selectedMake.value, 
       model: activeModelObj ? activeModelObj.name : selectedModel.value, 
-      submodel: activeSubmodelObj ? activeSubmodelObj.name : selectedSubmodel.value, // 🟢 NEW
-      engine: activeEngineObj ? activeEngineObj.name : selectedEngine.value,         // 🟢 NEW
+      submodel: activeSubmodelObj ? activeSubmodelObj.name : selectedSubmodel.value, 
+      engine: activeEngineObj ? activeEngineObj.name : selectedEngine.value,         
       page: 1
     }
   })
 }
 
 onMounted(() => {
-  fetchAttributes('pa_year', years, loadingYears)
+  fetchAttributes('pa_year', years, loadingYears) 
+  syncHeaderNavigationMenu() // 🔥 Call sync to shared state
 })
 </script>
 
