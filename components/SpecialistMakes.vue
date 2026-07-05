@@ -55,7 +55,7 @@ onMounted(() => {
                     Specialist Inventory
                 </span>
                 <h2 class="text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tighter">
-                    Supported Manufacturers
+                    Supported Brands
                 </h2>
                 <p v-if="loading" class="text-xs text-gray-400 mt-2 animate-pulse">Syncing dynamic inventory...</p>
                 <div class="w-10 h-1 bg-[#f2a900] mx-auto mt-4 rounded-full"></div>
