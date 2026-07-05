@@ -49,7 +49,7 @@ const syncHeaderNavigationMenu = async () => {
       
       // 🟢 Kyunki database flat hai, hum backend ko batate hain ke 'pa_submodel' chahiye jahan parent/make sirf brandName ho
       // Agar aapki API pipe '|' split karti hai, toh hum sirf brandName bhejenge taake woh 'make' column check kare
-      const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=pa_submodel&parent=${encodeURIComponent(brandName)}`
+      const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=pa_model&parent=${encodeURIComponent(brandName)}`
       
       try {
         const data = await $fetch(apiUrl, { method: 'GET' })
