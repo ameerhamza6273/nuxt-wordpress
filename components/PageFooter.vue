@@ -43,11 +43,11 @@
           <div class="space-y-4">
             <div class="flex items-center gap-3 text-white/80 group">
               <i class="fa fa-phone text-[#f2a900] w-5"></i>
-              <span class="text-sm group-hover:text-white transition-colors">+000000000000</span>
+              <span class="text-sm group-hover:text-white transition-colors">+1 305-925-5654</span>
             </div>
             <div class="flex items-center gap-3 text-white/80 group">
               <i class="fa fa-envelope text-[#f2a900] w-5"></i>
-              <span class="text-sm group-hover:text-white transition-colors">booking@logicautoparts.com</span>
+              <span class="text-sm group-hover:text-white transition-colors">info@logicautoparts.com</span>
             </div>
             <div class="flex items-center gap-3 text-white/80 group">
               <i class="fa fa-map-marker-alt text-[#f2a900] w-5"></i>
