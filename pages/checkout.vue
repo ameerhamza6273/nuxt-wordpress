@@ -94,7 +94,7 @@
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { cartItems } from '~/composables/useCart.js'
 
-const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8?rest_route='
+const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8?rest_route=/'
 const APPLICATION_ID = 'sandbox-sq0idb-MXfqn01CTCCR-zLHuevhMQ'
 const LOCATION_ID = 'ZY8JDY1RVQWKV'
 
@@ -204,7 +204,7 @@ const handlePaymentSubmit = async () => {
     const result = await cardInstance.tokenize()
     if (result.status === 'OK') {
       // handlePaymentSubmit ke andar jahan $fetch call ho rahi hai use badlein:
-      const paymentResponse = await $fetch(`${WP_URL}/custom/v1/process-square-payment`, {
+      const paymentResponse = await $fetch(`${WP_URL}custom/v1/process-square-payment`, {
         method: 'POST',
         body: {
           sourceId: result.token,
