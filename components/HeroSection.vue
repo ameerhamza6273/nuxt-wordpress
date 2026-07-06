@@ -39,6 +39,7 @@ const fetchAttributes = async (slugType, targetRef, loadingRef, parentSlug = '')
     loadingRef.value = false
   }
 }
+
 const syncHeaderNavigationMenu = async () => {
   const targetBrands = ['BMW', 'Mercedes-Benz', 'Land Rover']
   const finalMenuStructure = []
@@ -46,9 +47,6 @@ const syncHeaderNavigationMenu = async () => {
   try {
     for (const brandName of targetBrands) {
       let submodelsList = []
-      
-      // 🟢 Kyunki database flat hai, hum backend ko batate hain ke 'pa_submodel' chahiye jahan parent/make sirf brandName ho
-      // Agar aapki API pipe '|' split karti hai, toh hum sirf brandName bhejenge taake woh 'make' column check kare
       const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=pa_model&parent=${encodeURIComponent(brandName)}`
       
       try {
@@ -56,14 +54,13 @@ const syncHeaderNavigationMenu = async () => {
         console.log(`Database Submodels for ${brandName}:`, data)
 
         if (data && Array.isArray(data)) {
-          // Unique submodels filter kar rahe hain jo objects ya strings ki surat mein aayenge
           submodelsList = data.map(item => {
             if (typeof item === 'string') return item;
             if (item && typeof item === 'object') {
               return item.name || item.submodel || item.slug || '';
             }
             return '';
-          }).filter((value, index, self) => value !== '' && self.indexOf(value) === index) // Unique values only
+          }).filter((value, index, self) => value !== '' && self.indexOf(value) === index)
         }
       } catch (e) {
         console.error(`Fetch error for ${brandName}:`, e)
@@ -83,7 +80,8 @@ const syncHeaderNavigationMenu = async () => {
     console.error("Global secure data mapper crash:", error)
   }
 }
-// Watchers (Aapke original unchanged watchers)
+
+// Watchers
 watch(selectedYear, (newYear) => {
   selectedMake.value = ''
   selectedModel.value = ''
@@ -139,6 +137,7 @@ watch(selectedSubmodel, (newSubmodel) => {
     const activeSubObj = submodels.value.find(sub => sub.slug === newSubmodel)
     const subName = activeSubObj ? activeSubObj.name : newSubmodel
 
+    // 🛠️ FIXED: Passing consistent slug/name properties for submodel matrix matching
     const comboParam = `${String(selectedYear.value).trim()}|${String(selectedMake.value).trim()}|${String(modelName).trim()}|${String(subName).trim()}`
     fetchAttributes('pa_engine', engines, loadingEngines, comboParam)
   }
@@ -167,7 +166,7 @@ const handleSearch = () => {
 
 onMounted(() => {
   fetchAttributes('pa_year', years, loadingYears) 
-  syncHeaderNavigationMenu() // 🔥 Call sync to shared state
+  syncHeaderNavigationMenu()
 })
 </script>
 
