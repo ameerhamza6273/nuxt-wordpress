@@ -46,7 +46,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-100">
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Phone Number</label>
-                    <input type="tel" v-model="customerInfo.phone" required placeholder="+44 7123 456789"
+                    <input type="tel" v-model="customerInfo.phone" required placeholder="(555) 123-4567"
                       class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
                   </div>
                   <div>
