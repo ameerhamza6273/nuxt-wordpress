@@ -133,7 +133,7 @@ const customerInfo = ref({
   postcode: ''
 })
 
-// 🟢 Unified Pricing Parser
+// Unified Pricing Parser
 const parseCleanPrice = (priceStr) => {
   if (!priceStr) return 0
   let cleanString = String(priceStr)
@@ -157,7 +157,7 @@ const parseCleanPrice = (priceStr) => {
   return isNaN(finalPrice) ? 0 : finalPrice
 }
 
-// ✅ Dynamic Grand Total Calculation matching cart state
+// Grand Total Calculation
 const finalPayablePrice = computed(() => {
   const items = cartItems.value && cartItems.value.length > 0 ? cartItems.value : []
   return items.reduce((total, item) => {
@@ -170,36 +170,43 @@ const finalPayablePrice = computed(() => {
 onMounted(() => {
   if (!process.client) return
 
-  // 1. Sync localStorage Cart
+  // 1. Live Guard: Cart Check
   try {
     const savedCart = localStorage.getItem('atms_cart')
-    if (savedCart) cartItems.value = JSON.parse(savedCart)
+    if (savedCart) {
+      cartItems.value = JSON.parse(savedCart)
+    }
   } catch (e) { console.error(e) }
 
-  // 2. Comprehensive Auth State Checking (Har common storage pattern ko cover karne ke liye)
-  const userToken = localStorage.getItem('user_session_token') || 
-                    localStorage.getItem('custom_session_token') || 
-                    localStorage.getItem('token') || 
-                    localStorage.getItem('auth._token.local')
+  if (!cartItems.value || cartItems.value.length === 0) {
+    navigateTo('/')
+    return
+  }
 
-  const savedName = localStorage.getItem('user_display_name') || 
-                    localStorage.getItem('user_name') || 
-                    localStorage.getItem('display_name')
+  // 2. Verified Dynamic Session Auth (No more Hardcoded Fallbacks)
+  const userToken = localStorage.getItem('atms_user_token')
+  const savedName = localStorage.getItem('atms_user_display')
+  const savedEmail = localStorage.getItem('atms_user_email')
+  const guestMode = localStorage.getItem('atms_checkout_mode')
 
-  const savedEmail = localStorage.getItem('user_email') || 
-                     localStorage.getItem('email') || 
-                     localStorage.getItem('user_username')
-
-  // Agar token aur email mil jaye, ya direct cookies/state sync ho rahi ho
-  if ((userToken && savedEmail) || savedEmail) {
+  if (userToken && savedEmail) {
+    // Registered Authenticated User Data
     isGuest.value = false
-    customerInfo.value.firstName = savedName || 'Ameer Hamza' // Fallback option agar name miss ho jaye
+    customerInfo.value.firstName = savedName || ''
     customerInfo.value.email = savedEmail
+    customerInfo.value.phone = ''     // Will stay empty for database profile submission if not stored
+    customerInfo.value.postcode = ''  // Will stay empty for user input
+  } else if (guestMode === 'guest') {
+    // Explicit Guest Flow
+    isGuest.value = true
+    customerInfo.value.firstName = ''
+    customerInfo.value.email = ''
+    customerInfo.value.phone = ''
+    customerInfo.value.postcode = ''
   } else {
-    // Agar local storage khali hai par session active lag raha hai, toh dynamic checking enforce karein
-    isGuest.value = false
-    customerInfo.value.firstName = 'Ameer Hamza'
-    customerInfo.value.email = 'ameerhamza0270@gmail.com' // Jo aapki dynamic billing active custom id hai
+    // Force authentication redirect if state is completely broken/missing
+    navigateTo('/checkout-auth?checkout=true')
+    return
   }
 
   // 3. Load Square SDK Script
@@ -257,6 +264,7 @@ const handlePaymentSubmit = async () => {
         cartItems.value = []
         if (process.client) {
           localStorage.removeItem('atms_cart')
+          localStorage.removeItem('atms_checkout_mode')
         }
         navigateTo('/')
       } else {

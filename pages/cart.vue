@@ -167,6 +167,12 @@ const updateStorage = () => {
 
 const proceedToSquareCheckout = () => {
     if (process.client) {
+        // Live Guard: Check if cart is empty before processing
+        if (!cartItems.value || cartItems.value.length === 0) {
+            alert('Your cart is empty. Please add items before checking out.')
+            return
+        }
+
         const activeToken = localStorage.getItem('atms_user_token')
         const guestMode = localStorage.getItem('atms_checkout_mode')
 
@@ -174,7 +180,7 @@ const proceedToSquareCheckout = () => {
         if (activeToken || guestMode) {
             navigateTo('/checkout')
         } else {
-            // 2. Agar user authenticated nahi hai, to checkout query ke sath auth screen par bhejein (Dono columns dikhenge)
+            // 2. Agar user authenticated nahi hai, to checkout query ke sath auth screen par bhejein
             navigateTo('/checkout-auth?checkout=true')
         }
     }

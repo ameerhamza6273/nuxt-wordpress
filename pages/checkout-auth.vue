@@ -105,8 +105,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { cartItems } from '~/composables/useCart.js'
 
 const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8'
 const route = useRoute()
@@ -117,6 +118,15 @@ const showLoginPassword = ref(false)
 
 const isCheckoutMode = computed(() => {
     return route.query.checkout === 'true'
+})
+
+// Live Guard: Page load par check karein ke cart empty to nahi
+onMounted(() => {
+    if (process.client && isCheckoutMode.value) {
+        if (!cartItems.value || cartItems.value.length === 0) {
+            navigateTo('/')
+        }
+    }
 })
 
 const handleLogin = async () => {
@@ -132,8 +142,11 @@ const handleLogin = async () => {
 
         if (response?.success && response?.token) {
             if (process.client) {
+                // Production-ready keys setup
                 localStorage.setItem('atms_user_token', response.token)
-                localStorage.setItem('atms_user_display', response.user_display_name)
+                localStorage.setItem('atms_user_display', response.user_display_name || '')
+                localStorage.setItem('atms_user_email', response.user_email || loginForm.value.email)
+                localStorage.removeItem('atms_checkout_mode') // Remove guest mode if logging in
             }
             if (isCheckoutMode.value) {
                 navigateTo('/checkout')
@@ -151,6 +164,11 @@ const handleLogin = async () => {
 
 const proceedAsGuest = () => {
     if (process.client) {
+        if (!cartItems.value || cartItems.value.length === 0) {
+            alert('Your cart is empty.')
+            navigateTo('/')
+            return
+        }
         localStorage.setItem('atms_checkout_mode', 'guest')
     }
     navigateTo('/checkout')

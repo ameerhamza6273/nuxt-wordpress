@@ -76,14 +76,14 @@
             </div>
           </div>
 
-          <NuxtLink to="/cart"
+          <div @click="handleCartClick"
             class="relative cursor-pointer group p-2 py-1 bg-gray-100 hover:bg-gray-200 rounded-full transition-all duration-300">
             <i class="fa-solid fa-cart-shopping text-gray-700 text-sm group-hover:text-[#e31e24] transition-colors"></i>
             <span v-if="totalCartItems > 0"
               class="absolute -top-2 -right-2 bg-[#e31e24] text-white rounded-full min-w-[18px] h-[18px] text-[10px] font-black flex items-center justify-center px-1 shadow-sm">
               {{ totalCartItems }}
             </span>
-          </NuxtLink>
+          </div>
 
           <button @click="isMobileMenuOpen = !isMobileMenuOpen" class="lg:hidden text-2xl text-gray-800 p-1">
             <i :class="isMobileMenuOpen ? 'fa-solid fa-xmark' : 'fa-solid fa-bars-staggered'"></i>
@@ -158,6 +158,7 @@
 </template>
 
 <script setup>
+import { navigateTo } from '#app'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { cartItems } from '~/composables/useCart.js'
@@ -239,6 +240,18 @@ watch(() => route.fullPath, () => {
   activeMobileBrand.value = null
   checkAuthSession()
 })
+
+const handleCartClick = () => {
+  // Live Safe Guard: Agar cart items zero hain ya cart exist nahi karta
+  if (!totalCartItems.value || totalCartItems.value === 0) {
+    alert('Your cart is empty. Add parts to the cart first! 🛒')
+    return
+  }
+  
+  // Agar items hain, to safely route par bhej do
+  navigateTo('/cart')
+}
+
 </script>
 
 <style scoped>
