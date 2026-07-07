@@ -1,9 +1,8 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { sharedBrandsData } from '~/composables/useNavData.js'
+import { fetchVehicleAttribute } from '~/composables/useVehicleData.js'
 
-const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8' 
 const router = useRouter()
 
 const years = ref([])
@@ -24,61 +23,12 @@ const loadingModels = ref(false)
 const loadingSubmodels = ref(false) 
 const loadingEngines = ref(false)   
 
-// Aapka original full-proof data fetcher
+// Wrapper matching the local (targetRef, loadingRef) signature this form's watchers expect,
+// backed by the shared fetch helper in useVehicleData.js
 const fetchAttributes = async (slugType, targetRef, loadingRef, parentSlug = '') => {
   loadingRef.value = true
-  try {
-    const cleanParent = parentSlug ? encodeURIComponent(String(parentSlug).trim()) : ''
-    const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=${slugType}&parent=${cleanParent}`
-    const data = await $fetch(apiUrl, { method: 'GET' })
-    targetRef.value = data || []
-  } catch (err) {
-    console.error(`Direct connection crash on ${slugType}:`, err)
-    targetRef.value = []
-  } finally {
-    loadingRef.value = false
-  }
-}
-
-const syncHeaderNavigationMenu = async () => {
-  const targetBrands = ['BMW', 'Mercedes-Benz', 'Land Rover']
-  const finalMenuStructure = []
-
-  try {
-    for (const brandName of targetBrands) {
-      let submodelsList = []
-      const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=pa_model&parent=${encodeURIComponent(brandName)}`
-      
-      try {
-        const data = await $fetch(apiUrl, { method: 'GET' })
-        console.log(`Database Submodels for ${brandName}:`, data)
-
-        if (data && Array.isArray(data)) {
-          submodelsList = data.map(item => {
-            if (typeof item === 'string') return item;
-            if (item && typeof item === 'object') {
-              return item.name || item.submodel || item.slug || '';
-            }
-            return '';
-          }).filter((value, index, self) => value !== '' && self.indexOf(value) === index)
-        }
-      } catch (e) {
-        console.error(`Fetch error for ${brandName}:`, e)
-      }
-
-      finalMenuStructure.push({
-        brand: brandName,
-        categories: submodelsList
-      })
-    }
-
-    if (finalMenuStructure.length > 0) {
-      sharedBrandsData.value = finalMenuStructure
-    }
-
-  } catch (error) {
-    console.error("Global secure data mapper crash:", error)
-  }
+  targetRef.value = await fetchVehicleAttribute(slugType, parentSlug)
+  loadingRef.value = false
 }
 
 // Watchers
@@ -165,8 +115,7 @@ const handleSearch = () => {
 }
 
 onMounted(() => {
-  fetchAttributes('pa_year', years, loadingYears) 
-  syncHeaderNavigationMenu()
+  fetchAttributes('pa_year', years, loadingYears)
 })
 </script>
 

@@ -64,6 +64,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { showToast } from '~/composables/useToast.js'
 
 const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8'
 
@@ -83,12 +84,12 @@ const handleChangePassword = async () => {
         })
 
         if (response?.success) {
-            alert(response.message)
+            showToast(response.message, 'success')
             navigateTo('/checkout-auth')
         }
     } catch (err) {
         console.error("Password modification error:", err)
-        alert(err.data?.message || 'Failed to update password. Verify account details.')
+        showToast(err.data?.message || 'Failed to update password. Verify account details.', 'error')
     } finally {
         loading.value = false
     }

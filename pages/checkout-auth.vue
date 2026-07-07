@@ -108,6 +108,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { cartItems } from '~/composables/useCart.js'
+import { showToast } from '~/composables/useToast.js'
 
 const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8'
 const route = useRoute()
@@ -156,7 +157,7 @@ const handleLogin = async () => {
         }
     } catch (err) {
         console.error("Authentication exception:", err)
-        alert(err.data?.message || 'Invalid credentials, please try again.')
+        showToast(err.data?.message || 'Invalid credentials, please try again.', 'error')
     } finally {
         loadingLogin.value = false
     }
@@ -165,7 +166,7 @@ const handleLogin = async () => {
 const proceedAsGuest = () => {
     if (process.client) {
         if (!cartItems.value || cartItems.value.length === 0) {
-            alert('Your cart is empty.')
+            showToast('Your cart is empty.', 'error')
             navigateTo('/')
             return
         }

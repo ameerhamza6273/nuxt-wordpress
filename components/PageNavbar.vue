@@ -162,7 +162,8 @@ import { navigateTo } from '#app'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { cartItems } from '~/composables/useCart.js'
-import { sharedBrandsData } from '~/composables/useNavData.js'
+import { navBrandsData, ensureNavMenu } from '~/composables/useVehicleData.js'
+import { showToast } from '~/composables/useToast.js'
 
 const isMobileMenuOpen = ref(false)
 const isAccountDropdownOpen = ref(false)
@@ -173,8 +174,8 @@ const userName = ref('')
 
 // 🟢 Fallback computed logic: Navbar empty na lage jab tak API hit clear na kare
 const brandsData = computed(() => {
-  if (sharedBrandsData.value && sharedBrandsData.value.length > 0) {
-    return sharedBrandsData.value
+  if (navBrandsData.value && navBrandsData.value.length > 0) {
+    return navBrandsData.value
   }
   // Base skeleton titles structured before API response resolution
   return [
@@ -201,6 +202,7 @@ const checkAuthSession = () => {
 
 onMounted(() => {
   checkAuthSession()
+  ensureNavMenu()
 })
 
 const toggleMobileBrand = (brand) => {
@@ -244,7 +246,7 @@ watch(() => route.fullPath, () => {
 const handleCartClick = () => {
   // Live Safe Guard: Agar cart items zero hain ya cart exist nahi karta
   if (!totalCartItems.value || totalCartItems.value === 0) {
-    alert('Your cart is empty. Add parts to the cart first! 🛒')
+    showToast('Your cart is empty. Add parts to the cart first!', 'error')
     return
   }
   

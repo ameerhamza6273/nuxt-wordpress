@@ -71,6 +71,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { showToast } from '~/composables/useToast.js'
 
 const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8'
 
@@ -92,14 +93,14 @@ const handleRegister = async () => {
         })
 
         if (response?.code === 200 || response?.success) {
-            alert('Registration Successful! Redirecting to login...')
+            showToast('Registration successful! Redirecting to login...', 'success')
             navigateTo('/checkout-auth')
         } else {
-            alert(response?.message || 'Registration failed, try a different username/email.')
+            showToast(response?.message || 'Registration failed, try a different username/email.', 'error')
         }
     } catch (err) {
         console.error("Registration endpoint error structure:", err)
-        alert(err.data?.message || 'Error communicating with custom user framework.')
+        showToast(err.data?.message || 'Error communicating with custom user framework.', 'error')
     } finally {
         loadingRegister.value = false
     }

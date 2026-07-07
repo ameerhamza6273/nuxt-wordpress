@@ -46,13 +46,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-gray-100">
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Phone Number</label>
-                    <input type="tel" v-model="customerInfo.phone" required placeholder="(555) 123-4567"
-                      class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <input type="tel" v-model="customerInfo.phone" @input="clearFieldError('phone')" required placeholder="(555) 123-4567"
+                      :class="fieldErrors.phone ? 'border-[#e31e24] bg-red-50/40' : 'border-gray-200 bg-white'"
+                      class="w-full px-4 py-3 border rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <p v-if="fieldErrors.phone" class="text-[10px] font-bold text-[#e31e24] mt-1">Phone number is required.</p>
                   </div>
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Postcode</label>
-                    <input type="text" v-model="customerInfo.postcode" required placeholder="SW1A 1AA"
-                      class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <input type="text" v-model="customerInfo.postcode" @input="clearFieldError('postcode')" required placeholder="SW1A 1AA"
+                      :class="fieldErrors.postcode ? 'border-[#e31e24] bg-red-50/40' : 'border-gray-200 bg-white'"
+                      class="w-full px-4 py-3 border rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <p v-if="fieldErrors.postcode" class="text-[10px] font-bold text-[#e31e24] mt-1">Postcode is required.</p>
                   </div>
                 </div>
               </div>
@@ -61,26 +65,34 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Full/First Name</label>
-                    <input type="text" v-model="customerInfo.firstName" required placeholder="John"
-                      class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <input type="text" v-model="customerInfo.firstName" @input="clearFieldError('firstName')" required placeholder="John"
+                      :class="fieldErrors.firstName ? 'border-[#e31e24] bg-red-50/40' : 'border-gray-200 bg-gray-50'"
+                      class="w-full px-4 py-3 border rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <p v-if="fieldErrors.firstName" class="text-[10px] font-bold text-[#e31e24] mt-1">Name is required.</p>
                   </div>
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Email Address</label>
-                    <input type="email" v-model="customerInfo.email" required placeholder="john@example.com"
-                      class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <input type="email" v-model="customerInfo.email" @input="clearFieldError('email')" required placeholder="john@example.com"
+                      :class="fieldErrors.email ? 'border-[#e31e24] bg-red-50/40' : 'border-gray-200 bg-gray-50'"
+                      class="w-full px-4 py-3 border rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <p v-if="fieldErrors.email" class="text-[10px] font-bold text-[#e31e24] mt-1">A valid email is required.</p>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Phone Number</label>
-                    <input type="tel" v-model="customerInfo.phone" required placeholder="+44 7123 456789"
-                      class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <input type="tel" v-model="customerInfo.phone" @input="clearFieldError('phone')" required placeholder="+44 7123 456789"
+                      :class="fieldErrors.phone ? 'border-[#e31e24] bg-red-50/40' : 'border-gray-200 bg-gray-50'"
+                      class="w-full px-4 py-3 border rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <p v-if="fieldErrors.phone" class="text-[10px] font-bold text-[#e31e24] mt-1">Phone number is required.</p>
                   </div>
                   <div>
                     <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Postcode</label>
-                    <input type="text" v-model="customerInfo.postcode" required placeholder="SW1A 1AA"
-                      class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <input type="text" v-model="customerInfo.postcode" @input="clearFieldError('postcode')" required placeholder="SW1A 1AA"
+                      :class="fieldErrors.postcode ? 'border-[#e31e24] bg-red-50/40' : 'border-gray-200 bg-gray-50'"
+                      class="w-full px-4 py-3 border rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
+                    <p v-if="fieldErrors.postcode" class="text-[10px] font-bold text-[#e31e24] mt-1">Postcode is required.</p>
                   </div>
                 </div>
               </div>
@@ -116,6 +128,7 @@
 <script setup>
 import { ref, onMounted, computed, nextTick } from 'vue'
 import { cartItems } from '~/composables/useCart.js'
+import { showToast } from '~/composables/useToast.js'
 
 const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8?rest_route=/'
 const APPLICATION_ID = 'sandbox-sq0idb-MXfqn01CTCCR-zLHuevhMQ'
@@ -132,6 +145,17 @@ const customerInfo = ref({
   phone: '',
   postcode: ''
 })
+
+const fieldErrors = ref({
+  firstName: false,
+  email: false,
+  phone: false,
+  postcode: false
+})
+
+const clearFieldError = (field) => {
+  fieldErrors.value[field] = false
+}
 
 // Unified Pricing Parser
 const parseCleanPrice = (priceStr) => {
@@ -238,8 +262,15 @@ const initializeSquareForm = async () => {
 const handlePaymentSubmit = async () => {
   if (!cardInstance || processing.value) return
 
-  if (!customerInfo.value.firstName || !customerInfo.value.email || !customerInfo.value.phone || !customerInfo.value.postcode) {
-    alert('Please complete all required fields.')
+  fieldErrors.value = {
+    firstName: !customerInfo.value.firstName,
+    email: !customerInfo.value.email,
+    phone: !customerInfo.value.phone,
+    postcode: !customerInfo.value.postcode
+  }
+
+  if (Object.values(fieldErrors.value).some(Boolean)) {
+    showToast('Please complete all required fields.', 'error')
     return
   }
 
@@ -260,7 +291,7 @@ const handlePaymentSubmit = async () => {
       })
 
       if (paymentResponse.success) {
-        alert('Payment Successful! Order Confirmed. 🔥')
+        showToast('Payment successful! Order confirmed.', 'success')
         cartItems.value = []
         if (process.client) {
           localStorage.removeItem('atms_cart')
@@ -268,13 +299,13 @@ const handlePaymentSubmit = async () => {
         }
         navigateTo('/')
       } else {
-        alert(paymentResponse.message || 'Payment failed.')
+        showToast(paymentResponse.message || 'Payment failed.', 'error')
       }
     } else {
-      alert('Square Error: ' + result.errors[0].message)
+      showToast('Square Error: ' + result.errors[0].message, 'error')
     }
   } catch (err) {
-    alert('Failed communicating with core gateway.')
+    showToast('Failed communicating with core gateway.', 'error')
   } finally {
     processing.value = false
   }

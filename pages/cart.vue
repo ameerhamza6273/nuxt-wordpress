@@ -112,6 +112,7 @@
 <script setup>
 import { computed } from 'vue'
 import { cartItems, removeFromCart } from '~/composables/useCart.js'
+import { showToast } from '~/composables/useToast.js'
 
 // 1. Total Items Count
 const totalItemsCount = computed(() => {
@@ -169,7 +170,7 @@ const proceedToSquareCheckout = () => {
     if (process.client) {
         // Live Guard: Check if cart is empty before processing
         if (!cartItems.value || cartItems.value.length === 0) {
-            alert('Your cart is empty. Please add items before checking out.')
+            showToast('Your cart is empty. Please add items before checking out.', 'error')
             return
         }
 

@@ -1,34 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
-// 🔴 APNA WORDPRESS URL YAHAN CHECK KARLEIN
-const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8'
+import { allMakes, allMakesLoaded, ensureAllMakes } from '~/composables/useVehicleData.js'
 
 const router = useRouter()
-const brands = ref([])
-const loading = ref(false)
 
-// 🟢 Database se saare unique Makes dynamic uthane ka function
-const fetchAllDatabaseBrands = async () => {
-  loading.value = true
-  try {
-    // Hamne PHP mein 'pa_make' ko bina parent ke global fetch banaya hua hai
-    const apiUrl = `${WP_URL}/wp-json/custom/v2/vehicle?slug=pa_make`
-    const data = await $fetch(apiUrl, { method: 'GET' })
-    
-    if (data && Array.isArray(data)) {
-      // Hamein sirf name chahiye array mein render karne ke liye
-      brands.value = data.map(item => item.name || item)
-    }
-  } catch (error) {
-    console.error("Error fetching dynamic brands for section:", error)
-    // Fallback array agar connection temporary fail ho
-    brands.value = ['BMW', 'Mercedes-Benz', 'Ford', 'Toyota', 'Nissan']
-  } finally {
-    loading.value = false
-  }
-}
+const loading = computed(() => !allMakesLoaded.value)
+
+// 🟢 Hamein sirf name chahiye array mein render karne ke liye
+const brands = computed(() => allMakes.value.map(item => item.name || item))
 
 // 🟢 Card click hone par product page par filters ke sath bhejna
 const handleBrandClick = (brandName) => {
@@ -42,7 +22,7 @@ const handleBrandClick = (brandName) => {
 }
 
 onMounted(() => {
-  fetchAllDatabaseBrands()
+  ensureAllMakes()
 })
 </script>
 

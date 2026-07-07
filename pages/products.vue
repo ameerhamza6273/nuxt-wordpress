@@ -198,7 +198,7 @@
                 </div>
 
                 <div v-if="totalPages > 1"
-                  class="flex items-center justify-center gap-2 pt-10 border-t border-gray-100 mt-8">
+                  class="flex flex-wrap items-center justify-center gap-2 pt-10 border-t border-gray-100 mt-8">
 
                   <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1"
                     class="px-4 h-10 rounded-xl border border-gray-200 text-xs font-black uppercase text-gray-700 bg-white transition-all duration-300
@@ -208,14 +208,20 @@
                   </button>
 
                   <div class="flex items-center gap-1.5">
-                    <button v-for="page in totalPages" :key="page" @click="changePage(page)" :class="[
-                      'w-10 h-10 rounded-xl text-xs font-black transition-all duration-300 shadow-sm flex items-center justify-center',
-                      currentPage === page
-                        ? 'bg-[#e31e24] text-white border border-[#e31e24] shadow-md shadow-[#e31e24]/20'
-                        : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-900 hover:text-gray-900'
-                    ]">
-                      {{ page }}
-                    </button>
+                    <template v-for="(page, idx) in paginationRange" :key="`${page}-${idx}`">
+                      <span v-if="page === '...'"
+                        class="w-10 h-10 flex items-center justify-center text-xs font-black text-gray-400 select-none">
+                        &hellip;
+                      </span>
+                      <button v-else @click="changePage(page)" :class="[
+                        'w-10 h-10 rounded-xl text-xs font-black transition-all duration-300 shadow-sm flex items-center justify-center',
+                        currentPage === page
+                          ? 'bg-[#e31e24] text-white border border-[#e31e24] shadow-md shadow-[#e31e24]/20'
+                          : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-900 hover:text-gray-900'
+                      ]">
+                        {{ page }}
+                      </button>
+                    </template>
                   </div>
 
                   <button @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages"
@@ -260,6 +266,34 @@ const sortBy = ref(route?.query?.order_by || 'relevance')
 const currentPage = computed(() => {
   if (!route || !route.query) return 1
   return parseInt(route.query.page) || 1
+})
+
+// 🟢 Professional pagination: sirf current page ke aas-paas + start/end numbers dikhayein, baaki '...' se compress karein
+const paginationRange = computed(() => {
+  const total = totalPages.value
+  const current = currentPage.value
+  const siblingCount = 1
+
+  const range = []
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || (i >= current - siblingCount && i <= current + siblingCount)) {
+      range.push(i)
+    }
+  }
+
+  const withDots = []
+  let prev = 0
+  for (const page of range) {
+    if (prev && page - prev === 2) {
+      withDots.push(prev + 1)
+    } else if (prev && page - prev > 2) {
+      withDots.push('...')
+    }
+    withDots.push(page)
+    prev = page
+  }
+
+  return withDots
 })
 
 const selectedCategorySlug = computed(() => {
@@ -349,50 +383,24 @@ const triggerFetch = async () => {
       }
     })
 
-    // 🔍 KICK-ASS DEBUGGER: Browser Console mein exact check karne ke liye
-    console.log("--- PAGINATION RAW RESPONSE START ---")
-    console.log(response)
-    console.log("--- END ---")
-
-    // 🟢 1. Checking if response has a nested 'data' key (Like standard WP Response wrappers)
-    if (response && response.data) {
-      products.value = Array.isArray(response.data) ? response.data : []
-
-      // Strict integer checking for total_pages
-      if (response.total_pages) {
-        totalPages.value = parseInt(response.total_pages)
-      } else if (response.total_items) {
-        totalPages.value = Math.ceil(parseInt(response.total_items) / 10)
-      } else {
-        totalPages.value = products.value.length >= 10 ? currentPage.value + 1 : currentPage.value
-      }
+    // Backend ab { data, total_items, total_pages, current_page } shape return karta hai.
+    if (response && Array.isArray(response.data)) {
+      products.value = response.data
+      totalPages.value = response.total_pages ? parseInt(response.total_pages) : 1
     }
-    // 🟢 2. Checking if response itself is a straight array
+    // Backward-compat: agar backend abhi purana bare-array format bhej raha hai
     else if (Array.isArray(response)) {
       products.value = response
-
-      // Agar direct items array hai, toh backend automatic pagination filter setup kar chuka hai (LIMIT/OFFSET).
-      // Agar response length 10 hai, iska matlab agla page exist karta hai!
-      if (response.length >= 10) {
-        totalPages.value = currentPage.value + 1
-      } else {
-        // Agar response 10 se kam hai, toh yeh aakhri page hai.
-        totalPages.value = currentPage.value
-      }
+      totalPages.value = 1
     }
-    // 🟢 3. Fail-safe reset
     else {
       products.value = []
       totalPages.value = 1
     }
 
-    // Safety fallback: Agar page data kisi wajah se 0 ya minus ho jaye
     if (isNaN(totalPages.value) || totalPages.value < 1) {
       totalPages.value = 1
     }
-
-    console.log("Parsed products length:", products.value.length)
-    console.log("Calculated Total Pages inside Nuxt State:", totalPages.value)
 
     // Quantities init loop
     products.value.forEach(p => {
@@ -496,19 +504,16 @@ watch(() => route.query, (newQuery, oldQuery) => {
     fetchVehicleFacetedCategories()
   }
   
-  // 🟢 STRICT ENFORCEMENT: Kisi bhi parameter ke badalne par products ka function lazmi chalna chahiye!
+  // Kisi bhi filter/sort/page parameter ke badalne par products dobara fetch hon
   if (oldQuery && (
     newQuery.model !== oldQuery.model ||
     newQuery.submodel !== oldQuery.submodel ||
     newQuery.engine !== oldQuery.engine ||
-    newQuery.page !== oldQuery.page
+    newQuery.page !== oldQuery.page ||
+    newQuery.category !== oldQuery.category ||
+    newQuery.order_by !== oldQuery.order_by
   )) {
-    // Aapka products fetch karne wala function (triggerFetch ya fetchProducts)
-    if (typeof triggerFetch === 'function') {
-      triggerFetch()
-    } else if (typeof fetchProducts === 'function') {
-      fetchProducts()
-    }
+    triggerFetch()
   }
 }, { deep: true })
 
