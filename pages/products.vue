@@ -29,43 +29,52 @@
               </div>
 
               <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-                <h5
-                  class="font-black text-gray-900 uppercase text-xs tracking-widest mb-6 border-b pb-4 border-gray-100 flex items-center gap-2">
-                  <i class="fa-solid fa-layer-group text-[#e31e24]"></i> Browse Categories
-                </h5>
+  <h5 class="font-black text-gray-900 uppercase text-xs tracking-widest mb-6 border-b pb-4 border-gray-100 flex items-center gap-2">
+    <i class="fa-solid fa-car text-[#e31e24]"></i> Filter By Vehicle
+  </h5>
 
-                <div v-if="loadingCategories" class="space-y-3 py-4">
-                  <div class="h-4 bg-gray-100 rounded-md animate-pulse w-3/4"></div>
-                  <div class="h-4 bg-gray-100 rounded-md animate-pulse w-5/6"></div>
-                  <div class="h-4 bg-gray-100 rounded-md animate-pulse w-2/3"></div>
-                </div>
+  <div v-if="loadingCategories" class="space-y-3 py-4">
+    <div class="h-4 bg-gray-100 rounded-md animate-pulse w-3/4"></div>
+    <div class="h-4 bg-gray-100 rounded-md animate-pulse w-5/6"></div>
+    <div class="h-4 bg-gray-100 rounded-md animate-pulse w-2/3"></div>
+  </div>
 
-                <div v-else class="space-y-4">
-                  <div v-if="dynamicCategories.length === 0" class="text-xs text-gray-400 font-bold py-2 text-center">
-                    No active categories found for this vehicle.
-                  </div>
+  <div v-else class="space-y-4">
+    
+    <div v-for="model in sidebarVehicles" :key="model.id" class="space-y-2">
+  
+  <button @click="toggleCategory(model.id)"
+    :class="['w-full flex items-center justify-between text-left font-black text-sm uppercase transition-colors py-1', (route.query.model === model.slug || route.query.model === model.name) ? 'text-[#e31e24]' : 'text-gray-800 hover:text-[#e31e24]']">
+    <span>{{ model.name }}</span>
+    <i :class="['fa-solid text-[10px] transition-transform ml-2', activeCatGroup === model.id ? 'fa-chevron-down rotate-180' : 'fa-chevron-right']"></i>
+  </button>
 
-                  <div v-for="cat in dynamicCategories" :key="cat.id" class="space-y-2">
-                    <button @click="toggleCategory(cat.id)"
-                      class="w-full flex items-center justify-between text-left font-black text-sm uppercase text-gray-800 hover:text-[#e31e24] transition-colors">
-                      {{ cat.name }}
-                      <i
-                        :class="['fa-solid text-xs transition-transform', activeCatGroup === cat.id ? 'fa-chevron-down rotate-180' : 'fa-chevron-right']"></i>
-                    </button>
+  <div v-if="activeCatGroup === model.id" class="pl-3 space-y-3 border-l-2 border-gray-100 mt-1">
+    
+    <div v-for="sub in model.submodels" :key="sub.id" class="space-y-1">
+      <button @click="filterBySidebarSubmodel(model.slug, sub.slug)"
+        :class="['w-full text-left text-xs font-black transition-colors block py-0.5', (route.query.submodel === sub.slug || route.query.submodel === sub.name) ? 'text-[#e31e24]' : 'text-gray-700 hover:text-[#e31e24]']">
+        ▸ {{ sub.name }}
+      </button>
 
-                    <div v-if="activeCatGroup === cat.id" class="pl-4 space-y-2 border-l border-gray-100 mt-2">
-                      <button @click="filterBySubCategory(cat.slug)"
-                        :class="['w-full text-left text-xs font-bold block py-1', selectedCategorySlug === cat.slug ? 'text-[#e31e24]' : 'text-gray-500 hover:text-gray-900']">
-                        • All {{ cat.name }}
-                      </button>
-                      <button v-for="sub in cat.children" :key="sub.id" @click="filterBySubCategory(sub.slug)"
-                        :class="['w-full text-left text-xs font-bold block py-1 transition-colors', selectedCategorySlug === sub.slug ? 'text-[#e31e24]' : 'text-gray-500 hover:text-gray-900']">
-                        • {{ sub.name }}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div v-if="(route.query.submodel === sub.slug || route.query.submodel === sub.name) && sub.engines && sub.engines.length > 0" class="pl-4 pt-0.5 space-y-1">
+        <button v-for="engine in sub.engines" :key="engine" 
+          @click="filterBySidebarEngine(model.slug, sub.slug, engine)"
+          :class="['w-full text-left text-[11px] font-medium block py-0.5 pl-2 border-l border-gray-200 transition-colors', route.query.engine === engine ? 'text-[#e31e24] font-bold' : 'text-gray-500 hover:text-gray-900']">
+          • {{ engine }}
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    <div v-if="sidebarVehicles.length === 0" class="text-xs text-gray-400 font-bold py-2 text-center">
+      No vehicle configurations found.
+    </div>
+
+  </div>
+</div>
             </aside>
 
             <main class="lg:col-span-3 space-y-6">
@@ -276,39 +285,51 @@ const validateQuantity = (productId) => {
   }
 }
 
-// 🟢 MODIFIED: Fallback parameters agar baaki categories empty hon tab bhi chalega
+// Ek naya ref banayein jo vehicle hierarchy ko hold karega
+const sidebarVehicles = ref([])
+
 const fetchVehicleFacetedCategories = async () => {
   if (!route.query.make) return
   loadingCategories.value = true
   try {
-    const data = await $fetch(`${WP_URL}/wp-json/custom/v1/vehicle-categories`, {
+    const currentMake = String(route.query.make).trim();
+
+    // 🟢 SOLID FIX: Sidebar tree humesha direct pure make ka mangwayenge bina year ke condition ke, 
+    // taaki form se aane par bhi saare models-submodels humesha load hon!
+    const data = await $fetch(`${WP_URL}/wp-json/custom/v2/vehicle`, {
       method: 'GET',
       params: {
-        year: route.query.year || '',
-        make: route.query.make || '',
-        model: route.query.model || '',
-        submodel: route.query.submodel || '',
-        engine: route.query.engine || ''
+        slug: 'pa_sidebar_tree',
+        make: currentMake
       }
     })
 
-    if (Array.isArray(data)) {
-      dynamicCategories.value = data.filter(c => c.parent_id === 0).map(parentCat => ({
-        id: parentCat.id,
-        name: parentCat.name,
-        slug: parentCat.slug,
-        children: data.filter(child => child.parent_id === parentCat.id)
-      }))
+    if (Array.isArray(data) && data.length > 0) {
+      sidebarVehicles.value = data
+
+      // 🟢 AUTO EXPAND: Agar URL mein model pehle se mojood hai (jaise Form se aane par),
+      // toh us model ka dropdown automatic open kar do!
+      const urlModel = route.query.model ? String(route.query.model).toLowerCase().trim() : '';
+      if (urlModel) {
+        const matchedModel = data.find(m => 
+          m.slug === urlModel || 
+          m.name.toLowerCase().trim() === urlModel
+        );
+        if (matchedModel) {
+          activeCatGroup.value = matchedModel.id;
+        }
+      }
     } else {
-      dynamicCategories.value = []
+      sidebarVehicles.value = []
     }
   } catch (err) {
-    console.error("Failed to load targeted active vehicle categories:", err)
-    dynamicCategories.value = []
+    console.error("Failed to load backend vehicle tree:", err)
+    sidebarVehicles.value = []
   } finally {
     loadingCategories.value = false
   }
 }
+
 
 const triggerFetch = async () => {
   if (!route.query.make) return
@@ -336,7 +357,7 @@ const triggerFetch = async () => {
     // 🟢 1. Checking if response has a nested 'data' key (Like standard WP Response wrappers)
     if (response && response.data) {
       products.value = Array.isArray(response.data) ? response.data : []
-      
+
       // Strict integer checking for total_pages
       if (response.total_pages) {
         totalPages.value = parseInt(response.total_pages)
@@ -345,11 +366,11 @@ const triggerFetch = async () => {
       } else {
         totalPages.value = products.value.length >= 10 ? currentPage.value + 1 : currentPage.value
       }
-    } 
+    }
     // 🟢 2. Checking if response itself is a straight array
     else if (Array.isArray(response)) {
       products.value = response
-      
+
       // Agar direct items array hai, toh backend automatic pagination filter setup kar chuka hai (LIMIT/OFFSET).
       // Agar response length 10 hai, iska matlab agla page exist karta hai!
       if (response.length >= 10) {
@@ -358,7 +379,7 @@ const triggerFetch = async () => {
         // Agar response 10 se kam hai, toh yeh aakhri page hai.
         totalPages.value = currentPage.value
       }
-    } 
+    }
     // 🟢 3. Fail-safe reset
     else {
       products.value = []
@@ -406,25 +427,88 @@ const filterBySubCategory = (subSlug) => {
   router.push({ query: { ...route.query, page: 1, category: subSlug || undefined } })
 }
 
-// 🟢 MODIFIED: Flexible parameter watchers logic
+// 1. Model Click (Sirf dropdown toggle ke liye - Safe and Clean)
+const filterBySidebarModel = (modelSlug) => {
+  // Isko khali chodh dein taaki URL refresh na ho, sirf template se category toggle ho
+}
+
+// 🟢 1. FIXED SUBMODEL CLICK: Hamesha accurate string name bhejega
+const filterBySidebarSubmodel = (modelSlug, submodelSlug) => {
+  // Pura target model dhoondein
+  const targetModel = sidebarVehicles.value.find(m => m.slug === modelSlug || m.id === modelSlug)
+  const modelName = targetModel ? targetModel.name : modelSlug
+
+  let submodelValue = submodelSlug
+  if (targetModel && targetModel.submodels) {
+    // Slug aur name dono check karein taaki galat value na jaye
+    const targetSub = targetModel.submodels.find(s => s.slug === submodelSlug || s.name === submodelSlug)
+    if (targetSub) {
+      submodelValue = targetSub.name
+    }
+  }
+
+  // Naya query object - Engine ko har haal mein clean (delete) karna hai naye submodel par
+  const newQuery = {
+    ...route.query, // Purane baki params (jaise page, year, make) barkarar rakhein
+    model: String(modelName).trim(),
+    submodel: String(submodelValue).trim(),
+    page: 1
+  }
+  
+  // URL se purana engine nikalne ke liye use delete kar dein
+  delete newQuery.engine 
+
+  router.push({ query: newQuery })
+}
+
+// 🟢 2. FIXED ENGINE CLICK: Exact accurate name pass karega bina crash hue
+const filterBySidebarEngine = (modelSlug, submodelSlug, engineName) => {
+  const targetModel = sidebarVehicles.value.find(m => m.slug === modelSlug || m.id === modelSlug)
+  const modelName = targetModel ? targetModel.name : modelSlug
+
+  let submodelValue = submodelSlug
+  if (targetModel && targetModel.submodels) {
+    const targetSub = targetModel.submodels.find(s => s.slug === submodelSlug || s.name === submodelSlug)
+    if (targetSub) {
+      submodelValue = targetSub.name
+    }
+  }
+
+  const newQuery = {
+    ...route.query,
+    model: String(modelName).trim(),
+    submodel: String(submodelValue).trim(),
+    engine: String(engineName).trim(), // Direct target raw database name
+    page: 1
+  }
+
+  router.push({ query: newQuery })
+}
+
 watch(() => route.query, (newQuery, oldQuery) => {
   if (!newQuery.make) {
     router.replace('/')
     return
   }
 
+  // Sidebar tree sirf make/year badalne par fetch ho
+  if (oldQuery && (newQuery.make !== oldQuery.make || newQuery.year !== oldQuery.year)) {
+    fetchVehicleFacetedCategories()
+  }
+  
+  // 🟢 STRICT ENFORCEMENT: Kisi bhi parameter ke badalne par products ka function lazmi chalna chahiye!
   if (oldQuery && (
-    newQuery.year !== oldQuery.year ||
-    newQuery.make !== oldQuery.make ||
     newQuery.model !== oldQuery.model ||
     newQuery.submodel !== oldQuery.submodel ||
     newQuery.engine !== oldQuery.engine ||
-    newQuery.page !== oldQuery.page ||
-    newQuery.category !== oldQuery.category ||
-    newQuery.order_by !== oldQuery.order_by
+    newQuery.page !== oldQuery.page
   )) {
-    fetchVehicleFacetedCategories()
-    triggerFetch()
+    // Aapka products fetch karne wala function (triggerFetch ya fetchProducts)
+    if (typeof triggerFetch === 'function') {
+      triggerFetch()
+    } else if (typeof fetchProducts === 'function') {
+      fetchProducts()
+    }
   }
 }, { deep: true })
 
@@ -432,17 +516,8 @@ onMounted(() => {
   checkRouteValidity()
 
   if (route.query.make) {
-    fetchVehicleFacetedCategories().then(() => {
-      if (selectedCategorySlug.value && Array.isArray(dynamicCategories.value)) {
-        const matchingCat = dynamicCategories.value.find(c =>
-          c.slug === selectedCategorySlug.value ||
-          (c.children && Array.isArray(c.children) && c.children.some(child => child.slug === selectedCategorySlug.value))
-        )
-        if (matchingCat) {
-          activeCatGroup.value = matchingCat.id
-        }
-      }
-    })
+    // Pehle sidebar tree mangwayenge, uske baad parameters automatic auto-expand ho jayenge
+    fetchVehicleFacetedCategories()
     triggerFetch()
   }
 })

@@ -25,8 +25,8 @@
             <div v-if="item.categories && item.categories.length > 0" class="absolute left-[70px] -translate-x-1/2 top-full pt-2 hidden group-hover:block w-48 z-50 animate-in fade-in slide-in-from-top-2">
               <div class="bg-white shadow-2xl rounded-lg border border-gray-100 overflow-hidden py-3">
                 <div class="max-h-[350px] overflow-y-auto px-2 space-y-0.5">
-                  <NuxtLink v-for="modelName in item.categories" :key="modelName" 
-                    :to="{ path: '/products', query: { make: item.brand, submodel: modelName, page: 1 } }"
+                  <NuxtLink v-for="modelName in item.categories" :key="modelName"
+                    :to="{ path: '/products', query: { make: item.brand, model: modelName, page: 1 } }"
                     class="block px-3 py-2 text-[13px] font-bold text-gray-700 hover:bg-gray-50 hover:text-[#e31e24] rounded-md transition-colors">
                     {{ modelName }}
                   </NuxtLink>
@@ -112,8 +112,8 @@
                 </button>
                 
                 <div v-show="activeMobileBrand === item.brand && item.categories && item.categories.length > 0" class="bg-gray-50 border-t border-gray-100/50 transition-all duration-300">
-                  <NuxtLink v-for="modelName in item.categories" :key="modelName" 
-                    :to="{ path: '/products', query: { make: item.brand, submodel: modelName, page: 1 } }"
+                  <NuxtLink v-for="modelName in item.categories" :key="modelName"
+                    :to="{ path: '/products', query: { make: item.brand, model: modelName, page: 1 } }"
                     class="block pl-10 pr-6 py-3 text-[13px] font-bold text-gray-600 hover:text-[#e31e24] transition-colors border-b border-gray-100 last:border-0">
                     {{ modelName }}
                   </NuxtLink>
