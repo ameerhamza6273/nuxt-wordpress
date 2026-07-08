@@ -38,11 +38,29 @@
 
         <div class="flex items-center gap-3">
           <div class="relative hidden xl:block w-[250px]">
-            <input type="text" placeholder="Search Part..."
-              class="w-full bg-[#fcfcfc] border-2 border-gray-100 rounded-lg py-2 pl-4 pr-10 text-sm focus:border-[#f2a900] outline-none" />
-            <button class="absolute right-1 top-1 bottom-1 bg-[#e31e24] text-white px-3 rounded-md">
+            <input type="text" v-model="searchQuery" placeholder="Search By Make (e.g. BMW)"
+              @input="handleSearchInput" @focus="handleSearchInput" @blur="handleSearchBlur"
+              @keydown.enter.prevent="handleSearchSubmit" @keydown.esc="showSuggestions = false"
+              class="w-full bg-[#fcfcfc] border-2 border-gray-100 rounded-lg py-2 pl-4 pr-10 text-[12px] focus:border-[#f2a900] outline-none" />
+            <button type="button" @click="handleSearchSubmit"
+              class="absolute right-1 top-1 bottom-1 bg-[#e31e24] text-white px-3 rounded-md">
               <i class="fa-solid fa-magnifying-glass text-xs"></i>
             </button>
+
+            <div v-if="showSuggestions"
+              class="absolute left-0 right-0 top-full mt-2 bg-white shadow-2xl rounded-lg border border-gray-100 overflow-hidden z-50 py-1">
+              <template v-if="searchSuggestions.length > 0">
+                <button v-for="make in searchSuggestions" :key="make.slug || make.name" type="button"
+                  @mousedown.prevent="selectSuggestion(make.name)"
+                  class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-[#e31e24] transition-colors flex items-center gap-2">
+                  <i class="fa-solid fa-car-side text-[10px] text-gray-300"></i>
+                  {{ make.name }}
+                </button>
+              </template>
+              <p v-else class="px-4 py-3 text-[11px] font-bold text-gray-400 uppercase tracking-wide">
+                No matching brand found
+              </p>
+            </div>
           </div>
 
           <div class="hidden md:block relative group">
@@ -162,12 +180,75 @@ import { navigateTo } from '#app'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { cartItems } from '~/composables/useCart.js'
-import { navBrandsData, ensureNavMenu } from '~/composables/useVehicleData.js'
+import { navBrandsData, ensureNavMenu, allMakes, ensureAllMakes } from '~/composables/useVehicleData.js'
 import { showToast } from '~/composables/useToast.js'
 
 const isMobileMenuOpen = ref(false)
 const isAccountDropdownOpen = ref(false)
 const activeMobileBrand = ref(null)
+
+const searchQuery = ref('')
+const showSuggestions = ref(false)
+
+// 🟢 Sirf makes/brands ke against filter - navbar search "search by make" hai,
+// part-number/keyword search nahi (uske liye koi backend endpoint mojood nahi)
+const searchSuggestions = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase()
+  if (!q) return []
+  return allMakes.value
+    .filter((m) => (m.name || '').toLowerCase().includes(q))
+    .slice(0, 6)
+})
+
+const handleSearchInput = () => {
+  showSuggestions.value = searchQuery.value.trim().length > 0
+}
+
+const handleSearchBlur = () => {
+  // Chhota delay taake suggestion button ka click blur se pehle register ho jaye
+  setTimeout(() => { showSuggestions.value = false }, 150)
+}
+
+const goToMakeSearch = (brandName) => {
+  searchQuery.value = ''
+  showSuggestions.value = false
+  navigateTo({ path: '/products', query: { make: brandName, page: 1 } })
+}
+
+// 🟢 Suggestion click par seedha navigate nahi karna - sirf input mein value bhar dein,
+// user ko phir search icon/Enter se explicitly search karna hoga
+const selectSuggestion = (brandName) => {
+  searchQuery.value = brandName
+  showSuggestions.value = false
+}
+
+const handleSearchSubmit = () => {
+  const query = searchQuery.value.trim()
+  if (!query) {
+    showToast('Please enter a brand to search.', 'error')
+    return
+  }
+
+  // Exact match mile to seedha wahan bhej dein
+  const exactMatch = allMakes.value.find((m) => (m.name || '').toLowerCase() === query.toLowerCase())
+  if (exactMatch) {
+    goToMakeSearch(exactMatch.name)
+    return
+  }
+
+  // Warna partial matches dekhein - agar sirf ek hi ho to wahi sahi maan lein,
+  // zyada hon to user se select karwayein, koi na ho to error dikhayein
+  const matches = searchSuggestions.value
+  if (matches.length === 1) {
+    goToMakeSearch(matches[0].name)
+  } else if (matches.length > 1) {
+    showSuggestions.value = true
+    showToast('Multiple matching brands found — please pick one from the list.', 'info')
+  } else {
+    showSuggestions.value = true
+    showToast(`No brand matching "${query}" found. Please pick from the suggestions.`, 'error')
+  }
+}
 
 const isLoggedIn = ref(false)
 const userName = ref('')
@@ -203,6 +284,7 @@ const checkAuthSession = () => {
 onMounted(() => {
   checkAuthSession()
   ensureNavMenu()
+  ensureAllMakes()
 })
 
 const toggleMobileBrand = (brand) => {
@@ -240,6 +322,7 @@ watch(() => route.fullPath, () => {
   isMobileMenuOpen.value = false
   isAccountDropdownOpen.value = false
   activeMobileBrand.value = null
+  showSuggestions.value = false
   checkAuthSession()
 })
 
