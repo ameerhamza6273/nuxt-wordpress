@@ -51,7 +51,7 @@
             </div>
             <div class="flex items-center gap-3 text-white/80 group">
               <i class="fa fa-map-marker-alt text-[#f2a900] w-5"></i>
-              <span class="text-sm group-hover:text-white transition-colors">logicautoparts</span>
+              <span class="text-sm group-hover:text-white transition-colors">logicautoparts, US</span>
             </div>
           </div>
         </div>

@@ -112,9 +112,9 @@
 
 <script setup>
 const contactInfo = [
-  { icon: 'fa-solid fa-phone-volume', title: 'Call Technical Support', value: '+1 (800) LOGIC-AUTO' },
-  { icon: 'fa-solid fa-envelope-open-text', title: 'Email Inquiries', value: 'support@logicautoparts.com' },
-  { icon: 'fa-solid fa-location-dot', title: 'Distribution Center', value: '123 Logistics Way, Wolverhampton, UK' }
+  { icon: 'fa-solid fa-phone-volume', title: 'Call Technical Support', value: '+1 305-925-5654' },
+  { icon: 'fa-solid fa-envelope-open-text', title: 'Email Inquiries', value: 'info@logicautoparts.com' },
+  { icon: 'fa-solid fa-location-dot', title: 'Distribution Center', value: 'logicautoparts, US' }
 ]
 </script>
 
