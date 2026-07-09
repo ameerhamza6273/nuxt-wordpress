@@ -121,11 +121,11 @@
                     <i class="fa-solid fa-circle-check"></i> Guaranteed To Fit
                   </div>
 
-                  <div
+                  <NuxtLink :to="`/product/${product.id}`"
                     class="w-full md:w-44 h-32 flex-shrink-0 bg-gray-50 rounded-2xl p-4 flex items-center justify-center border border-gray-50">
                     <img :src="product.image || 'https://via.placeholder.com/150'"
                       class="max-h-full max-w-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform" />
-                  </div>
+                  </NuxtLink>
 
                   <div class="flex-grow text-center md:text-left">
                     <div class="flex flex-wrap gap-2 items-center mb-2 justify-center md:justify-start">
@@ -139,12 +139,12 @@
                       </span>
                     </div>
 
-                    <a :href="product.permalink" class="block">
+                    <NuxtLink :to="`/product/${product.id}`" class="block">
                       <h3
                         class="text-lg md:text-xl font-black text-gray-900 tracking-tight hover:text-[#e31e24] transition-colors leading-tight mb-2">
                         {{ product.title }}
                       </h3>
-                    </a>
+                    </NuxtLink>
                     <p class="text-xs text-gray-400 font-medium line-clamp-2 max-w-xl"
                       v-html="product.short_description"></p>
 
@@ -166,33 +166,11 @@
                         Ship</span>
                     </div>
 
-                    <div class="w-full mt-4 space-y-2">
-                      <div
-                        class="flex items-center bg-gray-50 border border-gray-100 rounded-xl overflow-hidden justify-between h-10 px-2 relative group/qty w-full">
-                        <span
-                          class="text-[10px] font-black uppercase text-gray-400 tracking-wider pl-1 select-none">Qty</span>
-
-                        <div class="flex items-center justify-end w-full gap-1">
-                          <input type="number" v-model.number="quantities[product.id]" min="1"
-                            class="bg-transparent text-xs font-black text-gray-800 outline-none text-right w-12 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            @blur="validateQuantity(product.id)" />
-
-                          <div
-                            class="relative flex items-center justify-center cursor-pointer text-gray-400 hover:text-gray-800 transition-colors w-4 h-full">
-                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
-                            <select v-model="quantities[product.id]"
-                              class="absolute inset-0 opacity-0 cursor-pointer w-full h-full text-xs">
-                              <option v-for="n in 10" :key="n" :value="n">{{ n }}</option>
-                              <option value="10">10+</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button @click="handleAddToCart(product)"
+                    <div class="w-full mt-4">
+                      <NuxtLink :to="`/product/${product.id}`"
                         class="w-full bg-[#e31e24] hover:bg-black text-white font-black py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-sm">
-                        <i class="fa-solid fa-cart-plus"></i> Add To Cart
-                      </button>
+                        <i class="fa-solid fa-circle-info"></i> View Details
+                      </NuxtLink>
                     </div>
                   </div>
                 </div>
@@ -247,7 +225,6 @@
 <script setup>
 import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { cartItems, addToCart } from '~/composables/useCart.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -258,7 +235,6 @@ const dynamicCategories = ref([])
 const loading = ref(false)
 const loadingCategories = ref(false)
 const activeCatGroup = ref(null)
-const quantities = ref({})
 const totalPages = ref(1)
 
 const sortBy = ref(route?.query?.order_by || 'relevance')
@@ -309,13 +285,6 @@ const toggleCategory = (groupId) => {
 const checkRouteValidity = () => {
   if (!route?.query || !route.query.make) {
     router.replace('/')
-  }
-}
-
-const validateQuantity = (productId) => {
-  const qty = quantities.value[productId]
-  if (!qty || parseInt(qty) < 1 || isNaN(qty)) {
-    quantities.value[productId] = 1
   }
 }
 
@@ -402,12 +371,6 @@ const triggerFetch = async () => {
       totalPages.value = 1
     }
 
-    // Quantities init loop
-    products.value.forEach(p => {
-      if (!quantities.value[p.id]) {
-        quantities.value[p.id] = 1
-      }
-    })
   } catch (err) {
     console.error("Fitment collection processing failure:", err)
     products.value = []
@@ -415,11 +378,6 @@ const triggerFetch = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const handleAddToCart = (product) => {
-  const selectedQty = quantities.value[product.id] || 1
-  addToCart(product, selectedQty)
 }
 
 const changePage = (newPage) => {
