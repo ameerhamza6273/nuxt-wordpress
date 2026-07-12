@@ -16,7 +16,7 @@
             <ClientOnly>
               <div class="bg-gray-50 p-5 rounded-2xl mb-6 flex justify-between items-center border border-gray-100 shadow-sm">
                 <span class="text-xs font-black text-gray-400 uppercase tracking-wider">Final Payable Price:</span>
-                <span class="text-2xl font-black text-gray-900">£{{ finalPayablePrice.toFixed(2) }}</span>
+                <span class="text-2xl font-black text-gray-900">${{ finalPayablePrice.toFixed(2) }}</span>
               </div>
             </ClientOnly>
 

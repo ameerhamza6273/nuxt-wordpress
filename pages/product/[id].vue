@@ -82,7 +82,7 @@
                   <button type="button" @click="showFitment = !showFitment"
                     class="w-full flex items-center justify-between text-left">
                     <h4 class="font-black text-gray-900 uppercase text-xs tracking-widest">
-                      <i class="fa-solid fa-car text-[#e31e24] mr-2"></i>View Part Details
+                      <i class="fa-solid fa-car text-[#e31e24] mr-2"></i>View Fitment Details
                     </h4>
                     <i :class="['fa-solid fa-chevron-down text-[10px] transition-transform duration-300', showFitment ? 'rotate-180 text-[#e31e24]' : 'text-gray-400']"></i>
                   </button>

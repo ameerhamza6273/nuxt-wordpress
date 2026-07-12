@@ -2,7 +2,7 @@
     <section>
         <article>
             <PageNavbar />
-            <div class="py-16 bg-[#f8f9fa] min-h-screen flex items-center">
+""            <div class="py-16 bg-[#f8f9fa] min-h-screen flex items-center">
                 <div :class="['container mx-auto px-4', isCheckoutMode ? 'max-w-[1100px]' : 'max-w-[700px]']">
 
                     <div
