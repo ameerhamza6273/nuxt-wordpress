@@ -46,6 +46,9 @@
                                     <p class="text-[11px] text-gray-400 font-bold mt-0.5 uppercase tracking-wide">
                                         Brand: {{ item.brand }}
                                     </p>
+                                    <p v-if="item.vin" class="text-[11px] text-gray-400 font-bold mt-0.5 uppercase tracking-wide">
+                                        VIN: <span class="text-gray-700">{{ item.vin }}</span>
+                                    </p>
                                 </div>
 
                                 <div

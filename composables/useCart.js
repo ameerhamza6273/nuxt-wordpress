@@ -41,6 +41,7 @@ export const addToCart = (product, selectedQty = 1) => {
       image: product.image || 'https://via.placeholder.com/150',
       brand: product.brand || 'Premium OE',
       category_name: product.category_name || '',
+      vin: product.vin || '',
       quantity: qtyToAdd
     })
   } else {

@@ -58,12 +58,27 @@
                   </div>
                   <div v-if="product.manufacturer_part_number">
                     <span class="text-gray-400 font-bold uppercase block mb-1">Manufacturer Part #</span>
-                    <span class="font-black text-gray-800">{{ product.manufacturer_part_number }}</span>
+                    <div class="flex flex-wrap gap-1.5">
+                      <span v-for="(num, idx) in splitPartNumbers(product.manufacturer_part_number)" :key="idx"
+                        class="font-black text-gray-800 bg-gray-100 px-2 py-0.5 rounded text-[11px]">{{ num }}</span>
+                    </div>
                   </div>
                   <div v-if="product.interchange_part_number">
                     <span class="text-gray-400 font-bold uppercase block mb-1">Interchange Part #</span>
-                    <span class="font-black text-gray-800">{{ product.interchange_part_number }}</span>
+                    <div class="flex flex-wrap gap-1.5">
+                      <span v-for="(num, idx) in splitPartNumbers(product.interchange_part_number)" :key="idx"
+                        class="font-black text-gray-800 bg-gray-100 px-2 py-0.5 rounded text-[11px]">{{ num }}</span>
+                    </div>
                   </div>
+                </div>
+
+                <div v-if="product.vin_required_message" class="bg-red-50 border-2 border-[#e31e24]/20 rounded-2xl p-5 space-y-3">
+                  <p class="text-xs font-black text-[#e31e24] uppercase tracking-wide flex items-start gap-2">
+                    <i class="fa-solid fa-circle-exclamation mt-0.5"></i>
+                    <span>{{ product.vin_required_message }}</span>
+                  </p>
+                  <input type="text" v-model="vinNumber" placeholder="Enter your 17-digit VIN"
+                    class="w-full px-4 py-3 bg-white border border-red-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24] transition-colors" />
                 </div>
 
                 <div class="flex items-center gap-4">
@@ -101,6 +116,18 @@
               </div>
             </div>
 
+            <div v-if="fitmentNotesList.length > 0" class="bg-amber-50 border border-amber-200 rounded-3xl p-6 md:p-8 mt-8">
+              <h4 class="font-black text-amber-800 uppercase text-xs tracking-widest mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation"></i> Important Fitment Notes
+              </h4>
+              <ul class="space-y-2">
+                <li v-for="(note, idx) in fitmentNotesList" :key="idx" class="text-sm text-amber-900 font-medium flex gap-2">
+                  <i class="fa-solid fa-circle-exclamation text-amber-500 text-[10px] mt-1.5"></i>
+                  <span>{{ note }}</span>
+                </li>
+              </ul>
+            </div>
+
             <div class="bg-white rounded-3xl border border-gray-100 p-8 shadow-sm mt-8">
               <h4 class="font-black text-gray-900 uppercase text-xs tracking-widest mb-4 border-b border-gray-100 pb-4">
                 Product Description
@@ -117,7 +144,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { addToCart } from '~/composables/useCart.js'
 import { showToast } from '~/composables/useToast.js'
@@ -130,6 +157,24 @@ const loading = ref(true)
 const showFitment = ref(false)
 const quantity = ref(1)
 const activeImage = ref('')
+const vinNumber = ref('')
+
+// Space/comma-separated part number strings (e.g. eBay's "Manufacturer Part Number")
+// rendered as individual badges instead of one long string.
+const splitPartNumbers = (str) => {
+  if (!str) return []
+  return String(str).split(/[\s,]+/).map(s => s.trim()).filter(Boolean)
+}
+
+// fitment_notes holds multiple eBay "Fitment Note" entries joined by whoever populates the
+// row (newline or " | " have both been used) - split on either so formatting doesn't matter.
+const fitmentNotesList = computed(() => {
+  if (!product.value?.fitment_notes) return []
+  return String(product.value.fitment_notes)
+    .split(/\n|\|/)
+    .map(s => s.trim())
+    .filter(Boolean)
+})
 
 const fetchProduct = async () => {
   loading.value = true
@@ -155,13 +200,20 @@ const fetchProduct = async () => {
 
 const handleAddToCart = () => {
   if (!product.value) return
+
+  if (product.value.vin_required_message && !vinNumber.value.trim()) {
+    showToast('Please enter your VIN before adding this part to cart.', 'error')
+    return
+  }
+
   addToCart({
     id: product.value.id,
     title: product.value.title,
     price: product.value.price,
     sku: product.value.sku,
     image: activeImage.value,
-    brand: product.value.brand
+    brand: product.value.brand,
+    vin: vinNumber.value.trim() || undefined
   }, quantity.value || 1)
   showToast('Added to cart!', 'success')
 }
