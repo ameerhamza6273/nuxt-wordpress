@@ -1,0 +1,33 @@
+Hi,
+
+Thanks for laying that out clearly - it makes total sense, and honestly it's the better long-term setup anyway. You and your team already know how to run bulk uploads on Amazon and eBay, so there's no reason to make you learn a brand new system or route every product through us.
+
+Here's what we've built for you: an import page just for your team, with its own login, and a simple two-file format - the same idea eBay itself uses for listings + compatibility (a Products file, and a Fitment/Compatibility file).
+
+FILE 1 - Products (one row per product). Columns:
+sku, title, price, description, brand, placement_on_vehicle, manufacturer_part_number, interchange_part_number, other_part_number, fitment_notes, vin_required_message, images
+
+- sku: unique product code. Re-uploading the same SKU updates that product; a new SKU adds a new product.
+- placement_on_vehicle: e.g. "Front & Rear Axle"
+- fitment_notes: free text shown on the product page. Separate multiple notes with a pipe: |
+- vin_required_message: if filled in, customer must enter their VIN before adding to cart. Leave blank if not needed.
+- images: image URLs separated by a pipe: | (e.g. url1|url2)
+
+FILE 2 - Fitment/Compatibility (one row per vehicle fit). Columns:
+sku, year, make, model, submodel, engine
+
+- sku: must already exist in File 1, so upload Products first, then Fitment.
+- submodel: use "Base" if there's no submodel.
+- A product that fits multiple vehicles just needs multiple rows with the same SKU.
+- Re-uploading Fitment for a SKU replaces its old list, so correcting a mistake is just a re-upload, no duplicates.
+
+Just build these as CSV files (Excel/Google Sheets, save as CSV) with the exact column names above as the header row. You can run this as often as you like - individual products from manufacturer catalogs, or the kits your team builds from other eBay listings, in any batch size. If you ever need a column we haven't thought of, just add it to your file - it's picked up automatically.
+
+Import page: [URL will go here once the site is live]
+Login: we'll send your username/password separately.
+
+One suggestion before loading everything: let's run a first batch of maybe 20-50 products through this so you can see exactly how they look live on the site (titles, fitment, images, VIN messages, etc.) and confirm it matches the FCP Euro-style standard we're aiming for. Once that looks right, go ahead and load the rest - whether that ends up being 2,000 or 20,000.
+
+Let us know if anything isn't clear.
+
+Thanks!

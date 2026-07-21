@@ -90,6 +90,10 @@
                     <i class="fa-solid fa-right-from-bracket text-red-400 w-5"></i> Log Out
                   </button>
                 </template>
+
+                <NuxtLink to="/admin" class="flex items-center gap-3 px-4 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-[#e31e24] transition-colors border-t border-gray-100">
+                  <i class="fa-solid fa-user-shield text-gray-400 w-5"></i> Admin
+                </NuxtLink>
               </div>
             </div>
           </div>
@@ -166,6 +170,10 @@
                     <i class="fa-solid fa-right-from-bracket text-red-500 w-5"></i> Log Out
                   </button>
                 </template>
+
+                <NuxtLink to="/admin" class="flex items-center gap-4 px-10 py-4 text-xs font-black border-t border-gray-100 hover:text-[#e31e24] uppercase transition-colors">
+                  <i class="fa-solid fa-user-shield text-[#e31e24] w-5"></i> Admin
+                </NuxtLink>
               </div>
             </div>
           </div>

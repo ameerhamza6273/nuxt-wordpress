@@ -47,6 +47,9 @@ export default defineNuxtConfig({
       wcApiUrl: process.env.NUXT_PUBLIC_WC_API_URL,
       wcConsumerKey: process.env.NUXT_PUBLIC_WC_CONSUMER_KEY,
       wcConsumerSecret: process.env.NUXT_PUBLIC_WC_CONSUMER_SECRET,
+      importSecret: process.env.NUXT_PUBLIC_IMPORT_SECRET,
+      importUsername: process.env.NUXT_PUBLIC_IMPORT_USERNAME,
+      importPassword: process.env.NUXT_PUBLIC_IMPORT_PASSWORD,
     },
   },
   build: {
