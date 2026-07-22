@@ -32,9 +32,9 @@
 
               <p v-if="loginError" class="text-[#e31e24] text-xs font-bold uppercase">{{ loginError }}</p>
 
-              <button type="submit"
-                class="w-full bg-black hover:bg-[#e31e24] text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300">
-                Sign In
+              <button type="submit" :disabled="loading"
+                class="w-full bg-black hover:bg-[#e31e24] text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 disabled:opacity-50">
+                {{ loading ? 'Signing In...' : 'Sign In' }}
               </button>
             </form>
           </div>
@@ -49,19 +49,26 @@
 <script setup>
 import { ref } from 'vue'
 
-const config = useRuntimeConfig()
-
 const username = ref('')
 const password = ref('')
 const showPassword = ref(false)
 const loginError = ref('')
+const loading = ref(false)
 
-function login() {
-  if (username.value === config.public.importUsername && password.value === config.public.importPassword) {
+async function login() {
+  loading.value = true
+  loginError.value = ''
+  try {
+    await $fetch('/api/admin-login', {
+      method: 'POST',
+      body: { username: username.value, password: password.value },
+    })
     if (process.client) sessionStorage.setItem('import_logged_in', '1')
     navigateTo('/admin/products')
-  } else {
+  } catch (err) {
     loginError.value = 'Invalid username or password.'
+  } finally {
+    loading.value = false
   }
 }
 </script>

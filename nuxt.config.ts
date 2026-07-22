@@ -34,6 +34,8 @@ export default defineNuxtConfig({
     '@fortawesome/fontawesome-free/css/all.min.css', // Add Font Awesome CSS
   ],
   runtimeConfig: {
+    adminUsername: process.env.ADMIN_USERNAME,
+    adminPassword: process.env.ADMIN_PASSWORD,
     public: {
       wordpressUrl: 'https://cms.x-trekkers.com/graphql',
       BASE_URL: 'https://cms.x-trekkers.com/wp-json/wp/v2',
@@ -48,8 +50,6 @@ export default defineNuxtConfig({
       wcConsumerKey: process.env.NUXT_PUBLIC_WC_CONSUMER_KEY,
       wcConsumerSecret: process.env.NUXT_PUBLIC_WC_CONSUMER_SECRET,
       importSecret: process.env.NUXT_PUBLIC_IMPORT_SECRET,
-      importUsername: process.env.NUXT_PUBLIC_IMPORT_USERNAME,
-      importPassword: process.env.NUXT_PUBLIC_IMPORT_PASSWORD,
     },
   },
   build: {
