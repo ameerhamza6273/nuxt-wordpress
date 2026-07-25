@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-[#f8f9fa] flex">
-    <aside class="w-60 bg-black text-white shrink-0 hidden md:flex md:flex-col">
+    <aside class="w-60 bg-black text-white shrink-0 hidden md:flex md:flex-col md:sticky md:top-0 md:h-screen md:overflow-y-auto">
       <div class="p-6 border-b border-white/10">
         <NuxtLink to="/">
           <NuxtImg src="/logic-auto-parts-website-logo.jpeg" alt="Logic Auto Parts" class="h-14 w-full rounded" />

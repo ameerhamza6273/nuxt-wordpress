@@ -58,14 +58,14 @@
         <h2 class="text-sm font-black uppercase tracking-tight text-gray-900">Images</h2>
         <button type="button" @click="images.push('')" class="text-[11px] font-bold text-[#e31e24] uppercase">+ Add Image Slot</button>
       </div>
-      <input type="file" ref="fileInputEl" accept="image/*" class="hidden" @change="onFileChosen" />
       <div v-for="(_, i) in images" :key="i" class="flex items-center gap-3 border border-gray-200 rounded-xl p-3">
         <div class="w-16 h-16 shrink-0 bg-gray-50 border border-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
           <img v-if="images[i]" :src="images[i]" class="w-full h-full object-cover" />
           <i v-else class="fa-solid fa-image text-gray-300 text-xl"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <button type="button" @click="triggerUpload(i)" :disabled="uploading[i]"
+          <input type="file" :ref="el => { fileInputEls.value[i] = el }" accept="image/*" class="hidden" @change="e => onFileChosen(e, i)" />
+          <button type="button" @click="fileInputEls.value[i]?.click()" :disabled="uploading[i]"
             class="text-[11px] font-bold text-white bg-black hover:bg-[#e31e24] disabled:opacity-50 px-4 py-2 rounded-lg uppercase transition-colors">
             {{ uploading[i] ? 'Uploading...' : (images[i] ? 'Change Image' : 'Upload Image') }}
           </button>
@@ -166,24 +166,16 @@ const form = reactive({
 
 const images = ref(Array.isArray(props.initial.images) && props.initial.images.length > 0 ? [...props.initial.images] : ['', '', '', ''])
 
-// Image upload - one shared hidden <input type=file>, reused per row via activeUploadIndex,
-// so we don't need a dynamic ref array for every image slot.
-const fileInputEl = ref(null)
-const activeUploadIndex = ref(null)
+// Image upload - each row gets its own hidden <input type=file> (fileInputEls[i]),
+// so there's no shared "which row am I uploading for" state to get out of sync.
+const fileInputEls = ref([])
 const uploading = ref({})
 const uploadErrors = ref({})
 
-function triggerUpload(i) {
-  activeUploadIndex.value = i
-  uploadErrors.value[i] = ''
-  fileInputEl.value.click()
-}
-
-async function onFileChosen(e) {
+async function onFileChosen(e, i) {
   const file = e.target.files[0]
-  const i = activeUploadIndex.value
   e.target.value = '' // allow re-selecting the same file later
-  if (!file || i === null) return
+  if (!file) return
 
   uploading.value[i] = true
   uploadErrors.value[i] = ''
