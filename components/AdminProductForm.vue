@@ -64,8 +64,8 @@
           <i v-else class="fa-solid fa-image text-gray-300 text-xl"></i>
         </div>
         <div class="flex-1 min-w-0">
-          <input type="file" :ref="el => { fileInputEls.value[i] = el }" accept="image/*" class="hidden" @change="e => onFileChosen(e, i)" />
-          <button type="button" @click="fileInputEls.value[i]?.click()" :disabled="uploading[i]"
+          <input type="file" :id="`admin-image-upload-${i}`" accept="image/*" class="hidden" @change="e => onFileChosen(e, i)" />
+          <button type="button" @click="triggerUpload(i)" :disabled="uploading[i]"
             class="text-[11px] font-bold text-white bg-black hover:bg-[#e31e24] disabled:opacity-50 px-4 py-2 rounded-lg uppercase transition-colors">
             {{ uploading[i] ? 'Uploading...' : (images[i] ? 'Change Image' : 'Upload Image') }}
           </button>
@@ -166,11 +166,16 @@ const form = reactive({
 
 const images = ref(Array.isArray(props.initial.images) && props.initial.images.length > 0 ? [...props.initial.images] : ['', '', '', ''])
 
-// Image upload - each row gets its own hidden <input type=file> (fileInputEls[i]),
-// so there's no shared "which row am I uploading for" state to get out of sync.
-const fileInputEls = ref([])
+// Image upload - each row gets its own hidden <input type=file>, looked up by DOM id
+// rather than a Vue template ref (a Vue ref written into a reactive array from inside
+// a v-for's inline function-ref broke on SSR hydration - "Cannot set properties of
+// undefined" - so plain getElementById side-steps that entirely).
 const uploading = ref({})
 const uploadErrors = ref({})
+
+function triggerUpload(i) {
+  document.getElementById(`admin-image-upload-${i}`)?.click()
+}
 
 async function onFileChosen(e, i) {
   const file = e.target.files[0]
