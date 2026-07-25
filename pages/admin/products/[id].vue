@@ -6,7 +6,6 @@ import { WP_URL } from '~/composables/useVehicleData'
 definePageMeta({ layout: 'admin', middleware: 'admin-auth' })
 
 const route = useRoute()
-const config = useRuntimeConfig()
 
 const product = ref(null)
 const loading = ref(true)
@@ -14,9 +13,7 @@ const error = ref('')
 
 onMounted(async () => {
   try {
-    const res = await fetch(`${WP_URL}/wp-json/custom/v1/product-detail?id=${route.params.id}`, {
-      headers: { 'X-Import-Secret': config.public.importSecret },
-    })
+    const res = await fetch(`${WP_URL}/wp-json/custom/v1/product-detail?id=${route.params.id}`)
     const data = await res.json()
     if (!data.success) {
       error.value = data.message || 'Product not found.'

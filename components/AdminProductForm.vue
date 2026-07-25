@@ -72,17 +72,15 @@
         <h2 class="text-sm font-black uppercase tracking-tight text-gray-900">Fitment (Vehicle Compatibility)</h2>
         <button type="button" @click="fitment.push({ year: '', make: '', model: '', submodel: '', engine: '' })" class="text-[11px] font-bold text-[#e31e24] uppercase">+ Add Row</button>
       </div>
-      <div v-for="(fit, i) in fitment" :key="i" class="grid grid-cols-2 md:grid-cols-5 gap-2 items-center border-b border-gray-50 pb-3 last:border-0">
-        <input v-model="fit.year" placeholder="Year" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
-        <input v-model="fit.make" placeholder="Make" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
-        <input v-model="fit.model" placeholder="Model" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
-        <input v-model="fit.submodel" placeholder="Submodel" class="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
-        <div class="flex gap-2">
-          <input v-model="fit.engine" placeholder="Engine" class="flex-1 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
-          <button type="button" @click="fitment.splice(i, 1)" class="px-2 text-gray-400 hover:text-[#e31e24]">
-            <i class="fa-solid fa-trash"></i>
-          </button>
-        </div>
+      <div v-for="(fit, i) in fitment" :key="i" class="grid grid-cols-2 md:grid-cols-[repeat(5,minmax(0,1fr))_2rem] gap-2 items-center border-b border-gray-50 pb-3 last:border-0">
+        <input v-model="fit.year" placeholder="Year" class="min-w-0 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
+        <input v-model="fit.make" placeholder="Make" class="min-w-0 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
+        <input v-model="fit.model" placeholder="Model" class="min-w-0 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
+        <input v-model="fit.submodel" placeholder="Submodel" class="min-w-0 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
+        <input v-model="fit.engine" placeholder="Engine" class="min-w-0 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold outline-none focus:border-[#e31e24]" />
+        <button type="button" @click="fitment.splice(i, 1)" class="justify-self-center text-gray-400 hover:text-[#e31e24]">
+          <i class="fa-solid fa-trash"></i>
+        </button>
       </div>
       <p v-if="fitment.length === 0" class="text-xs text-gray-400 font-bold">No fitment rows yet - this product will show as fitting all vehicles until you add some.</p>
     </section>
@@ -122,7 +120,7 @@ const form = reactive({
   vin_required_message: props.initial.vin_required_message || '',
 })
 
-const images = ref(Array.isArray(props.initial.images) ? [...props.initial.images] : [])
+const images = ref(Array.isArray(props.initial.images) && props.initial.images.length > 0 ? [...props.initial.images] : ['', '', '', ''])
 const fitment = ref(
   Array.isArray(props.initial.fitment)
     ? props.initial.fitment.map(f => ({ year: f.year || '', make: f.make || '', model: f.model || '', submodel: f.submodel || '', engine: f.engine || '' }))

@@ -77,6 +77,7 @@ const navItems = [
   { label: 'Products', to: '/admin/products', icon: 'fa-solid fa-boxes-stacked' },
   { label: 'Add Product', to: '/admin/products/new', icon: 'fa-solid fa-plus' },
   { label: 'Bulk Import', to: '/admin/import', icon: 'fa-solid fa-file-import' },
+  { label: 'Orders', to: '/admin/orders', icon: 'fa-solid fa-receipt' },
 ]
 
 function logout() {

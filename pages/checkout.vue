@@ -130,7 +130,7 @@ import { ref, onMounted, computed, nextTick } from 'vue'
 import { cartItems } from '~/composables/useCart.js'
 import { showToast } from '~/composables/useToast.js'
 
-const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8?rest_route=/'
+const WP_URL = 'https://qsz.zoy.temporary.site/website_11f3c7a8/?rest_route=/'
 const APPLICATION_ID = 'sandbox-sq0idb-MXfqn01CTCCR-zLHuevhMQ'
 const LOCATION_ID = 'ZY8JDY1RVQWKV'
 
