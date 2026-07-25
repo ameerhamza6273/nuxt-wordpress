@@ -16,10 +16,12 @@ Four snippets:
 3. **`extract-ebay-fitment-data.php`** - one-off admin-only maintenance script (not a REST route), triggered via `?run_fitment_sync=1` in wp-admin. Parses a big eBay CSV export to backfill `wp_custom_product_fitment`. Treat as a throwaway tool, not part of the standing API surface.
 4. **`orders-endpoint.php`** (added 2026-07-25, **not yet live** - see Orders section below) - order tracking tables + admin/customer order APIs.
 
-There's also a couple of **external routes not mirrored here** (source never pasted into this repo - ask the user for current source before changing them):
+There's also one **external route not mirrored here** (source never pasted into this repo - ask the user for current source before changing it):
 - `custom/v1/product-detail?id=...` (full product + fitment + images for one item).
-- `custom/v1/process-square-payment` - charges the card via Square. **Has a live, confirmed bug**: it sends `currency: GBP` (or similar) to Square's Create Payment API, but the Square sandbox location is USD-only, so every payment attempt fails with `"This merchant can only process payments in USD, but amount was provided in GBP."` (confirmed 2026-07-25 via a live end-to-end checkout test with a Square sandbox test card). This is on top of the still-needed `custom_record_order()` integration (see Orders section) - can't fix either without this snippet's source, never shared yet.
-- Whatever handles register/login against `w84_custom_app_users` (see below) - also never seen, not required for the orders work so far since orders link by email instead.
+
+`custom/v1/process-square-payment` was also external/unseen originally (confirmed live via wp-json discovery, and via the GBP/USD bug below) - but the user didn't have its source saved anywhere to hand over, so **`wp-snippets/process-square-payment.php` (added 2026-07-25) is a from-scratch replacement**, not a mirror of whatever was live before. It is **not yet pasted into WP** - once it is, it fully replaces the old route. Charges the card server-side via Square's Payments API (`wp_remote_post` to `/v2/payments`), hardcodes `currency: USD` (fixing the bug below), and calls `custom_record_order()` from `orders-endpoint.php` on success. **`SQUARE_ACCESS_TOKEN` is now filled in with a real Sandbox Access Token** (user pasted it in chat 2026-07-25) - treat this file as containing a live secret from here on, same caution as `BULK_IMPORT_SECRET`/the eBay API keys mentioned elsewhere in project memory. It's a *sandbox* token (lower stakes than production), but still shouldn't be pasted into future chats/commits beyond what's already here.
+
+Whatever handles register/login against `w84_custom_app_users` (see below) is also never seen, not required for the orders work so far since orders link by email instead.
 
 ## Checkout flow bug found & fixed (2026-07-25)
 
@@ -47,10 +49,9 @@ Client asked to move past the product catalog into "customers, orders, all of th
 - `pages/admin/orders/index.vue` + `[id].vue`: admin order list (search/status filter) + detail view with a status dropdown (pending/paid/processing/shipped/delivered/cancelled/refunded).
 - Orders link to `w84_custom_app_users` via `app_user_id`, resolved by matching the checkout email against that table - nullable, so guest checkouts still work fine without a matching account.
 
-**Still needed before this is live/functional (in order):**
-1. User pastes `orders-endpoint.php` into WP, visits `?run_orders_setup=1` once to create the two tables.
-2. The actual gap: **`process-square-payment`'s source has never been shared** - need it to add one call, `custom_record_order($body)`, right after the Square charge succeeds (it already receives `billingDetails`/`itemsOrdered`/`amountCents`/`userType` from `pages/checkout.vue` - same shape `custom_record_order()` expects, plus whatever Square returns as the payment id). Without this, checkouts won't create order rows at all.
-3. No customer-facing "my orders" page built yet in the Nuxt app (the `my-orders` API exists, UI doesn't) - not asked for yet, only the admin side was requested so far.
+**Status as of 2026-07-25: fully working end-to-end, verified live.** Both `orders-endpoint.php` and `process-square-payment.php` are pasted into WP and live. Ran a real checkout test (Square sandbox test card `4111 1111 1111 1111`, guest checkout, $1000 item with a VIN) through the actual browser: card charged successfully via Square, `custom_record_order()` fired, and the order (`LAP-000001`, status `paid`) is visible and correct in `/admin/orders` - customer info, total, and the line item (title/SKU/price/VIN) all match. This is the first real order in the system - it's a genuine DB row (Square sandbox charge, no real money) sitting in `wp_custom_orders`/`wp_custom_order_items`; left in place as a working proof rather than deleted, but flagged to the user in case they want to clear it via phpMyAdmin before real use (same pattern as the test rows cleaned up after the 2026-07-21 bulk-import test).
+
+**Only remaining gap**: no customer-facing "my orders" page built yet in the Nuxt app (the `my-orders` API exists, UI doesn't) - not asked for yet, only the admin side was requested so far.
 
 ## Last session (2026-07-25) - bugs found & fixed
 
