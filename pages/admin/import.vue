@@ -51,6 +51,34 @@ function onFileChange(e, kind) {
   if (kind === 'products') productsFile.value = file
   else fitmentFile.value = file
 }
+
+const exporting = ref({ products: false, fitment: false })
+
+async function exportCsv(kind) {
+  exporting.value[kind] = true
+  error.value = ''
+  try {
+    const endpoint = kind === 'products' ? 'export-products' : 'export-fitment'
+    const res = await fetch(`${WP_URL}/wp-json/custom/v1/${endpoint}`, {
+      headers: { 'X-Import-Secret': config.public.importSecret },
+    })
+    if (!res.ok) {
+      error.value = 'Export failed.'
+      return
+    }
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = kind === 'products' ? 'products-export.csv' : 'fitment-export.csv'
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch (e) {
+    error.value = 'Export failed: ' + e.message
+  } finally {
+    exporting.value[kind] = false
+  }
+}
 </script>
 
 <template>
@@ -68,10 +96,16 @@ function onFileChange(e, kind) {
         columns are allowed - they'll be added automatically.
       </p>
       <input type="file" accept=".csv" @change="onFileChange($event, 'products')" class="text-xs font-bold" />
-      <button @click="upload('products')" :disabled="loading"
-        class="block px-10 bg-black hover:bg-[#e31e24] text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 disabled:opacity-50">
-        Upload Products
-      </button>
+      <div class="flex gap-3">
+        <button @click="upload('products')" :disabled="loading"
+          class="px-10 bg-black hover:bg-[#e31e24] text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 disabled:opacity-50">
+          Upload Products
+        </button>
+        <button @click="exportCsv('products')" :disabled="exporting.products" type="button"
+          class="px-10 bg-white border-2 border-gray-900 hover:bg-gray-900 hover:text-white text-gray-900 font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 disabled:opacity-50">
+          {{ exporting.products ? 'Exporting...' : 'Export Current Products' }}
+        </button>
+      </div>
       <pre v-if="productsResult" class="bg-gray-50 border border-gray-100 text-[11px] p-4 rounded-xl overflow-auto">{{ productsResult }}</pre>
     </section>
 
@@ -82,10 +116,16 @@ function onFileChange(e, kind) {
         <span class="text-gray-700">after</span> the products file - each SKU must already exist.
       </p>
       <input type="file" accept=".csv" @change="onFileChange($event, 'fitment')" class="text-xs font-bold" />
-      <button @click="upload('fitment')" :disabled="loading"
-        class="block px-10 bg-black hover:bg-[#e31e24] text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 disabled:opacity-50">
-        Upload Fitment
-      </button>
+      <div class="flex gap-3">
+        <button @click="upload('fitment')" :disabled="loading"
+          class="px-10 bg-black hover:bg-[#e31e24] text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 disabled:opacity-50">
+          Upload Fitment
+        </button>
+        <button @click="exportCsv('fitment')" :disabled="exporting.fitment" type="button"
+          class="px-10 bg-white border-2 border-gray-900 hover:bg-gray-900 hover:text-white text-gray-900 font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 disabled:opacity-50">
+          {{ exporting.fitment ? 'Exporting...' : 'Export Current Fitment' }}
+        </button>
+      </div>
       <pre v-if="fitmentResult" class="bg-gray-50 border border-gray-100 text-[11px] p-4 rounded-xl overflow-auto">{{ fitmentResult }}</pre>
     </section>
   </div>
