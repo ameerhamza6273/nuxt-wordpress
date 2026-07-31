@@ -67,8 +67,11 @@
           <input type="file" :id="`admin-image-upload-${i}`" accept="image/*" class="hidden" @change="e => onFileChosen(e, i)" />
           <button type="button" @click="triggerUpload(i)" :disabled="uploading[i]"
             class="text-[11px] font-bold text-white bg-black hover:bg-[#e31e24] disabled:opacity-50 px-4 py-2 rounded-lg uppercase transition-colors">
-            {{ uploading[i] ? 'Uploading...' : (images[i] ? 'Change Image' : 'Upload Image') }}
+            {{ uploading[i] ? (compressing[i] ? 'Compressing Image...' : 'Uploading...') : (images[i] ? 'Change Image' : 'Upload Image') }}
           </button>
+          <p v-if="compressing[i]" class="text-[10px] text-gray-400 font-bold mt-1">
+            Large file detected - compressing on the server before upload, this can take a few extra seconds.
+          </p>
           <p v-if="uploadErrors[i]" class="text-[10px] text-[#e31e24] font-bold mt-1">{{ uploadErrors[i] }}</p>
         </div>
         <button type="button" @click="images.splice(i, 1)" class="px-2 text-gray-400 hover:text-[#e31e24]">
@@ -172,6 +175,11 @@ const images = ref(Array.isArray(props.initial.images) && props.initial.images.l
 // undefined" - so plain getElementById side-steps that entirely).
 const uploading = ref({})
 const uploadErrors = ref({})
+const compressing = ref({})
+
+// Mirrors ADMIN_IMAGE_MAX_BYTES in wp-snippets/admin-upload-image.php - files above
+// this are re-encoded/downsized server-side, which is why the request takes longer.
+const ADMIN_IMAGE_MAX_BYTES = 500 * 1024
 
 function triggerUpload(i) {
   document.getElementById(`admin-image-upload-${i}`)?.click()
@@ -183,6 +191,7 @@ async function onFileChosen(e, i) {
   if (!file) return
 
   uploading.value[i] = true
+  compressing.value[i] = file.size > ADMIN_IMAGE_MAX_BYTES
   uploadErrors.value[i] = ''
   try {
     const body = new FormData()
@@ -202,6 +211,7 @@ async function onFileChosen(e, i) {
     uploadErrors.value[i] = 'Upload failed: ' + e.message
   } finally {
     uploading.value[i] = false
+    compressing.value[i] = false
   }
 }
 const fitment = ref(

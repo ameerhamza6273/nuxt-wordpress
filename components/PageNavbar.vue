@@ -38,7 +38,7 @@
 
         <div class="flex items-center gap-3">
           <div class="relative hidden xl:block w-[250px]">
-            <input type="text" v-model="searchQuery" placeholder="Search By Make (e.g. BMW)"
+            <input type="text" v-model="searchQuery" placeholder="Search By SKU / Part Number"
               @input="handleSearchInput" @focus="handleSearchInput" @blur="handleSearchBlur"
               @keydown.enter.prevent="handleSearchSubmit" @keydown.esc="showSuggestions = false"
               class="w-full bg-[#fcfcfc] border-2 border-gray-100 rounded-lg py-2 pl-4 pr-10 text-[12px] focus:border-[#f2a900] outline-none" />
@@ -49,16 +49,20 @@
 
             <div v-if="showSuggestions"
               class="absolute left-0 right-0 top-full mt-2 bg-white shadow-2xl rounded-lg border border-gray-100 overflow-hidden z-50 py-1">
-              <template v-if="searchSuggestions.length > 0">
-                <button v-for="make in searchSuggestions" :key="make.slug || make.name" type="button"
-                  @mousedown.prevent="selectSuggestion(make.name)"
+              <template v-if="searchLoading">
+                <p class="px-4 py-3 text-[11px] font-bold text-gray-400 uppercase tracking-wide">Searching...</p>
+              </template>
+              <template v-else-if="searchSuggestions.length > 0">
+                <button v-for="item in searchSuggestions" :key="item.id" type="button"
+                  @mousedown.prevent="selectSuggestion(item)"
                   class="w-full text-left px-4 py-2.5 text-xs font-bold text-gray-700 hover:bg-gray-50 hover:text-[#e31e24] transition-colors flex items-center gap-2">
-                  <i class="fa-solid fa-car-side text-[10px] text-gray-300"></i>
-                  {{ make.name }}
+                  <i class="fa-solid fa-gear text-[10px] text-gray-300"></i>
+                  <span class="truncate">{{ item.title }}</span>
+                  <span class="ml-auto text-[10px] text-gray-400 shrink-0">{{ item.sku }}</span>
                 </button>
               </template>
               <p v-else class="px-4 py-3 text-[11px] font-bold text-gray-400 uppercase tracking-wide">
-                No matching brand found
+                No matching part found - press Enter to search anyway
               </p>
             </div>
           </div>
@@ -188,7 +192,7 @@ import { navigateTo } from '#app'
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { cartItems } from '~/composables/useCart.js'
-import { navBrandsData, ensureNavMenu, allMakes, ensureAllMakes } from '~/composables/useVehicleData.js'
+import { navBrandsData, ensureNavMenu, WP_URL } from '~/composables/useVehicleData.js'
 import { showToast } from '~/composables/useToast.js'
 
 const isMobileMenuOpen = ref(false)
@@ -198,18 +202,39 @@ const activeMobileBrand = ref(null)
 const searchQuery = ref('')
 const showSuggestions = ref(false)
 
-// 🟢 Sirf makes/brands ke against filter - navbar search "search by make" hai,
-// part-number/keyword search nahi (uske liye koi backend endpoint mojood nahi)
-const searchSuggestions = computed(() => {
-  const q = searchQuery.value.trim().toLowerCase()
-  if (!q) return []
-  return allMakes.value
-    .filter((m) => (m.name || '').toLowerCase().includes(q))
-    .slice(0, 6)
-})
+// 🟢 Real SKU / part-number search - the client confirmed this is the storefront's
+// primary, fastest search input (vehicle Year/Make/Model search stays in HeroSection
+// as a separate flow; manufacturer-brand logos in the footer are a secondary filter).
+const searchSuggestions = ref([])
+const searchLoading = ref(false)
+let searchDebounceTimer = null
 
 const handleSearchInput = () => {
   showSuggestions.value = searchQuery.value.trim().length > 0
+  if (searchDebounceTimer) clearTimeout(searchDebounceTimer)
+
+  const q = searchQuery.value.trim()
+  if (!q) {
+    searchSuggestions.value = []
+    searchLoading.value = false
+    return
+  }
+
+  searchDebounceTimer = setTimeout(async () => {
+    searchLoading.value = true
+    try {
+      const res = await $fetch(`${WP_URL}/wp-json/custom/v1/product-search`, {
+        method: 'GET',
+        params: { q, page: 1, per_page: 6 }
+      })
+      searchSuggestions.value = Array.isArray(res?.data) ? res.data : []
+    } catch (err) {
+      console.error('Product search suggestion fetch failed:', err)
+      searchSuggestions.value = []
+    } finally {
+      searchLoading.value = false
+    }
+  }, 300)
 }
 
 const handleSearchBlur = () => {
@@ -217,45 +242,21 @@ const handleSearchBlur = () => {
   setTimeout(() => { showSuggestions.value = false }, 150)
 }
 
-const goToMakeSearch = (brandName) => {
+// Suggestion is a specific product match - clicking it goes straight to that product.
+const selectSuggestion = (product) => {
   searchQuery.value = ''
   showSuggestions.value = false
-  navigateTo({ path: '/products', query: { make: brandName, page: 1 } })
-}
-
-// 🟢 Suggestion click par seedha navigate nahi karna - sirf input mein value bhar dein,
-// user ko phir search icon/Enter se explicitly search karna hoga
-const selectSuggestion = (brandName) => {
-  searchQuery.value = brandName
-  showSuggestions.value = false
+  navigateTo(`/product/${product.id}`)
 }
 
 const handleSearchSubmit = () => {
   const query = searchQuery.value.trim()
   if (!query) {
-    showToast('Please enter a brand to search.', 'error')
+    showToast('Please enter a SKU or part number to search.', 'error')
     return
   }
-
-  // Exact match mile to seedha wahan bhej dein
-  const exactMatch = allMakes.value.find((m) => (m.name || '').toLowerCase() === query.toLowerCase())
-  if (exactMatch) {
-    goToMakeSearch(exactMatch.name)
-    return
-  }
-
-  // Warna partial matches dekhein - agar sirf ek hi ho to wahi sahi maan lein,
-  // zyada hon to user se select karwayein, koi na ho to error dikhayein
-  const matches = searchSuggestions.value
-  if (matches.length === 1) {
-    goToMakeSearch(matches[0].name)
-  } else if (matches.length > 1) {
-    showSuggestions.value = true
-    showToast('Multiple matching brands found — please pick one from the list.', 'info')
-  } else {
-    showSuggestions.value = true
-    showToast(`No brand matching "${query}" found. Please pick from the suggestions.`, 'error')
-  }
+  showSuggestions.value = false
+  navigateTo({ path: '/products', query: { q: query, page: 1 } })
 }
 
 const isLoggedIn = ref(false)
@@ -292,7 +293,6 @@ const checkAuthSession = () => {
 onMounted(() => {
   checkAuthSession()
   ensureNavMenu()
-  ensureAllMakes()
 })
 
 const toggleMobileBrand = (brand) => {
