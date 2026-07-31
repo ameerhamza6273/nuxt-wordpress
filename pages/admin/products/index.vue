@@ -98,12 +98,13 @@ onMounted(load)
             <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-500 border-r border-gray-200">Title</th>
             <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-500 border-r border-gray-200">Brand</th>
             <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-500 border-r border-gray-200">Price</th>
+            <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-500 border-r border-gray-200">Stock</th>
             <th class="px-6 py-3 text-[10px] font-black uppercase tracking-wider text-gray-500"></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-if="loading"><td colspan="6" class="px-6 py-8 text-center text-xs font-bold text-gray-400">Loading...</td></tr>
-          <tr v-else-if="items.length === 0"><td colspan="6" class="px-6 py-8 text-center text-xs font-bold text-gray-400">No products found.</td></tr>
+          <tr v-if="loading"><td colspan="7" class="px-6 py-8 text-center text-xs font-bold text-gray-400">Loading...</td></tr>
+          <tr v-else-if="items.length === 0"><td colspan="7" class="px-6 py-8 text-center text-xs font-bold text-gray-400">No products found.</td></tr>
           <tr v-for="item in items" :key="item.item_id" class="border-b border-gray-200 last:border-0 hover:bg-gray-50/50">
             <td class="px-6 py-3 border-r border-gray-100">
               <img v-if="item.thumbnail" :src="item.thumbnail" class="w-12 h-12 object-cover rounded-lg border border-gray-200" />
@@ -113,6 +114,11 @@ onMounted(load)
             <td class="px-6 py-3 text-xs font-bold text-gray-900 border-r border-gray-100">{{ item.title }}</td>
             <td class="px-6 py-3 text-xs font-bold text-gray-500 border-r border-gray-100">{{ item.brand }}</td>
             <td class="px-6 py-3 text-xs font-bold text-gray-500 border-r border-gray-100">{{ item.price }}</td>
+            <td class="px-6 py-3 border-r border-gray-100">
+              <span :class="['text-[10px] font-black uppercase px-2 py-1 rounded', item.stock_status === 'out_of_stock' ? 'bg-gray-100 text-gray-400' : 'bg-emerald-50 text-emerald-600']">
+                {{ item.stock_status === 'out_of_stock' ? 'Out of Stock' : 'In Stock' }}
+              </span>
+            </td>
             <td class="px-6 py-3 text-right space-x-3 whitespace-nowrap">
               <NuxtLink :to="`/admin/products/${item.item_id}`" class="text-xs font-bold text-gray-500 hover:text-[#e31e24]">
                 <i class="fa-solid fa-pen"></i> Edit

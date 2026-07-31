@@ -196,8 +196,9 @@
                     class="w-full md:w-48 flex-shrink-0 flex flex-col items-center md:items-end justify-between border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6 h-full min-h-[140px]">
                     <div class="text-center md:text-right w-full">
                       <span class="text-2xl font-black text-gray-900 tracking-tighter" v-html="product.price"></span>
-                      <span class="block text-[10px] font-bold text-emerald-500 uppercase mt-0.5">In Stock / Ready To
-                        Ship</span>
+                      <span :class="['block text-[10px] font-bold uppercase mt-0.5', product.stock_status === 'out_of_stock' ? 'text-gray-400' : 'text-emerald-500']">
+                        {{ product.stock_status === 'out_of_stock' ? 'Out Of Stock' : 'In Stock / Ready To Ship' }}
+                      </span>
                     </div>
 
                     <div class="w-full mt-4">

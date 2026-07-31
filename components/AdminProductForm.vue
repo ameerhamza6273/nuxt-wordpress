@@ -27,6 +27,13 @@
           <input v-model="form.brand" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24]" />
         </div>
         <div>
+          <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Availability</label>
+          <select v-model="form.stock_status" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24]">
+            <option value="in_stock">In Stock</option>
+            <option value="out_of_stock">Out of Stock</option>
+          </select>
+        </div>
+        <div>
           <label class="text-[10px] font-black uppercase tracking-wider text-gray-500 block mb-1">Placement On Vehicle</label>
           <input v-model="form.placement_on_vehicle" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-bold outline-none focus:border-[#e31e24]" />
         </div>
@@ -165,6 +172,7 @@ const form = reactive({
   other_part_number: props.initial.other_part_number || '',
   fitment_notes: props.initial.fitment_notes || '',
   vin_required_message: props.initial.vin_required_message || '',
+  stock_status: props.initial.stock_status === 'out_of_stock' ? 'out_of_stock' : 'in_stock',
 })
 
 const images = ref(Array.isArray(props.initial.images) && props.initial.images.length > 0 ? [...props.initial.images] : ['', '', '', ''])

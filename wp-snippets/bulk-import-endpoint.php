@@ -19,6 +19,30 @@
 
 define('BULK_IMPORT_SECRET', '268d12bb24abaa5a41649d7655d4efcce1a55a8ad2cb319d938e5130df673999');
 
+// One-off column setup - visit any wp-admin page with ?run_stock_status_setup=1.
+// Adds wp_custom_products.stock_status (VARCHAR, NOT NULL DEFAULT 'in_stock') so
+// every existing row is backfilled to 'in_stock' automatically and no read
+// endpoint can ever see NULL/empty here - same one-off pattern as orders-endpoint.php.
+if (is_admin()) {
+    add_action('admin_init', 'bulk_import_run_stock_status_setup');
+}
+
+function bulk_import_run_stock_status_setup() {
+    if (!isset($_GET['run_stock_status_setup']) || $_GET['run_stock_status_setup'] !== '1') {
+        return;
+    }
+
+    global $wpdb;
+    $products_table = 'wp_custom_products';
+    $existing = array_map('strtolower', $wpdb->get_col("SHOW COLUMNS FROM `$products_table`"));
+
+    if (!in_array('stock_status', $existing, true)) {
+        $wpdb->query("ALTER TABLE `$products_table` ADD COLUMN stock_status VARCHAR(20) NOT NULL DEFAULT 'in_stock'");
+    }
+
+    wp_die("stock_status column ready on $products_table.");
+}
+
 add_action('rest_api_init', function () {
     register_rest_route('custom/v1', '/import-products', array(
         'methods'             => 'POST',
@@ -328,7 +352,7 @@ function admin_list_products($request) {
     $total_sql = "SELECT COUNT(*) FROM `$products_table` p $where";
     $total = $params ? $wpdb->get_var($wpdb->prepare($total_sql, $params)) : $wpdb->get_var($total_sql);
 
-    $list_sql = "SELECT p.item_id, p.sku, p.title, p.price, p.brand,
+    $list_sql = "SELECT p.item_id, p.sku, p.title, p.price, p.brand, p.stock_status,
                         (SELECT img.picture_url FROM `$images_table` img
                          WHERE img.product_id = p.item_id ORDER BY img.id ASC LIMIT 1) AS thumbnail
                  FROM `$products_table` p
@@ -373,11 +397,14 @@ function admin_save_product($request) {
     $fields = array(
         'sku', 'title', 'price', 'description', 'brand', 'placement_on_vehicle',
         'manufacturer_part_number', 'interchange_part_number', 'other_part_number',
-        'fitment_notes', 'vin_required_message',
+        'fitment_notes', 'vin_required_message', 'stock_status',
     );
     $row = array();
     foreach ($fields as $f) {
         $row[$f] = isset($body[$f]) ? $body[$f] : '';
+    }
+    if ($row['stock_status'] !== 'out_of_stock') {
+        $row['stock_status'] = 'in_stock';
     }
 
     if ($item_id > 0) {

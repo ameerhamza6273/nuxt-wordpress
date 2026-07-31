@@ -65,7 +65,7 @@ function product_search_run($request) {
     if ($sort === 'price_low')  $order_by = "(CASE WHEN p.sku = %s OR p.manufacturer_part_number = %s OR p.interchange_part_number = %s OR p.other_part_number = %s THEN 0 ELSE 1 END) ASC, p.price ASC";
     if ($sort === 'price_high') $order_by = "(CASE WHEN p.sku = %s OR p.manufacturer_part_number = %s OR p.interchange_part_number = %s OR p.other_part_number = %s THEN 0 ELSE 1 END) ASC, p.price DESC";
 
-    $list_sql = "SELECT p.item_id AS id, p.sku, p.title, p.price, p.brand, p.description AS short_description,
+    $list_sql = "SELECT p.item_id AS id, p.sku, p.title, p.price, p.brand, p.stock_status, p.description AS short_description,
                         (SELECT img.picture_url FROM `$images_table` img
                          WHERE img.product_id = p.item_id ORDER BY img.id ASC LIMIT 1) AS image
                  FROM `$products_table` p

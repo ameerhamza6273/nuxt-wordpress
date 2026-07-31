@@ -90,7 +90,7 @@ function brand_search_products_by_brand($request) {
         $brand
     ));
 
-    $list_sql = "SELECT p.item_id AS id, p.sku, p.title, p.price, p.brand, p.description AS short_description,
+    $list_sql = "SELECT p.item_id AS id, p.sku, p.title, p.price, p.brand, p.stock_status, p.description AS short_description,
                         (SELECT img.picture_url FROM `$images_table` img
                          WHERE img.product_id = p.item_id ORDER BY img.id ASC LIMIT 1) AS image
                  FROM `$products_table` p

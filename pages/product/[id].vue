@@ -48,6 +48,9 @@
 
                 <div class="text-3xl font-black text-gray-900 tracking-tighter border-y border-gray-100 py-4">
                   {{ product.price }}
+                  <span :class="['block text-[11px] font-bold uppercase mt-1', product.stock_status === 'out_of_stock' ? 'text-gray-400' : 'text-emerald-500']">
+                    {{ product.stock_status === 'out_of_stock' ? 'Out Of Stock' : 'Available: In Stock' }}
+                  </span>
                 </div>
 
                 <div v-if="product.placement_on_vehicle || product.manufacturer_part_number || product.interchange_part_number"
