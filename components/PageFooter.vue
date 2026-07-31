@@ -58,6 +58,25 @@
       </div>
 
       <hr class="mb-6 mt-12 border-white/10">
+
+      <div class="mb-6">
+        <h5 class="text-white/60 font-bold uppercase tracking-widest text-xs text-center mb-6">
+          Shop By Brand
+        </h5>
+        <div class="flex flex-wrap justify-center items-stretch gap-4">
+          <NuxtLink v-for="brand in shopByBrands" :key="brand.slug" :to="`/products?brand=${encodeURIComponent(brand.name)}`"
+            class="group flex items-center justify-center h-16 w-32 md:w-36 rounded-xl bg-white shadow-md border border-white/10 hover:shadow-[0_8px_24px_rgba(242,169,0,0.35)] hover:-translate-y-1 transition-all duration-300 p-3">
+            <img v-if="!brandLogoFailed[brand.slug]" :src="brand.logo" :alt="`${brand.name} logo`"
+              class="max-h-full max-w-full object-contain"
+              @error="brandLogoFailed[brand.slug] = true" />
+            <span v-else class="text-sm font-black uppercase tracking-wider text-gray-800">
+              {{ brand.name }}
+            </span>
+          </NuxtLink>
+        </div>
+      </div>
+
+      <hr class="mb-6 border-white/10">
       <div class="text-center opacity-75 text-sm tracking-wider">
         © {{ new Date().getFullYear() }} Logic Auto Parts. All Rights Reserved.
       </div>
@@ -66,12 +85,24 @@
 </template>
 
 <script setup>
+import { reactive } from 'vue'
+
 const socials = [
   'fab fa-facebook-f',
   'fab fa-instagram',
   'fab fa-whatsapp',
   'fab fa-linkedin-in'
 ];
+
+// Manufacturer brands carried (client-confirmed list, 2026-07-31).
+const shopByBrands = [
+  { name: 'Brembo', slug: 'brembo', logo: '/Brembo.jpg' },
+  { name: 'DFC', slug: 'dfc', logo: '/DFC.jpg' },
+  { name: 'Pagid', slug: 'pagid', logo: '/Pagid.jpg' },
+  { name: 'Textar', slug: 'textar', logo: '/Textar.jpg' },
+  { name: 'Arnott', slug: 'arnott', logo: '/Arnott.jpg' },
+];
+const brandLogoFailed = reactive({});
 
 const quickLinks = [
   { name: 'About Us', url: '/about' },

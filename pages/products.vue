@@ -8,7 +8,20 @@
           <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
 
             <aside class="space-y-6 lg:sticky lg:top-6">
-              <div class="bg-gray-900 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl">
+              <div v-if="isBrandMode" class="bg-gray-900 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl">
+                <span class="text-[10px] font-black tracking-widest text-[#f2a900] uppercase block mb-1">
+                  Shopping By Brand
+                </span>
+                <h4 class="text-xl font-black uppercase tracking-tight">
+                  {{ route.query.brand }}
+                </h4>
+                <button @click="router.push('/')"
+                  class="mt-4 text-xs font-black text-[#e31e24] uppercase tracking-wider flex items-center gap-2 hover:text-white transition-colors">
+                  <i class="fa-solid fa-rotate"></i> Search By Vehicle Instead
+                </button>
+              </div>
+
+              <div v-else class="bg-gray-900 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl">
                 <span class="text-[10px] font-black tracking-widest text-[#f2a900] uppercase block mb-1">
                   My Garage
                 </span>
@@ -28,7 +41,7 @@
                 </button>
               </div>
 
-              <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
+              <div v-if="!isBrandMode" class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
   <h5 class="font-black text-gray-900 uppercase text-xs tracking-widest mb-6 border-b pb-4 border-gray-100 flex items-center gap-2">
     <i class="fa-solid fa-car text-[#e31e24]"></i> Filter By Vehicle
   </h5>
@@ -82,7 +95,11 @@
                 class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                   <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Home / Parts Search</span>
-                  <h2
+                  <h2 v-if="isBrandMode"
+                    class="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tighter mt-1 leading-tight">
+                    {{ route.query.brand }} <span class="text-[#e31e24]">Parts</span>
+                  </h2>
+                  <h2 v-else
                     class="text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tighter mt-1 leading-tight">
                     {{ route.query.year || '' }} {{ route.query.make || '' }} {{ route.query.model || 'All Available' }}
                     <span v-if="route.query.submodel"
@@ -281,18 +298,23 @@ const toggleCategory = (groupId) => {
   activeCatGroup.value = activeCatGroup.value === groupId ? null : groupId
 }
 
-// 🟢 MODIFIED: Ab check safe hai, kam se kam 'make' (Brand) mojood hona chahiye home page par wapas phenkne se pehle
+// 🟢 MODIFIED: Ab check safe hai, kam se kam 'make' (vehicle) YA 'brand' (manufacturer) mojood hona chahiye home page par wapas phenkne se pehle
 const checkRouteValidity = () => {
-  if (!route?.query || !route.query.make) {
+  if (!route?.query || (!route.query.make && !route.query.brand)) {
     router.replace('/')
   }
 }
+
+// Manufacturer-brand mode (Brembo/DFC/Pagid/etc, footer logo links) is a
+// separate lookup from the Year/Make/Model vehicle flow below - no vehicle
+// context required, so the sidebar tree and products-filter call are skipped.
+const isBrandMode = computed(() => !!route.query.brand && !route.query.make)
 
 // Ek naya ref banayein jo vehicle hierarchy ko hold karega
 const sidebarVehicles = ref([])
 
 const fetchVehicleFacetedCategories = async () => {
-  if (!route.query.make) return
+  if (!route.query.make || isBrandMode.value) return
   loadingCategories.value = true
   try {
     const currentMake = String(route.query.make).trim();
@@ -335,22 +357,31 @@ const fetchVehicleFacetedCategories = async () => {
 
 
 const triggerFetch = async () => {
-  if (!route.query.make) return
+  if (!route.query.make && !route.query.brand) return
   loading.value = true
   try {
-    const response = await $fetch(`${WP_URL}/wp-json/custom/v1/products-filter`, {
-      method: 'GET',
-      params: {
-        year: route.query.year || '',
-        make: route.query.make || '',
-        model: route.query.model || '',
-        submodel: route.query.submodel || '',
-        engine: route.query.engine || '',
-        page: currentPage.value,
-        category: selectedCategorySlug.value || undefined,
-        sort: sortBy.value
-      }
-    })
+    const response = isBrandMode.value
+      ? await $fetch(`${WP_URL}/wp-json/custom/v1/products-by-brand`, {
+          method: 'GET',
+          params: {
+            brand: route.query.brand,
+            page: currentPage.value,
+            sort: sortBy.value
+          }
+        })
+      : await $fetch(`${WP_URL}/wp-json/custom/v1/products-filter`, {
+          method: 'GET',
+          params: {
+            year: route.query.year || '',
+            make: route.query.make || '',
+            model: route.query.model || '',
+            submodel: route.query.submodel || '',
+            engine: route.query.engine || '',
+            page: currentPage.value,
+            category: selectedCategorySlug.value || undefined,
+            sort: sortBy.value
+          }
+        })
 
     // Backend ab { data, total_items, total_pages, current_page } shape return karta hai.
     if (response && Array.isArray(response.data)) {
@@ -452,21 +483,22 @@ const filterBySidebarEngine = (modelSlug, submodelSlug, engineName) => {
 }
 
 watch(() => route.query, (newQuery, oldQuery) => {
-  if (!newQuery.make) {
+  if (!newQuery.make && !newQuery.brand) {
     router.replace('/')
     return
   }
 
-  // Sidebar tree sirf make/year badalne par fetch ho
+  // Sidebar tree sirf make/year badalne par fetch ho (brand-mode ismein shamil nahi)
   if (oldQuery && (newQuery.make !== oldQuery.make || newQuery.year !== oldQuery.year)) {
     fetchVehicleFacetedCategories()
   }
-  
+
   // Kisi bhi filter/sort/page parameter ke badalne par products dobara fetch hon
   if (oldQuery && (
     newQuery.model !== oldQuery.model ||
     newQuery.submodel !== oldQuery.submodel ||
     newQuery.engine !== oldQuery.engine ||
+    newQuery.brand !== oldQuery.brand ||
     newQuery.page !== oldQuery.page ||
     newQuery.category !== oldQuery.category ||
     newQuery.order_by !== oldQuery.order_by
@@ -478,7 +510,9 @@ watch(() => route.query, (newQuery, oldQuery) => {
 onMounted(() => {
   checkRouteValidity()
 
-  if (route.query.make) {
+  if (isBrandMode.value) {
+    triggerFetch()
+  } else if (route.query.make) {
     // Pehle sidebar tree mangwayenge, uske baad parameters automatic auto-expand ho jayenge
     fetchVehicleFacetedCategories()
     triggerFetch()
