@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     head: {
       title: 'logic-auto-parts',
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: 'logic-auto-parts-website-logo.jpeg' },
+        { rel: 'icon', type: 'image/x-icon', href: '/logic-auto-parts-website-logo.jpeg' },
       ],
     },
   },
