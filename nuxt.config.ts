@@ -11,6 +11,9 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
+    prerender: {
+      failOnError: false,
+    },
     devProxy: {
       '/wp-json': {
         target: 'https://cms.x-trekkers.com/wp-json',  // ← replace with your WPX subdomain
