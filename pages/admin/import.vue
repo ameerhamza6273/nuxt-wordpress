@@ -52,6 +52,44 @@ function onFileChange(e, kind) {
   else fitmentFile.value = file
 }
 
+const localizing = ref(false)
+const localizeStatus = ref(null) // { processed, succeeded, remaining, failed: [] }
+const localizeError = ref('')
+
+async function localizeImages() {
+  localizing.value = true
+  localizeError.value = ''
+  localizeStatus.value = { processed: 0, succeeded: 0, remaining: null, failed: [] }
+
+  try {
+    // Runs in small batches (server caps each call at 50) so a large catalog
+    // never risks a single request timing out - just keep polling until
+    // remaining hits 0.
+    while (true) {
+      const res = await fetch(`${WP_URL}/wp-json/custom/v1/localize-product-images`, {
+        method: 'POST',
+        headers: { 'X-Import-Secret': config.public.importSecret },
+      })
+      const data = await res.json()
+      if (!res.ok || data.success === false) {
+        localizeError.value = data.message || 'Failed to localize images.'
+        break
+      }
+
+      localizeStatus.value.processed += data.processed
+      localizeStatus.value.succeeded += data.succeeded
+      localizeStatus.value.remaining = data.remaining
+      if (data.failed?.length) localizeStatus.value.failed.push(...data.failed)
+
+      if (data.processed === 0 || data.remaining === 0) break
+    }
+  } catch (e) {
+    localizeError.value = 'Request failed: ' + e.message
+  } finally {
+    localizing.value = false
+  }
+}
+
 const exporting = ref({ products: false, fitment: false })
 
 async function exportCsv(kind) {
@@ -127,6 +165,28 @@ async function exportCsv(kind) {
         </button>
       </div>
       <pre v-if="fitmentResult" class="bg-gray-50 border border-gray-100 text-[11px] p-4 rounded-xl overflow-auto">{{ fitmentResult }}</pre>
+    </section>
+
+    <section class="bg-white p-8 rounded-[2rem] border border-gray-100 shadow-xl space-y-4">
+      <h2 class="text-sm font-black uppercase tracking-tight text-gray-900">3. Download & Host Product Images</h2>
+      <p class="text-xs text-gray-400 font-bold">
+        If the images column in your Products CSV had direct links (e.g. from PA or a CRM export),
+        those are stored as-is at first. Run this to download every one of them, compress it, and
+        host it on our own server instead - so the storefront never depends on another company's
+        server for its images. Safe to re-run anytime; it only touches images not already hosted here.
+      </p>
+      <button @click="localizeImages" :disabled="localizing"
+        class="px-10 bg-black hover:bg-[#e31e24] text-white font-black py-3 rounded-xl text-xs uppercase tracking-wider transition-all duration-300 disabled:opacity-50">
+        {{ localizing ? 'Downloading & Hosting Images...' : 'Download & Host Images' }}
+      </button>
+      <p v-if="localizeError" class="text-[#e31e24] text-xs font-bold uppercase">{{ localizeError }}</p>
+      <div v-if="localizeStatus" class="text-xs font-bold text-gray-700 space-y-2">
+        <p>Processed: {{ localizeStatus.processed }} &middot; Succeeded: {{ localizeStatus.succeeded }} &middot; Remaining: {{ localizeStatus.remaining ?? '...' }}</p>
+        <div v-if="localizeStatus.failed.length" class="text-[#e31e24]">
+          <p>{{ localizeStatus.failed.length }} image(s) failed to download (left as the original link):</p>
+          <pre class="bg-gray-50 border border-gray-100 text-[11px] p-4 rounded-xl overflow-auto mt-2">{{ localizeStatus.failed }}</pre>
+        </div>
+      </div>
     </section>
   </div>
 </template>

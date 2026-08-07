@@ -19,6 +19,13 @@
 
 define('BULK_IMPORT_SECRET', '268d12bb24abaa5a41649d7655d4efcce1a55a8ad2cb319d938e5130df673999');
 
+// Needed for the image-localizing endpoint below (download_url, wp_handle_sideload,
+// wp_generate_attachment_metadata). Safe to require here even though
+// admin-upload-image.php also requires them - require_once is idempotent.
+require_once ABSPATH . 'wp-admin/includes/image.php';
+require_once ABSPATH . 'wp-admin/includes/file.php';
+require_once ABSPATH . 'wp-admin/includes/media.php';
+
 // One-off column setup - visit any wp-admin page with ?run_stock_status_setup=1.
 // Adds wp_custom_products.stock_status (VARCHAR, NOT NULL DEFAULT 'in_stock') so
 // every existing row is backfilled to 'in_stock' automatically and no read
@@ -71,6 +78,12 @@ add_action('rest_api_init', function () {
     register_rest_route('custom/v1', '/admin-product-delete', array(
         'methods'             => 'POST',
         'callback'            => 'admin_delete_product',
+        'permission_callback' => 'bulk_import_check_secret',
+    ));
+
+    register_rest_route('custom/v1', '/localize-product-images', array(
+        'methods'             => 'POST',
+        'callback'            => 'bulk_import_localize_pending_images',
         'permission_callback' => 'bulk_import_check_secret',
     ));
 });
@@ -458,6 +471,137 @@ function admin_save_product($request) {
 }
 
 /**
+ * Downloads a single external image URL (e.g. a PA/manufacturer/CRM link),
+ * compresses it the same way admin-upload-image.php does for manual uploads
+ * (re-encoded to JPEG, quality stepped down until under ADMIN_IMAGE_MAX_BYTES),
+ * and registers it as a real WordPress media library attachment. Returns the
+ * new local URL on success, or a WP_Error on failure (bad URL, host down,
+ * not an image, etc.) - callers should leave the original URL in place on
+ * error rather than losing the image entirely.
+ *
+ * Depends on admin_compress_image_to_limit() from admin-upload-image.php for
+ * the compression step - that snippet must stay active alongside this one
+ * (same dependency direction as the other admin panel features). If it isn't
+ * active for some reason, the image is still downloaded and hosted on our
+ * own server, just without the 500KB compression pass.
+ */
+function bulk_import_localize_image($external_url) {
+    $tmp_file = download_url($external_url, 20); // 20s timeout, one image at a time
+    if (is_wp_error($tmp_file)) {
+        return $tmp_file;
+    }
+
+    $name_guess = sanitize_file_name(basename((string) parse_url($external_url, PHP_URL_PATH)));
+    if ($name_guess === '' || strpos($name_guess, '.') === false) {
+        $name_guess = 'product-image-' . wp_generate_password(8, false) . '.jpg';
+    }
+
+    // wp_handle_sideload()'s first parameter is declared by-reference in WordPress
+    // core, so it must be a variable here - passing an array literal directly fails
+    // with "could not be passed by reference" (confirmed live 2026-08-07).
+    $file_array = array('name' => $name_guess, 'tmp_name' => $tmp_file);
+    $overrides  = array('test_form' => false);
+    $sideloaded = wp_handle_sideload($file_array, $overrides);
+
+    if (isset($sideloaded['error'])) {
+        @unlink($tmp_file);
+        return new WP_Error('sideload_failed', $sideloaded['error']);
+    }
+
+    $file_path = $sideloaded['file'];
+    $max_bytes = defined('ADMIN_IMAGE_MAX_BYTES') ? ADMIN_IMAGE_MAX_BYTES : 500 * 1024;
+
+    if (function_exists('admin_compress_image_to_limit')) {
+        admin_compress_image_to_limit($file_path, $max_bytes); // best-effort; not fatal if it can't hit the target
+    }
+
+    // Compression (when it runs) always re-encodes to JPEG regardless of the
+    // original format, so make sure the stored filename/url/mime-type agree.
+    $path_info = pathinfo($file_path);
+    $ext = strtolower($path_info['extension']);
+    if ($ext !== 'jpg' && $ext !== 'jpeg') {
+        $new_path = $path_info['dirname'] . '/' . $path_info['filename'] . '.jpg';
+        if (@rename($file_path, $new_path)) {
+            $file_path = $new_path;
+            $sideloaded['url'] = preg_replace('/\.' . preg_quote($ext, '/') . '$/i', '.jpg', $sideloaded['url']);
+        }
+    }
+
+    $attachment_id = wp_insert_attachment(array(
+        'post_mime_type' => 'image/jpeg',
+        'post_title'     => sanitize_file_name(pathinfo($file_path, PATHINFO_FILENAME)),
+        'post_status'    => 'inherit',
+    ), $file_path);
+
+    if (is_wp_error($attachment_id)) {
+        return $attachment_id;
+    }
+
+    $metadata = wp_generate_attachment_metadata($attachment_id, $file_path);
+    wp_update_attachment_metadata($attachment_id, $metadata);
+
+    return wp_get_attachment_url($attachment_id);
+}
+
+/**
+ * Batch-processes wp_custom_product_images rows whose picture_url still
+ * points somewhere other than our own uploads folder (i.e. images that came
+ * in as raw external URLs via CSV import or admin_save_product, and haven't
+ * been downloaded/hosted locally yet).
+ *
+ * Deliberately does a small batch per call (?limit=, default 20, max 50)
+ * instead of processing everything in one request - a 500-product import can
+ * mean 1000+ images, and downloading/compressing all of them synchronously
+ * would blow past PHP's execution time limit on shared hosting. The admin
+ * panel calls this endpoint repeatedly (polling until remaining=0) to show a
+ * progress bar without ever risking a timed-out request. Safe to call again
+ * later too (e.g. after adding more products) - it only ever touches rows
+ * that aren't already hosted locally.
+ */
+function bulk_import_localize_pending_images($request) {
+    global $wpdb;
+    $images_table = 'wp_custom_product_images';
+
+    $limit = (int) $request->get_param('limit');
+    $limit = $limit > 0 ? min($limit, 50) : 20;
+
+    $uploads_base = $wpdb->esc_like(wp_upload_dir()['baseurl']);
+
+    $rows = $wpdb->get_results($wpdb->prepare(
+        "SELECT id, picture_url FROM `$images_table` WHERE picture_url NOT LIKE %s ORDER BY id ASC LIMIT %d",
+        $uploads_base . '%', $limit
+    ), ARRAY_A);
+
+    $succeeded = 0;
+    $failed    = array();
+
+    foreach ($rows as $row) {
+        $new_url = bulk_import_localize_image($row['picture_url']);
+
+        if (is_wp_error($new_url)) {
+            $failed[] = array('id' => (int) $row['id'], 'url' => $row['picture_url'], 'reason' => $new_url->get_error_message());
+            continue;
+        }
+
+        $wpdb->update($images_table, array('picture_url' => $new_url), array('id' => $row['id']));
+        $succeeded++;
+    }
+
+    $remaining = (int) $wpdb->get_var($wpdb->prepare(
+        "SELECT COUNT(*) FROM `$images_table` WHERE picture_url NOT LIKE %s",
+        $uploads_base . '%'
+    ));
+
+    return array(
+        'success'   => true,
+        'processed' => count($rows),
+        'succeeded' => $succeeded,
+        'failed'    => $failed,
+        'remaining' => $remaining,
+    );
+}
+
+/**
  * Deletes a product and its dependent fitment/image rows.
  */
 function admin_delete_product($request) {
@@ -480,4 +624,5 @@ function admin_delete_product($request) {
 
     return array('success' => true);
 }
+
 
