@@ -20,6 +20,8 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies & Build Nuxt
+        env:
+          NUXT_PUBLIC_IMPORT_SECRET: ${{ secrets.NUXT_PUBLIC_IMPORT_SECRET }}
         run: |
           npm ci
           npx nuxi generate
